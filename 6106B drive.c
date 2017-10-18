@@ -25,83 +25,94 @@ remember to flip the wiring!
 2 feet in 2935.23 revs */
 
 
-void motorControl()
+// -----------------BEGIN Global Variables Configuration-------------------
+
+const int MB_POWER = 80; // power to mobile goal lift
+const int FOURBAR_POWER = 64; //power to fourbar
+const int FOURBAR_ANTIGRAVITY = 20; //power to fourbar when it is in the "stop" position
+const int MB_ANTIGRAVITY=5; //power to mobile goal lift when it is in the "stop" position
+
+// ------------------END Global Variables Configuration----------------------
+
+
+// ------------------BEGIN Utility Functons---------------
+
+void moveLeftWheels(int power)
 {
-motor[front_left] = vexRT[Ch3];
-motor[back_left] = vexRT[Ch3];
-motor[front_right] = vexRT[Ch2];
-motor[back_right] = vexRT[Ch2];
+	motor[front_left] = power;
+	motor[back_left] = power;
 }
 
-void motorLiftControl ()
+void moveRightWheels(int power)
 {
-	if(vexRT[Btn5U] == 1)
-	{
-		motor[mb_left] = 80;
-		motor[mb_right] = 80;
-	}
-	else if(vexRT[Btn5D] == 1)
-	{
-		motor[mb_left] = -80;
-		motor[mb_right] = -80;
-	}
-	else
-	{
-		motor[mb_left] = 0;
-		motor[mb_right] = 0;
-	}
+	motor[front_right] = power;
+	motor[back_right] = power;
+}
 
+void mobileGoalUp()
+{
+	motor[mb_left] = MB_POWER;
+	motor[mb_right] = MB_POWER;
 }
-/*
-void motorControlWEncoder ()
+
+void mobileGoalDown()
+{
+	motor[mb_left] = -MB_POWER;
+	motor[mb_right] = -MB_POWER;
+}
+
+void mobileGoalStop(){
+	motor[mb_left] = MB_ANTIGRAVITY;
+	motor[mb_right] = MB_ANTIGRAVITY;
+}
+
+void fourBarUp()
+{
+	motor[fb_topleft] = FOURBAR_POWER;
+	motor[fb_bottomleft] = FOURBAR_POWER;
+	motor[fb_topright] = FOURBAR_POWER;
+	motor[fb_bottomright] = FOURBAR_POWER;
+}
+
+void fourBarDown()
 {
 
-	if(getMotorEncoder(back_left) == 400)
-	{
+	motor[fb_topleft] = -FOURBAR_POWER;
+	motor[fb_bottomleft] = -FOURBAR_POWER;
+	motor[fb_topright] = -FOURBAR_POWER;
+	motor[fb_bottomright] = -FOURBAR_POWER;
+}
 
-		resetMotorEncoder(back_left);
-		resetMotorEncoder(back_right);
-		wait1Msec(2000);
-	}
-	if(getMotorEncoder(back_left) < 400)
-	{
-		nMotorEncoder[back_left] = 63;
-		nMotorEncoder[back_right] = 63;
-	}
-}
-*/
-void fourBarLeft(int powerLeft)
+void fourBarStop()
 {
-	motor[fb_topleft] = powerLeft;
-	motor[fb_bottomleft] = powerLeft;
+
+	motor[fb_topleft] = FOURBAR_ANTIGRAVITY;
+	motor[fb_bottomleft] = FOURBAR_ANTIGRAVITY;
+	motor[fb_topright] = FOURBAR_ANTIGRAVITY;
+	motor[fb_bottomright] = FOURBAR_ANTIGRAVITY;
 }
-void fourBarRight(int powerRight)
-{
-	motor[fb_topright] = powerRight;
-	motor[fb_bottomright] = powerRight;
-}
-void fourbar()
-{
-	if (vexRT[Btn6U] == 1)
-	{
-		fourBarLeft(127);
-		fourBarRight(127);
+
+//----------------END Utility Functions------------
+
+
+//----------------BEGIN Main Functions-------------
+
+void driverControl(){
+	for(;;){
+		while (vexRT[Btn6U]) fourBarUp();
+		while (vexRT[Btn6D]) fourBarDown();
+		fourBarStop();
+		while (vexRT[Btn5D]) mobileGoalDown();
+		while (vexRT[Btn5U]) mobileGoalUp();
+		mobileGoalStop();
+		moveLeftWheels(vexRT[Ch3]);
+		moveRightWheels(vexRT[Ch2]);
 	}
-	else if (vexRT[Btn6D] == 1)
-	{
-		fourBarLeft(-64);
-		fourBarRight(-64);
-	}
 }
+
+//--------------END Main Functions------------------
 
 task main()
 {
-	nMotorEncoder(back_left) = 400;
-	while(true)
-	{
-		motorControl();
-		motorLiftControl();
-//		motorControlWEncoder();
-		fourbar();
-	}
+	driverControl();
 }
