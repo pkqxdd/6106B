@@ -33,8 +33,17 @@ const int FOURBAR_ANTIGRAVITY = 20; //power to fourbar when it is in the "stop" 
 const int MB_ANTIGRAVITY=5; //power to mobile goal lift when it is in the "stop" position
 
 // ------------------END Global Variables Configuration----------------------
+// -----------------BEGIN Keymap Configuration------------------
+
+#define ButtonMobileGoalUp vexRT[Btn5U]
+#define ButtonMobileGoalDown vexRT[Btn5D]
+#define ButtonFourbarUp vexRT[Btn6U]
+#define ButtonFourbarDown vexRT[Btn6D]
+#define AxisLeftWheels vexRT[Ch3]
+#define AxisRightWheels vexRT[Ch2]
 
 
+// -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
 
 void moveLeftWheels(int power)
@@ -93,20 +102,18 @@ void fourBarStop()
 }
 
 //----------------END Utility Functions------------
-
-
 //----------------BEGIN Main Functions-------------
 
 void driverControl(){
 	for(;;){
-		while (vexRT[Btn6U]) fourBarUp();
-		while (vexRT[Btn6D]) fourBarDown();
+		while (ButtonFourbarUp) fourBarUp();
+		while (ButtonFourbarDown) fourBarDown();
 		fourBarStop();
-		while (vexRT[Btn5D]) mobileGoalDown();
-		while (vexRT[Btn5U]) mobileGoalUp();
+		while (ButtonMobileGoalDown) mobileGoalDown();
+		while (ButtonMobileGoalUp) mobileGoalUp();
 		mobileGoalStop();
-		moveLeftWheels(vexRT[Ch3]);
-		moveRightWheels(vexRT[Ch2]);
+		moveLeftWheels(AxisLeftWheels);
+		moveRightWheels(AxisRightWheels);
 	}
 }
 
