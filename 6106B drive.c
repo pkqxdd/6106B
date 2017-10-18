@@ -25,14 +25,14 @@ remember to flip the wiring!
 2 feet in 2935.23 revs */
 
 
-// -----------------BEGIN Global Variables Configuration-------------------
+// -----------------BEGIN Global Constants Configuration-------------------
 
 const int MB_POWER = 80; // power to mobile goal lift
 const int FOURBAR_POWER = 64; //power to fourbar
 const int FOURBAR_ANTIGRAVITY = 20; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=5; //power to mobile goal lift when it is in the "stop" position
 
-// ------------------END Global Variables Configuration----------------------
+// ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
 #define ButtonMobileGoalUp vexRT[Btn5U]
