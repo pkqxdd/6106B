@@ -42,9 +42,8 @@ const int MB_ANTIGRAVITY=5; //power to mobile goal lift when it is in the "stop"
 #define AxisLeftWheels vexRT[Ch3]
 #define AxisRightWheels vexRT[Ch2]
 
-
 // -----------------END Keymap Configuration----------------
-// ------------------BEGIN Utility Functons---------------
+// ------------------BEGIN Control Functons---------------
 
 void moveLeftWheels(int power)
 {
@@ -101,7 +100,7 @@ void fourBarStop()
 	motor[fb_bottomright] = FOURBAR_ANTIGRAVITY;
 }
 
-//----------------END Utility Functions------------
+//----------------END Control Functions------------
 //----------------BEGIN Main Functions-------------
 
 void driverControl(){
