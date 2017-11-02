@@ -11,13 +11,7 @@ const int MB_ANTIGRAVITY=5; //power to mobile goal lift when it is in the "stop"
 // ------------------END Global Variables Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-#define ButtonMobileGoalUp vexRT[Btn5U]
-#define ButtonMobileGoalDown vexRT[Btn5D]
-#define ButtonFourbarUp vexRT[Btn6U]
-#define ButtonFourbarDown vexRT[Btn6D]
-#define AxisLeftWheels vexRT[Ch3]
-#define AxisRightWheels vexRT[Ch2]
-
+#include "Keymap.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -99,7 +93,6 @@ task MobileGoalControls(){
 
 task FourBarControls(){
 	for (;;){
-
 		while (ButtonFourbarUp) fourBarUp();
 		while (ButtonFourbarDown) fourBarDown();
 		fourBarStop();
