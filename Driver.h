@@ -1,24 +1,35 @@
 #ifndef drivers
 #define drivers
 
-// -----------------BEGIN Global Variables Configuration-------------------
+// -----------------BEGIN Global Constants Configuration-------------------
 
 const int MB_POWER = 90; // power to mobile goal lift
 const int FOURBAR_POWER = 100; //power to fourbar
 const int CHAINBAR_POWER=80; // power to chainbar
 const int ROLLER_POWER=80; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 0; //power to fourbar when it is in the "stop" position
-const int MB_ANTIGRAVITY=0; //power to mobile goal lift when it is in the "stop" position
+const int MB_ANTIGRAVITY=40; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY=20;
 const int ROLLER_ANTIGRAVITY=30;
 
-// ------------------END Global Variables Configuration----------------------
+const int POT_CHAINBAR_MAX=2000;
+const int POT_CHAINBAR_MIN=0;
+
+const int POT_FOURBAR_MAX=600;
+const int POT_FOURBAR_MIN=0;
+
+
+
+// ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-#include "KeymapXavier.h" // this file defines which button is bind to which key
+//#include "KeymapXavier.h" // this file defines which button is bind to which key
+#include "KeymapJack.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
+
+
 
 void moveLeftWheels(int power)
 {
@@ -32,75 +43,18 @@ void moveRightWheels(int power)
 	motor[back_right] = power;
 }
 
-short wheelRecordLeft[100];
-short wheelRecordRight[100];
-
-short index=0;
-short getRecordIndex(){
-	if (index == 99)
-	{
-		index=0;
-		return index;
-	}
-	else {
-	return index++;
-}
-}
-
-short getAverageWheelHistoryLeft(){
-	int sum=0;
-	for (short i=index;i>=0;i--)
-	{
-	sum+=wheelRecordLeft[i];
-}
-return sum/index;
-
-}
-
-
-short getAverageWheelHistoryRight(){
-	int sum=0;
-	for (short i=index;i>=0;i--)
-	{
-	sum+=wheelRecordRight[i];
-}
-return sum/index;
-
-}
-
-void bufferedWheelsControls(int powerLeft, int powerRight){
-short tmpIndex=getRecordIndex();
-if (powerLeft <= 0 || powerRight <=0 ){
-	wheelRecordLeft[tmpIndex]=powerLeft;
-	wheelRecordRight[tmpIndex]=powerRight;
-	moveLeftWheels(powerLeft);
-	moveRightWheels(powerRight);
-	return;
-} else {
-short history[2]={getAverageWheelHistoryLeft(),getAverageWheelHistoryRight()};
-if (history[0] <= -20 && history[1] <=-20){ // decrease the power to wheels overtime in this case
-	wheelRecordLeft[tmpIndex]=powerLeft/log10(abs(history[0]));
-	wheelRecordRight[tmpIndex]=powerRight/log10(abs(history[1]));
-	moveLeftWheels(powerLeft/log10(abs(history[0])));
-	moveRightWheels(powerRight/log10(abs(history[1])));
-}
-else {
-	wheelRecordLeft[tmpIndex]=powerLeft;
-	wheelRecordRight[tmpIndex]=powerRight;
-	moveLeftWheels(powerLeft);
-	moveRightWheels(powerRight);
-	return;
-}
-}
-
-}
-
-
 void mobileGoalUp()
 {
 	motor[mb_left] = MB_POWER;
-	motor[mb_right] = MB_POWER;
+	motor[mb_right] = MB_POWER+10;
 }
+
+void mobileGoalZero()
+{
+	motor[mb_left] = 0;
+	motor[mb_right] = 0;
+}
+
 
 void mobileGoalDown()
 {
@@ -110,21 +64,19 @@ void mobileGoalDown()
 
 void mobileGoalStop(){
 	motor[mb_left] = MB_ANTIGRAVITY;
-	motor[mb_right] = MB_ANTIGRAVITY;
+	motor[mb_right] = MB_ANTIGRAVITY+10;
 }
 
 void fourBarUp()
 {
-	motor[fb_left] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
+	motor[fb_left] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+2;
 	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
 }
 
 void fourBarDown()
 {
-
-	motor[fb_left] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
+	motor[fb_left] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY-1;
 	motor[fb_right] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
-
 }
 
 void fourBarStop()
@@ -133,12 +85,15 @@ void fourBarStop()
 	motor[fb_right] = FOURBAR_ANTIGRAVITY;
 }
 
+
 void rollerIn(){
 	motor[roller]=ROLLER_POWER;
 }
 
 void rollerOut(){
-	motor[roller]=-ROLLER_POWER;
+	clearTimer(T1);
+	while (time1(T1)<2000) motor[roller]=-ROLLER_POWER/2;
+	return;
 }
 
 void rollerStop(){
@@ -162,7 +117,100 @@ void chainBarStop(){
 	motor[chainbar]=CHAINBAR_ANTIGRAVITY;
 }
 
+int chainbar_position=0;
+int fourbar_position=0;
+bool isFourBarLocked=false;
+bool isChainBarLocked=false;
 
+
+task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
+
+	bool goal_reached;
+
+	for (;;){
+		goal_reached= (chainbar_position -10 < SensorValue[pot_chainbar]) && (SensorValue[pot_chainbar]< chainbar_position+10);
+
+		if (!goal_reached){
+			if ( SensorValue(pot_chainbar)>chainbar_position){
+				motor[chainbar]=50;
+				} else if ( SensorValue(pot_chainbar)<chainbar_position){
+				if (SensorValue(pot_chainbar)) {motor[chainbar]=-80;}
+				else {motor[chainbar]=-10;}
+			}
+			} else {
+			motor[chainbar]=0;
+		}
+
+	}
+}
+task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
+	for (;;){
+		if (SensorValue(pot_fourbar)>fourbar_position){
+			motor[fb_left]=-19;
+			motor[fb_right]=-19;
+			} else if (SensorValue(pot_fourbar)<fourbar_position){
+			motor[fb_left]=19;
+			motor[fb_right]=19;
+			} else {
+			motor[fb_left]=0;
+			motor[fb_right]=0;
+		}
+	}
+}
+
+
+
+void holdChainBar(int position){
+	chainbar_position=position;
+	if (!isChainBarLocked){
+		isChainBarLocked=true;
+		startTask(lockChainbar);
+		return;
+	}
+}
+
+void holdFourBar(int position){
+	fourbar_position=position;
+	if (!isFourBarLocked){
+		isFourBarLocked=true;
+		startTask(lockFourBar);
+		return;
+	}
+}
+
+void releaseChainBar(){
+	isChainBarLocked=false;
+	stopTask(lockChainbar);
+}
+
+void releaseFourBar(){
+	isFourBarLocked=false;
+	stopTask(lockFourBar);
+}
+
+
+
+void moveFourBarTo(int position){
+
+	if (isFourBarLocked) releaseFourBar();
+	while (position>SensorValue[pot_fourbar]){
+		fourBarUp();
+	}
+	while (position<SensorValue[pot_fourbar]){
+		fourBarDown();
+	}
+}
+
+void moveChainBarTo(int position){
+	if (isChainBarLocked) releaseChainBar();
+
+	if (position>SensorValue[pot_chainbar]){
+		while (position>SensorValue[pot_chainbar]) chainBarDown();
+	}
+	else {while (position<SensorValue[pot_chainbar]){
+			chainBarUp();
+	}}
+}
 
 
 //----------------END Utility Functions------------
@@ -177,23 +225,72 @@ task WheelControls()
 	}
 }
 
+task ArcadeWheelsControls(){
+	for(;;){
+	int left=vexRT[ch2]+vexRT[ch1];
+	int right=vexRT[ch2]-vexRT[ch1];
+/*
+	if (left>127||right>127){
+	left/=2;
+	right/=2;
+
+}
+*/
+
+	moveLeftWheels(left);
+	moveRightWheels(right);
+}
+}
+
 task MobileGoalControls()
 {
+	bool shouldStop=true;
 	for (;;){
-		while (ButtonMobileGoalDown) mobileGoalDown();
-		while (ButtonMobileGoalUp) mobileGoalUp();
-		mobileGoalStop();
-	}
+		if (ButtonMobileGoalDown){
+			mobileGoalDown();
+			shouldStop=true;
+		}
+		else if (ButtonMobileGoalUp){
+			mobileGoalUp();
+			shouldStop=false;
+		}
+		else
+		{
+			if (shouldStop) mobileGoalZero();
+			else mobileGoalStop();
+	}}
+
 }
 
 task FourBarControls()
 {
 	for (;;){
-		while (ButtonFourbarUp) fourBarUp();
-		while (ButtonFourbarDown) fourBarDown();
-		fourBarStop();
+		while (ButtonFourbarUp){
+			if (isFourBarLocked) releaseFourBar();
+			fourBarUp();
 		}
+		while (ButtonFourbarDown) {
+			if (isFourBarLocked) releaseFourBar();
+			fourBarDown();
+		}
+		if (!isFourBarLocked) fourBarStop();
+	}
 }
+
+/*
+task FourBarControls()
+{
+for (;;){
+while (ButtonFourbarUp){
+fourBarUp();
+}
+while (ButtonFourbarDown) {
+fourBarDown();
+}
+fourBarStop();
+}
+}
+*/
 
 task RollerControls()
 {
@@ -211,18 +308,58 @@ task RollerControls()
 		{
 			if (shouldStop) rollerZero();
 			else rollerStop();
-
-}
+		}
 }}
 
 task ChainBarControls()
 {
 	for (;;){
-		while (ButtonChainBarUp) chainBarUp();
-		while (ButtonChainBarDown) chainBarDown();
-		chainBarStop();
+		//if (SensorValue[pot_chainbar]<=350)
+		//{
+		//  moveChainBarTo(400);
+		//  holdChainBar(400);
+		//}
+		while (ButtonChainBarUp) {
+			if (isChainBarLocked) releaseChainBar();
+			chainBarUp();
+		}
+		while (ButtonChainBarDown) {
+			if (isChainBarLocked) releaseChainBar();
+			chainBarDown();
+		}
+		if (!isChainBarLocked) chainBarStop();
+	}
 }
+/*
+struct SpecialLocation {
+int chainbar;
+int fourbar;
+};
+*/
+//SpecialLocation manualLoader{1530,80};
+
+// special pick loading fourbar: 80, chainbar 1530
+
+
+task SpecialControls(){
+	for(;;){
+		if (ButtonSpecialPickUp){
+			moveChainBarTo(1300);
+			holdChainBar(1300);
+		}
+		if (ButtonSpecialDropOff1){
+			moveChainBarTo(400);
+			holdChainBar(400);
+		}
+		if (ButtonSpecialDropOff2){
+			moveChainBarTo(1900);
+			holdChainBar(1900);
+		}
+	}
 }
+
+
+
 
 
 #endif
