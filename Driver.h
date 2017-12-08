@@ -6,13 +6,13 @@
 const int MB_POWER = 90; // power to mobile goal lift
 const int FOURBAR_POWER = 100; //power to fourbar
 const int CHAINBAR_POWER=80; // power to chainbar
-const int ROLLER_POWER=80; // power to chainbar
-const int FOURBAR_ANTIGRAVITY = 0; //power to fourbar when it is in the "stop" position
-const int MB_ANTIGRAVITY=40; //power to mobile goal lift when it is in the "stop" position
+const int ROLLER_POWER=90; // power to chainbar
+const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
+const int MB_ANTIGRAVITY=20; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY=20;
-const int ROLLER_ANTIGRAVITY=30;
+const int ROLLER_ANTIGRAVITY=0;
 
-const int POT_CHAINBAR_MAX=2000;
+const int POT_CHAINBAR_MAX=2800;
 const int POT_CHAINBAR_MIN=0;
 
 const int POT_FOURBAR_MAX=600;
@@ -46,7 +46,7 @@ void moveRightWheels(int power)
 void mobileGoalUp()
 {
 	motor[mb_left] = MB_POWER;
-	motor[mb_right] = MB_POWER+10;
+	motor[mb_right] = MB_POWER+20;
 }
 
 void mobileGoalZero()
@@ -205,10 +205,10 @@ void moveChainBarTo(int position){
 	if (isChainBarLocked) releaseChainBar();
 
 	if (position>SensorValue[pot_chainbar]){
-		while (position>SensorValue[pot_chainbar]) chainBarDown();
+		while (position>SensorValue[pot_chainbar]) chainBarUp();
 	}
 	else {while (position<SensorValue[pot_chainbar]){
-			chainBarUp();
+			chainBarDown();
 	}}
 }
 
@@ -227,8 +227,8 @@ task WheelControls()
 
 task ArcadeWheelsControls(){
 	for(;;){
-	int left=vexRT[ch2]+vexRT[ch1];
-	int right=vexRT[ch2]-vexRT[ch1];
+	int left=vexRT[Ch2]+vexRT[Ch1];
+	int right=vexRT[Ch2]-vexRT[Ch1];
 /*
 	if (left>127||right>127){
 	left/=2;
@@ -344,16 +344,16 @@ int fourbar;
 task SpecialControls(){
 	for(;;){
 		if (ButtonSpecialPickUp){
-			moveChainBarTo(1300);
-			holdChainBar(1300);
+			moveChainBarTo(1910);
+			holdChainBar(1910);
 		}
 		if (ButtonSpecialDropOff1){
-			moveChainBarTo(400);
-			holdChainBar(400);
+			moveChainBarTo(1100);
+			holdChainBar(1100);
 		}
 		if (ButtonSpecialDropOff2){
-			moveChainBarTo(1900);
-			holdChainBar(1900);
+			moveChainBarTo(2675);
+			holdChainBar(2675);
 		}
 	}
 }
