@@ -10,7 +10,7 @@ const int ROLLER_POWER=90; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=20; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY=20;
-const int ROLLER_ANTIGRAVITY=4;
+const int ROLLER_ANTIGRAVITY=8;
 
 const int POT_CHAINBAR_MAX=950;
 const int POT_CHAINBAR_MIN=3190;
@@ -73,6 +73,12 @@ void fourBarUp()
 	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
 }
 
+void fourBarMove(int power)
+{
+	motor[fb_left] = power;
+	motor[fb_right] = power;
+}
+
 void fourBarDown()
 {
 	motor[fb_left] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY-1;
@@ -87,12 +93,13 @@ void fourBarStop()
 
 
 void rollerIn(){
-	motor[roller]=ROLLER_POWER;
+	clearTimer(T1);
+	while (time1(T1)<500) motor[roller]=ROLLER_POWER;
 }
 
 void rollerOut(){
 	clearTimer(T1);
-	while (time1(T1)<2000) motor[roller]=-ROLLER_POWER/2;
+	while (time1(T1)<2500) motor[roller]=-ROLLER_POWER/2;
 	return;
 }
 
@@ -120,13 +127,12 @@ void chainBarStop(){
 	motor[chainbar]=CHAINBAR_ANTIGRAVITY;
 }
 
+
 int chainbarTarget=0;
 int fourbarTarget=0;
 bool isFourBarLocked=false;
 bool isChainBarLocked=false;
-int fp;
-int outp;
-int outd;
+
 
 task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 	#define currLoc SensorValue[pot_chainbar]
@@ -142,10 +148,6 @@ task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 		err*kp+ // Proportional
 		(lastErr-err)*kd+
 		(currLoc>2705?-CHAINBAR_ANTIGRAVITY:0);
-		//Derivative
-		fp=powerOutput; //debug
-		outp=err*kp; // debug
-		outd=(lastErr-err)*kd; //debug
 		lastErr=err;
 		chainBarMove(powerOutput);
 	}
@@ -153,39 +155,25 @@ task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 	}
 
 task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
-	for (;;){/*
-		if (SensorValue(pot_fourbar)>fourbar_position){
-			motor[fb_left]=-19;
-			motor[fb_right]=-19;
-			} else if (SensorValue(pot_fourbar)<fourbar_position){
-			motor[fb_left]=19;
-			motor[fb_right]=19;
-			} else {
-			motor[fb_left]=0;
-			motor[fb_right]=0;*/
+	for (;;){
+	#define currLoc SensorValue[pot_fourbar]
+	const float kp=0.25; // proportional constant
+	const float kd=0.5; // derivatie constant
+	int lastErr,powerOutput=0;
+	int err=0;
+
+	for (;;){
+		err=fourbarTarget-currLoc;
+		powerOutput=
+		FOURBAR_ANTIGRAVITY+ //Base power
+		err*kp+ // Proportional
+		(lastErr-err)*kd;
+		lastErr=err;
+		fourBarMove(powerOutput);
+	}
+#undef currLoc
 		}
 	}
-
-
-
-
-void holdChainBar(int target){
-	chainbarTarget=target;
-	if (!isChainBarLocked){
-		isChainBarLocked=true;
-		startTask(lockChainbar);
-		return;
-	}
-}
-
-void holdFourBar(int position){
-	fourbarTarget=position;
-	if (!isFourBarlocked){
-		isFourBarLocked=true;
-		startTask(lockFourBar);
-		return;
-	}
-}
 
 void releaseChainBar(){
 	isChainBarLocked=false;
@@ -197,23 +185,30 @@ void releaseFourBar(){
 	stopTask(lockFourBar);
 }
 
+void holdChainBar(int target){
+	chainbarTarget=target;
+	if (isChainBarLocked){
+		stopTask(lockChainbar);
+	} else {
+	isChainBarLocked=true;
+}
+		startTask(lockChainbar);
+		return;
 
-
-void moveFourBarTo(int position){
-
-	if (isFourBarLocked) releaseFourBar();
-	while (position>SensorValue[pot_fourbar]){
-		fourBarUp();
-	}
-	while (position<SensorValue[pot_fourbar]){
-		fourBarDown();
-	}
 }
 
-void moveChainBarTo(int position){
-	if (isChainBarLocked) releaseChainBar();
-	holdChainbar(position);
+void holdFourBar(int position){
+	fourbarTarget=position;
+	if (isFourBarlocked){
+		stopTask(lockFourBar);
+	} else {
+		isFourBarLocked=true;
+	}
+		startTask(lockFourBar);
+		return;
 }
+
+
 
 
 //----------------END Utility Functions------------
@@ -232,13 +227,7 @@ task ArcadeWheelsControls(){
 	for(;;){
 	int left=vexRT[Ch2]+vexRT[Ch1];
 	int right=vexRT[Ch2]-vexRT[Ch1];
-/*
-	if (left>127||right>127){
-	left/=2;
-	right/=2;
 
-}
-*/
 
 	moveLeftWheels(left);
 	moveRightWheels(right);
@@ -280,21 +269,6 @@ task FourBarControls()
 	}
 }
 
-/*
-task FourBarControls()
-{
-for (;;){
-while (ButtonFourbarUp){
-fourBarUp();
-}
-while (ButtonFourbarDown) {
-fourBarDown();
-}
-fourBarStop();
-}
-}
-*/
-
 task RollerControls()
 {
 	bool shouldStop=true;
@@ -317,11 +291,6 @@ task RollerControls()
 task ChainBarControls()
 {
 	for (;;){
-		//if (SensorValue[pot_chainbar]<=350)
-		//{
-		//  moveChainBarTo(400);
-		//  holdChainBar(400);
-		//}
 		while (ButtonChainBarUp) {
 			if (isChainBarLocked) releaseChainBar();
 			chainBarUp();
@@ -333,16 +302,6 @@ task ChainBarControls()
 		if (!isChainBarLocked) chainBarStop();
 	}
 }
-/*
-struct SpecialLocation {
-int chainbar;
-int fourbar;
-};
-*/
-//SpecialLocation manualLoader{1530,80};
-
-// special pick loading fourbar: 80, chainbar 1530
-
 
 task SpecialControls(){
 	for(;;){
@@ -355,9 +314,12 @@ task SpecialControls(){
 		if (ButtonSpecialDropOffHigh){
 			holdChainBar(2810);
 		}
+		if (vexRT[Btn8L]){
+			holdChainBar(245);
+			holdFourBar(1328);
+		}
 	}
 }
-
 
 
 
