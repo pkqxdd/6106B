@@ -13,8 +13,6 @@ rollerStop();
 // move the robot to be in front of the stationary goal
 int dis[4]={0,0,0,0}; //record for the distance of wheels
 
-moveFourBarTo(430);
-holdFourBar(430);
 
 while (abs(nMotorEncoder(front_left))<1050){ //if average of four wheels...
 	dis[0]=nMotorEncoder(front_left);
