@@ -10,12 +10,12 @@ const int ROLLER_POWER=90; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=20; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY=20;
-const int ROLLER_ANTIGRAVITY=0;
+const int ROLLER_ANTIGRAVITY=4;
 
-const int POT_CHAINBAR_MAX=2800;
-const int POT_CHAINBAR_MIN=0;
+const int POT_CHAINBAR_MAX=950;
+const int POT_CHAINBAR_MIN=3190;
 
-const int POT_FOURBAR_MAX=600;
+const int POT_FOURBAR_MAX=700;
 const int POT_FOURBAR_MIN=0;
 
 
@@ -106,7 +106,10 @@ void rollerZero(){
 
 void chainBarUp(){
 	motor[chainbar]=CHAINBAR_POWER+CHAINBAR_ANTIGRAVITY;
+}
 
+void chainBarMove(int power){
+	motor[chainbar]=power;
 }
 
 void chainBarDown(){
@@ -117,34 +120,40 @@ void chainBarStop(){
 	motor[chainbar]=CHAINBAR_ANTIGRAVITY;
 }
 
-int chainbar_position=0;
-int fourbar_position=0;
+int chainbarTarget=0;
+int fourbarTarget=0;
 bool isFourBarLocked=false;
 bool isChainBarLocked=false;
-
+int fp;
+int outp;
+int outd;
 
 task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
-
-	bool goal_reached;
+	#define currLoc SensorValue[pot_chainbar]
+	const float kp=0.25; // proportional constant
+	const float kd=0.5; // derivatie constant
+	int lastErr,powerOutput=0;
+	int err=0;
 
 	for (;;){
-		goal_reached= (chainbar_position -10 < SensorValue[pot_chainbar]) && (SensorValue[pot_chainbar]< chainbar_position+10);
-
-		if (!goal_reached){
-			if ( SensorValue(pot_chainbar)>chainbar_position){
-				motor[chainbar]=50;
-				} else if ( SensorValue(pot_chainbar)<chainbar_position){
-				if (SensorValue(pot_chainbar)) {motor[chainbar]=-80;}
-				else {motor[chainbar]=-10;}
-			}
-			} else {
-			motor[chainbar]=0;
-		}
-
+		err=chainbarTarget-currLoc;
+		powerOutput=
+		CHAINBAR_ANTIGRAVITY+ //Base power
+		err*kp+ // Proportional
+		(lastErr-err)*kd+
+		(currLoc>2705?-CHAINBAR_ANTIGRAVITY:0);
+		//Derivative
+		fp=powerOutput; //debug
+		outp=err*kp; // debug
+		outd=(lastErr-err)*kd; //debug
+		lastErr=err;
+		chainBarMove(powerOutput);
 	}
-}
+#undef currLoc
+	}
+
 task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
-	for (;;){
+	for (;;){/*
 		if (SensorValue(pot_fourbar)>fourbar_position){
 			motor[fb_left]=-19;
 			motor[fb_right]=-19;
@@ -153,15 +162,15 @@ task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
 			motor[fb_right]=19;
 			} else {
 			motor[fb_left]=0;
-			motor[fb_right]=0;
+			motor[fb_right]=0;*/
 		}
 	}
-}
 
 
 
-void holdChainBar(int position){
-	chainbar_position=position;
+
+void holdChainBar(int target){
+	chainbarTarget=target;
 	if (!isChainBarLocked){
 		isChainBarLocked=true;
 		startTask(lockChainbar);
@@ -170,8 +179,8 @@ void holdChainBar(int position){
 }
 
 void holdFourBar(int position){
-	fourbar_position=position;
-	if (!isFourBarLocked){
+	fourbarTarget=position;
+	if (!isFourBarlocked){
 		isFourBarLocked=true;
 		startTask(lockFourBar);
 		return;
@@ -203,13 +212,7 @@ void moveFourBarTo(int position){
 
 void moveChainBarTo(int position){
 	if (isChainBarLocked) releaseChainBar();
-
-	if (position>SensorValue[pot_chainbar]){
-		while (position>SensorValue[pot_chainbar]) chainBarUp();
-	}
-	else {while (position<SensorValue[pot_chainbar]){
-			chainBarDown();
-	}}
+	holdChainbar(position);
 }
 
 
@@ -344,16 +347,13 @@ int fourbar;
 task SpecialControls(){
 	for(;;){
 		if (ButtonSpecialPickUp){
-			moveChainBarTo(1910);
-			holdChainBar(1910);
+			holdChainBar(1650);
 		}
-		if (ButtonSpecialDropOff1){
-			moveChainBarTo(1100);
-			holdChainBar(1100);
+		if (ButtonSpecialDropOffLow){
+			holdChainBar(980);
 		}
-		if (ButtonSpecialDropOff2){
-			moveChainBarTo(2675);
-			holdChainBar(2675);
+		if (ButtonSpecialDropOffHigh){
+			holdChainBar(2810);
 		}
 	}
 }
