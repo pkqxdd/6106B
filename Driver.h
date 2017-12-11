@@ -9,14 +9,25 @@ const int CHAINBAR_POWER=80; // power to chainbar
 const int ROLLER_POWER=90; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=20; //power to mobile goal lift when it is in the "stop" position
-const int CHAINBAR_ANTIGRAVITY=20;
+const int CHAINBAR_ANTIGRAVITY=10;
 const int ROLLER_ANTIGRAVITY=8;
 
-const int POT_CHAINBAR_MAX=950;
+const int POT_CHAINBAR_MAX=975;
 const int POT_CHAINBAR_MIN=3190;
 
-const int POT_FOURBAR_MAX=700;
-const int POT_FOURBAR_MIN=0;
+const int POT_FOURBAR_LEFT_MAX=2100;
+const int POT_FOURBAR_LEFT_MIN=970;
+
+const int POT_FOURBAR_RIGHT_MAX=2050;
+const int POT_FOURBAR_RIGHT_MIN=875;
+
+const int RIGHT_MB_START=0; //I2C 6
+const int RIGHT_MB_TRAVEL=375;
+const int RIGHT_MB_MAX=1220;
+
+const int LEFT_MB_START=0; //I2C 5
+const int LEFT_MB_TRAVEL=-375
+const int LEFT_MB_MAX=-1220;
 
 
 
@@ -67,9 +78,13 @@ void mobileGoalStop(){
 	motor[mb_right] = MB_ANTIGRAVITY+10;
 }
 
-void fourBarUp()
+void fourBarLeftUp()
 {
-	motor[fb_left] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+2;
+	motor[fb_left] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
+}
+
+void fourBarRightUp()
+{
 	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
 }
 
@@ -136,8 +151,8 @@ bool isChainBarLocked=false;
 
 task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 	#define currLoc SensorValue[pot_chainbar]
-	const float kp=0.25; // proportional constant
-	const float kd=0.5; // derivatie constant
+	const float kp=.25; // proportional constant
+	const float kd=.5; // derivatie constant
 	int lastErr,powerOutput=0;
 	int err=0;
 
@@ -156,7 +171,7 @@ task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 
 task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
 	for (;;){
-	#define currLoc SensorValue[pot_fourbar]
+	#define currLoc SensorValue[pot_fourbar_left]
 	const float kp=0.25; // proportional constant
 	const float kd=0.5; // derivatie constant
 	int lastErr,powerOutput=0;
@@ -259,7 +274,8 @@ task FourBarControls()
 	for (;;){
 		while (ButtonFourbarUp){
 			if (isFourBarLocked) releaseFourBar();
-			fourBarUp();
+			fourBarLeftUp();
+			fourBarRightUp();
 		}
 		while (ButtonFourbarDown) {
 			if (isFourBarLocked) releaseFourBar();
