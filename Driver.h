@@ -9,11 +9,11 @@ const int CHAINBAR_POWER=80; // power to chainbar
 const int ROLLER_POWER=90; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=20; //power to mobile goal lift when it is in the "stop" position
-const int CHAINBAR_ANTIGRAVITY=10;
+const int CHAINBAR_ANTIGRAVITY=20;
 const int ROLLER_ANTIGRAVITY=8;
 
-const int POT_CHAINBAR_MAX=975;
-const int POT_CHAINBAR_MIN=3190;
+const int POT_CHAINBAR_MIN=1052;
+const int POT_CHAINBAR_MAX=3190;
 
 const int POT_FOURBAR_LEFT_MAX=2100;
 const int POT_FOURBAR_LEFT_MIN=970;
@@ -85,12 +85,12 @@ void fourBarLeftUp()
 
 void fourBarRightUp()
 {
-	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
+	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
 void fourBarMove(int power)
 {
-	motor[fb_left] = power;
+  motor[fb_left] = power;
 	motor[fb_right] = power;
 }
 
@@ -150,9 +150,10 @@ bool isChainBarLocked=false;
 
 
 task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
+
 	#define currLoc SensorValue[pot_chainbar]
-	const float kp=.25; // proportional constant
-	const float kd=.5; // derivatie constant
+	const float kp=0.25; // proportional constant
+	const float kd=0.5; // derivatie constant
 	int lastErr,powerOutput=0;
 	int err=0;
 
@@ -165,13 +166,13 @@ task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 		(currLoc>2705?-CHAINBAR_ANTIGRAVITY:0);
 		lastErr=err;
 		chainBarMove(powerOutput);
-	}
+}
 #undef currLoc
 	}
 
 task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
 	for (;;){
-	#define currLoc SensorValue[pot_fourbar_left]
+	#define currLoc SensorValue[pot_fourbar_right]
 	const float kp=0.25; // proportional constant
 	const float kd=0.5; // derivatie constant
 	int lastErr,powerOutput=0;
@@ -330,13 +331,38 @@ task SpecialControls(){
 		if (ButtonSpecialDropOffHigh){
 			holdChainBar(2810);
 		}
-		if (vexRT[Btn8L]){
-			holdChainBar(245);
-			holdFourBar(1328);
+		if (vexRT[Btn8L]){ //loader, for temp test only
+			holdChainBar(1870);
+			holdFourBar(1095);
 		}
 	}
 }
 
+task FourbarLeftPassiveFollow(){
+	if (!ButtonFourbarDown && !ButtonFourbarUp){
+		for (;;){
+	#define currLoc SensorValue[pot_fourbar_left]
+	#define Target SensorValue[pot_fourbar_right]+25
+	const float kp=1.5; // proportional constant
+	const float kd=5; // derivatie constant
+	int lastErr,powerOutput=0;
+	int err=0;
+
+	for (;;){
+		err=Target-currLoc;
+		powerOutput=
+		FOURBAR_ANTIGRAVITY+ //Base power
+		err*kp+ // Proportional
+		(lastErr-err)*kd;
+		lastErr=err;
+		motor[fb_left]=powerOutput;
+	}
+#undef currLoc
+#undef Target
+		}
+}
+
+}
 
 
 
