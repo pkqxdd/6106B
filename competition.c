@@ -36,6 +36,7 @@ void pre_auton()
 {
 
   bStopTasksBetweenModes = true;
+#include "pre_auton.h"
 
 }
 
