@@ -25,7 +25,7 @@
 
 task main
 {
+#include "pre_auton.h"
 #include "UserControls.h"
-
 
 }
