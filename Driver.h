@@ -173,20 +173,20 @@ task lockChainbar(){ // hold the chainbar in place. Call stoptask to release it
 task lockFourBar(){ // hold the fourbar in place. Call stoptask to release it
 
 #define currLoc SensorValue[pot_fourbar_right]
-		const float kp=0.25; // proportional constant
-		const float kd=0.5; // derivatie constant
-		int lastErr,powerOutput=0;
-		int err=0;
+	const float kp=0.25; // proportional constant
+	const float kd=0.5; // derivatie constant
+	int lastErr,powerOutput=0;
+	int err=0;
 
-		for (;;){
-			err=fourbarTarget-currLoc;
-			powerOutput=
-			FOURBAR_ANTIGRAVITY+ //Base power
-			err*kp+ // Proportional
-			(lastErr-err)*kd;
-			lastErr=err;
-			fourBarMove(powerOutput);
-		}
+	for (;;){
+		err=fourbarTarget-currLoc;
+		powerOutput=
+		FOURBAR_ANTIGRAVITY+ //Base power
+		err*kp+ // Proportional
+		(lastErr-err)*kd;
+		lastErr=err;
+		fourBarMove(powerOutput);
+	}
 #undef currLoc
 
 }
@@ -260,8 +260,13 @@ task MobileGoalControls()
 		}
 		else if (ButtonMobileGoalUp){
 			mobileGoalUp();
-			shouldStop=false;
+			shouldStop=true;
+			}else if (vexRT[Btn8L]){
+			nMotorEncoder[mb_left]=0;
+			nMotorEncoder[mb_right]=0;
 		}
+
+
 		else
 		{
 			if (shouldStop) mobileGoalZero();
@@ -337,94 +342,96 @@ task SpecialControls(){
 			holdChainBar(2810);
 		}
 #endif
+		/*
 		if (vexRT[Btn8L]){ //cone loader, for temp test only
-			holdChainBar(1870);
-			holdFourBar(1095);
-		}
+		holdChainBar(1870);
+		holdFourBar(1095);
+		*/
+	}
 
 #ifdef ButtonConeCountIncrement //Added this bunch of ifdef so that even if those buttons are not bound to anything, there is no compiler error
 #ifdef ButtonConeCountDecrement
-		if (ButtonConeCountIncrement) coneCount++;
-		if (ButtonConeCountDecrement) coneCount--;
+	if (ButtonConeCountIncrement) coneCount++;
+	if (ButtonConeCountDecrement) coneCount--;
 #ifdef ButtonConeCountReset
-		if (ButtonConeCountReset) coneCount=0;
+	if (ButtonConeCountReset) coneCount=0;
 #endif
 #ifdef ButtonSpeicalDropOff
-		if (ButtonSpecialDropOff){
+	if (ButtonSpecialDropOff){
 		switch(coneCount){
-			case 0:
+		case 0:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 1:
+		case 1:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 2:
+		case 2:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 3:
+		case 3:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 4:
+		case 4:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 5:
+		case 5:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 6:
+		case 6:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 7:
+		case 7:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 8:
+		case 8:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 9:
+		case 9:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 10:
+		case 10:
 			holdChainBar();
 			holdFourBar();
 			break;
 
-	}
+		}
 	}
 #endif
 #endif
 #endif
 
-	}
 }
+
 
 task FourbarLeftPassiveFollow(){
 	if (!ButtonFourbarDown && !ButtonFourbarUp){
 
 #define currLoc SensorValue[pot_fourbar_left]
 #define Target SensorValue[pot_fourbar_right]+25
-			const float kp=1.5; // proportional constant
-			const float kd=5; // derivatie constant
-			int lastErr,powerOutput=0;
-			int err=0;
+		const float kp=1.5; // proportional constant
+		const float kd=5; // derivatie constant
+		int lastErr,powerOutput=0;
+		int err=0;
 
-			for (;;){
-				err=Target-currLoc;
-				powerOutput=
-				FOURBAR_ANTIGRAVITY+ //Base power
-				err*kp+ // Proportional
-				(lastErr-err)*kd;
-				lastErr=err;
-				motor[fb_left]=powerOutput;
-			}
+		for (;;){
+			err=Target-currLoc;
+			powerOutput=
+			FOURBAR_ANTIGRAVITY+ //Base power
+			err*kp+ // Proportional
+			(lastErr-err)*kd;
+			lastErr=err;
+			motor[fb_left]=powerOutput;
+		}
 #undef currLoc
 #undef Target
 
@@ -432,42 +439,67 @@ task FourbarLeftPassiveFollow(){
 
 }
 
+int level=3;
+int target=0;
+int lastErrLeft,lastErrRight,powerOutputLeft,powerOutputRight=0;
+int errLeft,errRight=0;
+
 task SmoothMobileGoalLift(){
-#define left (-1*nMotorEncoder[mb_left]) //assuming left side has the negative reading
+#define left (nMotorEncoder[mb_left]) //assuming left side has the negative reading
 #define right nMotorEncoder[mb_right]
 
-			const float kp=0.25; // proportional constant
-			const float kd=2; // derivatie constant
-			int lastErrLeft,lastErrRight,powerOutputLeft,powerOutputRight=0;
-			int errLeft,errRight=0;
-			int target=0;
-			const int targetInterval=10; //change this value if it's going too slow/fast
-
-			for (;;){
-
-				if (ButtonMobileGoalUp){ //so the target don't get shoot into some absurd valule
-					//TODO: also check the value relative to current value in case of stalling.
-					if (target+targetInterval<RIGHT_MB_MAX)
-					target+=targetInterval;
-				}
-
-				if (ButtonMobileGoalDown){
-					if (target-targetInterval>0)
-					target-=targetInterval;
-				}
-
-				errLeft=left-target;
-				errRight=right-target;
-				powerOutputLeft=errLeft*kp+(lastErrLeft-errLeft)*kd;
-				powerOutputRight=errRight*kp+(lastErrRight-errRight)*kd;
-				lastErrLeft=errLeft;
-				lastErrRight=errRight;
-				motor[fb_left]=powerOutputLeft;
-				motor[fb_right]=powerOutputRight; //smoothing both sides to make them balance
+	bool wasPressed=false;
+	const float kp=0.5; // proportional constant
+	const float kd=-5; // derivatie constant
+	//int lastErrLeft,lastErrRight,powerOutputLeft,powerOutputRight=0;
+	//int errLeft,errRight=0;
+	//int level,target=0; //level is 0,1,2,3
+	int mapLevelToTarget[4]={1300,857,450,0};
+	bool Up=false;
+	for (;;){
+		if (ButtonMobileGoalUp){ //so the target don't get shoot into some absurd valule
+			if (!wasPressed){
+				wasPressed=true;
+				if (level<3) level+=1;
+				Up=true;
 			}
+
+		}
+		else if (ButtonMobileGoalDown){
+			if (!wasPressed){wasPressed=true;
+				if (level>0) level-=1;
+				Up=false;
+			}
+		}
+		else {wasPressed=false;}
+
+		target=mapLevelToTarget[level];
+
+		/*
+		errLeft=left-target;
+		errRight=right-target;
+		powerOutputLeft=errLeft*kp+(lastErrLeft-errLeft)*kd;
+		powerOutputRight=errRight*kp+(lastErrRight-errRight)*kd;
+		lastErrLeft=errLeft;
+		lastErrRight=errRight;
+		motor[mb_left]=powerOutputLeft;
+		motor[mb_right]=powerOutputRight; //smoothing both sides to make them balance
+		*/
+
+		if (Up){
+			if ( left<target) {motor[mb_left]=0;} else  {motor[mb_left]=left-target;}
+			if(right<target ) {motor[mb_right]=0;} else 	{motor[mb_right]=right-target;}
+			} else {
+			if ( left>target) {motor[mb_left]=0;} else {motor[mb_left]=left-target;}
+			if(right>target ) {motor[mb_right]=0;} else 	{motor[mb_right]=right-target;}
+		}
+	}
+}
+
+
 #undef right
 #undef left
-}
+
 
 
 
