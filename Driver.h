@@ -265,16 +265,17 @@ task MobileGoalControls()
 			nMotorEncoder[mb_left]=0;
 			nMotorEncoder[mb_right]=0;
 		}
-
-
 		else
 		{
-			if (shouldStop) mobileGoalZero();
-			else mobileGoalStop();
-	}}
-
+			if (shouldStop){
+				mobileGoalZero();
+			}
+			else {
+				mobileGoalStop();
+			}
+		}
+	}
 }
-
 task FourBarControls()
 {
 	for (;;){
@@ -308,7 +309,8 @@ task RollerControls()
 			if (shouldStop) rollerZero();
 			else rollerStop();
 		}
-}}
+	}
+}
 
 task ChainBarControls()
 {
@@ -436,7 +438,6 @@ task FourbarLeftPassiveFollow(){
 #undef Target
 
 	}
-
 }
 
 int level=3;
@@ -446,7 +447,7 @@ int errLeft,errRight=0;
 
 task SmoothMobileGoalLift(){
 #define left (nMotorEncoder[mb_left]) //assuming left side has the negative reading
-#define right nMotorEncoder[mb_right]
+#define right (nMotorEncoder[mb_right])
 
 	bool wasPressed=false;
 	const float kp=0.5; // proportional constant
@@ -456,22 +457,27 @@ task SmoothMobileGoalLift(){
 	//int level,target=0; //level is 0,1,2,3
 	int mapLevelToTarget[4]={1300,857,450,0};
 	bool Up=false;
+	bool Down=false;
 	for (;;){
 		if (ButtonMobileGoalUp){ //so the target don't get shoot into some absurd valule
-			if (!wasPressed){
-				wasPressed=true;
-				if (level<3) level+=1;
-				Up=true;
-			}
-
+			if (level<3) level+=1;
+			Up=true;
+			Down=false;
 		}
 		else if (ButtonMobileGoalDown){
-			if (!wasPressed){wasPressed=true;
-				if (level>0) level-=1;
+			if (!wasPressed){
+				wasPressed=true;
+				if (level>0){
+					level-=1;
+				}
 				Up=false;
+				Down=true;
 			}
 		}
-		else {wasPressed=false;}
+		else {
+			Up=false;
+			Down=false;
+		}
 
 		target=mapLevelToTarget[level];
 
@@ -487,19 +493,36 @@ task SmoothMobileGoalLift(){
 		*/
 
 		if (Up){
-			if ( left<target) {motor[mb_left]=0;} else  {motor[mb_left]=left-target;}
-			if(right<target ) {motor[mb_right]=0;} else 	{motor[mb_right]=right-target;}
-			} else {
-			if ( left>target) {motor[mb_left]=0;} else {motor[mb_left]=left-target;}
-			if(right>target ) {motor[mb_right]=0;} else 	{motor[mb_right]=right-target;}
+			if (left>target) {
+				motor[mb_left]=4*(left-target);
+			}
+			if(right>target) {
+				motor[mb_right]=4*(right-target);
+			}
+		}
+		else if (Down){
+			if ( left<target) {
+				motor[mb_left]=4*(left-target);
+			}
+			if(right<target ) {
+				motor[mb_right]=4*(right-target);
+			}
+		}
+		else {
+			errLeft=left-target;
+			errRight=right-target;
+			powerOutputLeft=errLeft*kp+(lastErrLeft-errLeft)*kd;
+			powerOutputRight=errRight*kp+(lastErrRight-errRight)*kd;
+			lastErrLeft=errLeft;
+			lastErrRight=errRight;
+			motor[mb_left]=powerOutputLeft;
+			motor[mb_right]=powerOutputRight; //smoothing both sides to make them balance
 		}
 	}
 }
 
-
 #undef right
 #undef left
-
 
 
 
