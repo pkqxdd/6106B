@@ -14,15 +14,14 @@ while (true){
 }
 motor[mb_left]=0;
 motor[mb_right]=0;
-<<<<<<< HEAD
+
 clearTimer(T1);
 while (time1(T1)<500) {
 
 }
 
 
-=======
->>>>>>> parent of 92097c2... When Jerry Left
+
 nMotorEncoder[mb_left]=0;
 nMotorEncoder[mb_right]=0;
 // ------------END correcting mobile goal lift encoder reading---------

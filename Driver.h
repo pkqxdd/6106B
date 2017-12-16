@@ -436,7 +436,7 @@ task FourbarLeftPassiveFollow(){
 }
 
 task SmoothMobileGoalLift(){
-<<<<<<< HEAD
+
 #define left (nMotorEncoder[mb_left]) //assuming left side has the negative reading
 #define right (nMotorEncoder[mb_right])
 
@@ -512,7 +512,7 @@ task SmoothMobileGoalLift(){
 	}
 }
 
-=======
+
 #define left (-1*nMotorEncoder[mb_left]) //assuming left side has the negative reading
 #define right nMotorEncoder[mb_right]
 
@@ -545,7 +545,7 @@ task SmoothMobileGoalLift(){
 				motor[fb_left]=powerOutputLeft;
 				motor[fb_right]=powerOutputRight; //smoothing both sides to make them balance
 			}
->>>>>>> parent of 92097c2... When Jerry Left
+
 #undef right
 #undef left
 }
