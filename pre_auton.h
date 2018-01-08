@@ -14,7 +14,10 @@ while (true){
 }
 motor[mb_left]=0;
 motor[mb_right]=0;
+<<<<<<< HEAD
 
+=======
+>>>>>>> NotWorking
 clearTimer(T1);
 while (time1(T1)<500) {
 
