@@ -1,4 +1,4 @@
- #ifndef userControls
+#ifndef userControls
 #define userControls
 
 // ------------Driver Control Codes-------------
@@ -11,7 +11,10 @@ startTask (RollerControls);
 startTask (ChainBarControls);
 //startTask (FourbarLeftPassiveFollow);
 startTask (SmoothMobileGoalLift);
-for(;;){}
+while (true)
+{
+
+}
 
 
 // ------------END Driver Control Main Codes-----------
