@@ -179,22 +179,11 @@ task lockFourBar()
 { // hold the fourbar in place. Call stoptask to release it
 
 #define currLoc SensorValue[pot_fourbar_right]
-		const float kp=0.25; // proportional constant
-		const float kd=0.5; // derivatie constant
-		int lastErr,powerOutput=0;
-		int err=0;
+	const float kp=0.25; // proportional constant
+	const float kd=0.5; // derivatie constant
+	int lastErr,powerOutput=0;
+	int err=0;
 
-<<<<<<< HEAD
-		for (;;){
-			err=fourbarTarget-currLoc;
-			powerOutput=
-			FOURBAR_ANTIGRAVITY+ //Base power
-			err*kp+ // Proportional
-			(lastErr-err)*kd;
-			lastErr=err;
-			fourBarMove(powerOutput);
-		}
-=======
 	while (true)
 	{
 		err=fourbarTarget-currLoc;
@@ -205,7 +194,6 @@ task lockFourBar()
 		lastErr=err;
 		fourBarMove(powerOutput);
 	}
->>>>>>> NotWorking
 #undef currLoc
 
 }
@@ -284,29 +272,6 @@ moveRightWheels(right);
 /*
 task MobileGoalControls()
 {
-<<<<<<< HEAD
-	bool shouldStop=true;
-	for (;;){
-		if (ButtonMobileGoalDown){
-			mobileGoalDown();
-			shouldStop=true;
-		}
-		else if (ButtonMobileGoalUp){
-			mobileGoalUp();
-			shouldStop=false;
-		}
-		else
-		{
-			if (shouldStop){
-				mobileGoalZero();
-			}
-			else {
-				mobileGoalStop();
-			}
-		}
-	}
-}
-=======
 
 while (true)
 {
@@ -328,7 +293,6 @@ mobileGoalStop();
 }
 }
 */
->>>>>>> NotWorking
 task FourBarControls()
 {
 	while (true)
@@ -414,117 +378,76 @@ task SpecialControls()
 			//holdChainBar(POT_CHAINBAR_MAX-380);
 		}
 #endif
+		/*
 		if (vexRT[Btn8L]){ //cone loader, for temp test only
-			holdChainBar(1870);
-			holdFourBar(1095);
-		}
+		holdChainBar(1870);
+		holdFourBar(1095);
+		*/
+	}
 
 #ifdef ButtonConeCountIncrement //Added this bunch of ifdef so that even if those buttons are not bound to anything, there is no compiler error
 #ifdef ButtonConeCountDecrement
-		if (ButtonConeCountIncrement) coneCount++;
-		if (ButtonConeCountDecrement) coneCount--;
+	if (ButtonConeCountIncrement) coneCount++;
+	if (ButtonConeCountDecrement) coneCount--;
 #ifdef ButtonConeCountReset
-		if (ButtonConeCountReset) coneCount=0;
+	if (ButtonConeCountReset) coneCount=0;
 #endif
 #ifdef ButtonSpeicalDropOff
-<<<<<<< HEAD
-		if (ButtonSpecialDropOff){
-		switch(coneCount){
-			case 0:
-=======
 	if (ButtonSpecialDropOff)
 	{
 		switch(coneCount)
 		{
 		case 0:
->>>>>>> NotWorking
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 1:
+		case 1:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 2:
+		case 2:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 3:
+		case 3:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 4:
+		case 4:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 5:
+		case 5:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 6:
+		case 6:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 7:
+		case 7:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 8:
+		case 8:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 9:
+		case 9:
 			holdChainBar();
 			holdFourBar();
 			break;
-			case 10:
+		case 10:
 			holdChainBar();
 			holdFourBar();
 			break;
-<<<<<<< HEAD
-
-	}
-=======
 		}
->>>>>>> NotWorking
 	}
 #endif
 #endif
 #endif
 
-	}
 }
-<<<<<<< HEAD
-
-task FourbarLeftPassiveFollow(){
-	if (!ButtonFourbarDown && !ButtonFourbarUp){
-
-#define currLoc SensorValue[pot_fourbar_left]
-#define Target SensorValue[pot_fourbar_right]+25
-			const float kp=1.5; // proportional constant
-			const float kd=5; // derivatie constant
-			int lastErr,powerOutput=0;
-			int err=0;
-
-			for (;;){
-				err=Target-currLoc;
-				powerOutput=
-				FOURBAR_ANTIGRAVITY+ //Base power
-				err*kp+ // Proportional
-				(lastErr-err)*kd;
-				lastErr=err;
-				motor[fb_left]=powerOutput;
-			}
-#undef currLoc
-#undef Target
-
-	}
-}
-
-task SmoothMobileGoalLift(){
-
-#define left (nMotorEncoder[mb_left]) //assuming left side has the negative reading
-=======
 /*
 task FourbarLeftPassiveFollow()
 {
@@ -563,7 +486,6 @@ int errLeft,errRight=0;
 task SmoothMobileGoalLift()
 {
 #define left  (nMotorEncoder[mb_left]) //assuming left side has the negative reading
->>>>>>> NotWorking
 #define right (nMotorEncoder[mb_right])
 
 	bool wasPressed=false;
@@ -571,21 +493,6 @@ task SmoothMobileGoalLift()
 	//const float kd=-.25; // derivatie constant
 	int mapLevelToTarget[4]={-1225,-775,-300, 20};
 	bool Up=false;
-<<<<<<< HEAD
-	bool Down=false;
-	for (;;){
-		if (ButtonMobileGoalUp){ //so the target don't get shoot into some absurd valule
-			if (level<3) level+=1;
-			Up=true;
-			Down=false;
-		}
-		else if (ButtonMobileGoalDown){
-			if (!wasPressed){
-				wasPressed=true;
-				if (level>0){
-					level-=1;
-				}
-=======
 	while (true)
 	{
 		if (ButtonMobileGoalUp)
@@ -602,20 +509,12 @@ task SmoothMobileGoalLift()
 			if (!wasPressed){
 				wasPressed=true;
 				if (level>0) level-=1;
->>>>>>> NotWorking
 				Up=false;
-				Down=true;
 			}
 		}
-<<<<<<< HEAD
-		else {
-			Up=false;
-			Down=false;
-=======
 		else
 		{
 			wasPressed=false;
->>>>>>> NotWorking
 		}
 
 		target=mapLevelToTarget[level];
@@ -628,80 +527,11 @@ task SmoothMobileGoalLift()
 		powerOutputRight=errRight*kp;
 		motor[mb_left]=powerOutputLeft;
 		motor[mb_right]=powerOutputRight; //smoothing both sides to make them balance
-<<<<<<< HEAD
-		*/
-
-		if (Up){
-			if (left>target) {
-				motor[mb_left]=4*(left-target);
-			}
-			if(right>target) {
-				motor[mb_right]=4*(right-target);
-			}
-		}
-		else if (Down){
-			if ( left<target) {
-				motor[mb_left]=4*(left-target);
-			}
-			if(right<target ) {
-				motor[mb_right]=4*(right-target);
-			}
-		}
-		else {
-			errLeft=left-target;
-			errRight=right-target;
-			powerOutputLeft=errLeft*kp+(lastErrLeft-errLeft)*kd;
-			powerOutputRight=errRight*kp+(lastErrRight-errRight)*kd;
-			lastErrLeft=errLeft;
-			lastErrRight=errRight;
-			motor[mb_left]=powerOutputLeft;
-			motor[mb_right]=powerOutputRight; //smoothing both sides to make them balance
-		}
-	}
-}
-
-
-#define left (-1*nMotorEncoder[mb_left]) //assuming left side has the negative reading
-#define right nMotorEncoder[mb_right]
-=======
 	}
 }
 #undef right
 #undef left
->>>>>>> NotWorking
 
-			const float kp=0.25; // proportional constant
-			const float kd=2; // derivatie constant
-			int lastErrLeft,lastErrRight,powerOutputLeft,powerOutputRight=0;
-			int errLeft,errRight=0;
-			int target=0;
-			const int targetInterval=10; //change this value if it's going too slow/fast
 
-			for (;;){
-
-				if (ButtonMobileGoalUp){ //so the target don't get shoot into some absurd valule
-					//TODO: also check the value relative to current value in case of stalling.
-					if (target+targetInterval<RIGHT_MB_MAX)
-					target+=targetInterval;
-				}
-
-				if (ButtonMobileGoalDown){
-					if (target-targetInterval>0)
-					target-=targetInterval;
-				}
-
-				errLeft=left-target;
-				errRight=right-target;
-				powerOutputLeft=errLeft*kp+(lastErrLeft-errLeft)*kd;
-				powerOutputRight=errRight*kp+(lastErrRight-errRight)*kd;
-				lastErrLeft=errLeft;
-				lastErrRight=errRight;
-				motor[fb_left]=powerOutputLeft;
-				motor[fb_right]=powerOutputRight; //smoothing both sides to make them balance
-			}
-
-#undef right
-#undef left
-}
 
 #endif
