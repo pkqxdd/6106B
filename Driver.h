@@ -2,7 +2,6 @@
 #define drivers
 
 // -----------------BEGIN Global Constants Configuration-------------------
-
 const int MB_POWER = 60; // power to mobile goal lift
 const int FOURBAR_POWER = 100; //power to fourbar
 const int CHAINBAR_POWER=80; // power to chainbar
@@ -15,11 +14,14 @@ const int ROLLER_ANTIGRAVITY=8;
 const int POT_CHAINBAR_MIN=1052;
 const int POT_CHAINBAR_MAX=3190;
 
-const int POT_FOURBAR_LEFT_MAX=2100;
-const int POT_FOURBAR_LEFT_MIN=970;
+//POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
+const int POT_FOURBAR_LEFT_DIRECTION=-1;
+const int POT_FOURBAR_LEFT_MAX=1700;
+const int POT_FOURBAR_LEFT_MIN=3140;
 
-const int POT_FOURBAR_RIGHT_MAX=2050;
-const int POT_FOURBAR_RIGHT_MIN=875;
+const int POT_FOURBAR_RIGHT_DIRECTION=1;
+const int POT_FOURBAR_RIGHT_MAX=3800;
+const int POT_FOURBAR_RIGHT_MIN=2325;
 
 const int RIGHT_MB_START=0; //I2C 6
 const int RIGHT_MB_TRAVEL=375;
@@ -29,17 +31,16 @@ const int LEFT_MB_START=0; //I2C 5
 const int LEFT_MB_TRAVEL=-375;
 const int LEFT_MB_MAX=-1220;
 
-
-
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-//#include "KeymapXavier.h" // this file defines which button is bind to which key
 #include "KeymapJack.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
 
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
 
 
 void moveLeftWheels(int power)
@@ -57,7 +58,7 @@ void moveRightWheels(int power)
 void mobileGoalUp()
 {
 	motor[mb_left] = MB_POWER+50;
-	motor[mb_right] = MB_POWER+50;//+((nMotorEncoder[mb_right]-nMotorEncoder[mb_left]))*0.5;
+	motor[mb_right] = MB_POWER+50;
 }
 
 
@@ -80,18 +81,18 @@ void fourBarLeftUp()
 
 void fourBarRightUp()
 {
-	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY-4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
-void fourBarMove(int power)
+void fourBarMove(int powerLeft,int powerRight)
 {
-	motor[fb_left] = power;
-	motor[fb_right] = power+FOURBAR_ANTIGRAVITY+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+	motor[fb_left] = powerLeft;
+	motor[fb_right] = powerRight;
 }
 
 void fourBarDown()
 {
-	motor[fb_left] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY-1;
+	motor[fb_left] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
 	motor[fb_right] = -FOURBAR_POWER+FOURBAR_ANTIGRAVITY;
 }
 
@@ -100,7 +101,6 @@ void fourBarStop()
 	motor[fb_left] = FOURBAR_ANTIGRAVITY;
 	motor[fb_right] = FOURBAR_ANTIGRAVITY;
 }
-
 
 void rollerIn()
 {
@@ -111,7 +111,7 @@ void rollerIn()
 void rollerOut()
 {
 	clearTimer(T1);
-	while (time1(T1)<2500) motor[roller]=-ROLLER_POWER/1.5;
+	while (time1(T1)<2500) motor[roller]=-ROLLER_POWER;
 	return;
 }
 
@@ -151,10 +151,8 @@ int fourbarTarget=0;
 bool isFourBarLocked=false;
 bool isChainBarLocked=false;
 
-
 task lockChainbar()
 { // hold the chainbar in place. Call stoptask to release it
-
 #define currLoc SensorValue[pot_chainbar]
 	const float kp=-0.25; // proportional constant
 	const float kd=-0.5; // derivatie constant
@@ -175,27 +173,40 @@ task lockChainbar()
 #undef currLoc
 }
 
+
 task lockFourBar()
 { // hold the fourbar in place. Call stoptask to release it
 
-#define currLoc SensorValue[pot_fourbar_right]
+#define currLocLeft SensorValue[pot_fourbar_left]
+#define currLocRight SensorValue[pot_fourbar_right]
 	const float kp=0.25; // proportional constant
 	const float kd=0.5; // derivatie constant
-	int lastErr,powerOutput=0;
-	int err=0;
+	int lastErrLeft,lastErrRight=0;
+	int powerOutputLeft,powerOutputRight=0;
+	int errLeft,errRight=0;
 
 	while (true)
 	{
-		err=fourbarTarget-currLoc;
-		powerOutput=
-		FOURBAR_ANTIGRAVITY+ //Base power
-		err*kp+ // Proportional
-		(lastErr-err)*kd;
-		lastErr=err;
-		fourBarMove(powerOutput);
-	}
-#undef currLoc
+		//POT_MIN is the value when the fourbar is physically at its lowest location
+		errLeft=fourbarTarget-(currLocLeft-POT_FOURBAR_LEFT_MIN)*POT_FOURBAR_LEFT_DIRECTION;
+		errRight=fourbarTarget-(currLocRight-POT_FOURBAR_RIGHT_MIN)*POT_FOURBAR_RIGHT_DIRECTION;
 
+		powerOutputLeft=
+		FOURBAR_ANTIGRAVITY+ //Base power
+		errLeft*kp+ // Proportional
+		(lastErrLeft-errLeft)*kd;
+
+		powerOutputRight=
+		FOURBAR_ANTIGRAVITY+ //Base power
+		errRight*kp+ // Proportional
+		(lastErrRight-errRight)*kd;
+
+		lastErrLeft=errLeft;
+		lastErrRight=errRight;
+		fourBarMove(powerOutputLeft,powerOutputRight);
+	}
+#undef currLocLeft
+#undef currLocRight
 }
 
 void releaseChainBar()
@@ -225,24 +236,41 @@ void holdChainBar(int target)
 	return;
 
 }
-/*
-void holdFourBar(int position)
-{
-fourbarTarget=position;
-if (isFourBarLocked)
-{
-stopTask(lockFourBar);
-}
-else
-{
-isFourBarLocked=true;
-}
-startTask(lockFourBar);
-return;
-}
-*/
 
+void holdFourBar(int target)
+{
+	fourbarTarget=target;
+	if (isFourBarLocked)
+	{
+		stopTask(lockFourBar);
+	}
+	else
+	{
+		isFourBarLocked=true;
+	}
+	startTask(lockFourBar);
+	return;
 
+}
+
+void resetMobileGoalEncoder(const float t){// t is the time to move up
+motor[mb_left]=MB_POWER;
+motor[mb_right]=MB_POWER;
+nMotorEncoder[mb_left]=0;
+nMotorEncoder[mb_right]=0;
+
+clearTimer(T2);
+while (time1(T2)<t) {
+	mobileGoalUp();
+}
+
+motor[mb_left]=0;
+motor[mb_right]=0;
+
+nMotorEncoder[mb_left]=0;
+nMotorEncoder[mb_right]=0;
+
+}
 
 //----------------END Utility Functions------------
 
@@ -250,49 +278,11 @@ task WheelControls()
 {
 	while (true) // a foreverloop
 	{
-		moveLeftWheels(AxisLeftWheels*0.9);
-		moveRightWheels(AxisRightWheels*0.9);
-		//bufferedWheelsControls(AxisLeftWheels,AxisRightWheels);
+		moveLeftWheels(AxisLeftWheels);
+		moveRightWheels(AxisRightWheels);
 	}
 }
-/*
-task ArcadeWheelsControls()
-{
-while (true)
-{
-int left=vexRT[Ch2]+vexRT[Ch1];
-int right=vexRT[Ch2]-vexRT[Ch1];
 
-
-moveLeftWheels(left);
-moveRightWheels(right);
-}
-}
-*/
-/*
-task MobileGoalControls()
-{
-
-while (true)
-{
-if (ButtonMobileGoalDown)
-{
-mobileGoalDown();
-
-}
-else if (ButtonMobileGoalUp)
-{
-mobileGoalUp();
-
-}
-
-else
-{
-mobileGoalStop();
-}
-}
-}
-*/
 task FourBarControls()
 {
 	while (true)
@@ -362,28 +352,25 @@ task SpecialControls()
 		if (ButtonSpecialPickUp)
 		{
 			holdChainBar(1350);
-			//holdChainBar(POT_CHAINBAR_MAX-1540);
 		}
 #ifdef ButtonSpecialDropOffLow
 		if (ButtonSpecialDropOffLow
 			){
 			holdChainBar(1950);
-			//holdChainBar(POT_CHAINBAR_MAX-2210);
 		}
 #endif
 #ifdef ButtonSpecialDropOffHigh
 		if (ButtonSpecialDropOffHigh)
 		{
 			holdChainBar(440);
-			//holdChainBar(POT_CHAINBAR_MAX-380);
 		}
-#endif
-		/*
-		if (vexRT[Btn8L]){ //cone loader, for temp test only
-		holdChainBar(1870);
-		holdFourBar(1095);
-		*/
+
+		if (vexRT[Btn8L]){
+		holdFourBar(600);
 	}
+#endif
+}
+
 
 #ifdef ButtonConeCountIncrement //Added this bunch of ifdef so that even if those buttons are not bound to anything, there is no compiler error
 #ifdef ButtonConeCountDecrement
@@ -446,42 +433,14 @@ task SpecialControls()
 #endif
 #endif
 #endif
-
-}
-/*
-task FourbarLeftPassiveFollow()
-{
-if (!ButtonFourbarDown && !ButtonFourbarUp)
-{
-
-#define currLoc SensorValue[pot_fourbar_left]
-#define Target SensorValue[pot_fourbar_right]+25
-const float kp=1.5; // proportional constant
-const float kd=5; // derivatie constant
-int lastErr,powerOutput=0;
-int err=0;
-
-while (true)
-{
-err=Target-currLoc;
-powerOutput=
-FOURBAR_ANTIGRAVITY+ //Base power
-err*kp+ // Proportional
-(lastErr-err)*kd;
-lastErr=err;
-motor[fb_left]=powerOutput;
-}
-#undef currLoc
-#undef Target
-
 }
 
-}
-*/
+
 int level=3;
 int target=0;
 int leftEncoder, rightEncoder,powerOutputLeft,powerOutputRight=0;
 int errLeft,errRight=0;
+
 
 task SmoothMobileGoalLift()
 {
@@ -491,8 +450,8 @@ task SmoothMobileGoalLift()
 	bool wasPressed=false;
 	const float kp=-0.75; // proportional constant
 	//const float kd=-.25; // derivatie constant
-	int mapLevelToTarget[4]={-1225,-775,-300, 20};
-	bool Up=false;
+	int mapLevelToTarget[4]={-1325,-675,-300, 20};
+
 	while (true)
 	{
 		if (ButtonMobileGoalUp)
@@ -501,7 +460,7 @@ task SmoothMobileGoalLift()
 			{
 				wasPressed=true;
 				if (level<3) level+=1;
-				Up=true;
+				else resetMobileGoalEncoder(200);
 			}
 		}
 		else if (ButtonMobileGoalDown)
@@ -509,7 +468,6 @@ task SmoothMobileGoalLift()
 			if (!wasPressed){
 				wasPressed=true;
 				if (level>0) level-=1;
-				Up=false;
 			}
 		}
 		else
@@ -531,7 +489,4 @@ task SmoothMobileGoalLift()
 }
 #undef right
 #undef left
-
-
-
 #endif
