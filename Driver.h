@@ -82,8 +82,9 @@ void fourBarLeftUp()
 
 void fourBarRightUp()
 {
-    motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
-                      4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+
+	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+5;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+
 }
 
 void fourBarMove(int powerLeft, int powerRight)
@@ -408,50 +409,52 @@ task SpecialControls()
         if (ButtonConeCountReset) coneCount = 0;
 #endif
 #ifdef ButtonSpecialDropOff
-        if (ButtonSpecialDropOff)
-        {
-            switch (coneCount)
-            {
-                case 0:
-                    holdChainBar(1950);
-                    holdFourBar(675);
-                    break;
-                case 1:
-                    holdChainBar(496);
-                    holdFourBar(50);
-                    break;
-                case 2:
-                    holdChainBar(360);
-                    holdFourBar(50);
-                    break;
-                case 3:
-                    holdChainBar(525);
-                    holdFourBar(200);
-                    break;
-                case 4:
-                    holdChainBar(324);
-                    holdFourBar(335);
-                    break;
-                case 5:
-                    holdChainBar(350);
-                    holdFourBar(400);
-                    break;
-                case 6:
-                    holdChainBar(353);
-                    holdFourBar(420);
-                    break;
-                case 7:
-                    holdChainBar(403);
-                    holdFourBar(475);
-                    break;
-                case 8:
-                    holdChainBar(592);
-                    holdFourBar(558);
-                    break;
-                case 9:
-                    holdChainBar(619);
-                    holdFourBar(666);
-                    break;/*
+
+		if (ButtonSpecialDropOff)
+		{
+			switch(coneCount)
+			{
+			case 0:
+				holdChainBar(1950);
+				holdFourBar(675);
+				break;
+			case 1:
+				holdChainBar(496);
+				holdFourBar(50);
+				break;
+			case 2:
+				holdChainBar(360);
+				holdFourBar(50);
+				break;
+			case 3:
+				holdChainBar(525);
+				holdFourBar(200);
+				break;
+			case 4:
+				holdChainBar(370);
+				holdFourBar(350);
+				break;
+			case 5:
+				holdChainBar(415);
+				holdFourBar(400);
+				break;
+				case 6:
+				holdChainBar(420);
+				holdFourBar(420);
+				break;
+				case 7:
+				holdChainBar(503);
+				holdFourBar(475);
+				break;
+				case 8:
+				holdChainBar(592);
+				holdFourBar(558);
+				break;
+				case 9:
+				holdChainBar(619);
+				holdFourBar(666);
+				break;/*
+
 				case 10:
 				holdChainBar();
 				holdFourBar();
@@ -474,6 +477,7 @@ task SmoothMobileGoalLift()
 {
 #define left  (nMotorEncoder[mb_left]) //assuming left side has the negative reading
 #define right (nMotorEncoder[mb_right])
+
 
     bool wasPressed = false;
     const float kp = -0.75; // proportional constant
@@ -513,6 +517,7 @@ task SmoothMobileGoalLift()
         motor[mb_left] = powerOutputLeft;
         motor[mb_right] = powerOutputRight; //smoothing both sides to make them balance
     }
+
 }
 
 #undef right
