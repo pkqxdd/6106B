@@ -354,7 +354,13 @@ task SpecialControls()
 	{
 		if (ButtonSpecialPickUp)
 		{
-			holdChainBar(1350);
+			if (SensorValue[pot_fourbar_right] < 2555)
+			{
+				holdChainBar(1450);
+			}
+			else {
+				holdChainBar(1200);
+			}
 		}
 #ifdef ButtonSpecialDropOffLow
 		if (ButtonSpecialDropOffLow
@@ -423,23 +429,23 @@ task SpecialControls()
 			case 5:
 				holdChainBar(350);
 				holdFourBar(400);
-				break;/*
+				break;
 				case 6:
-				holdChainBar();
-				holdFourBar();
+				holdChainBar(353);
+				holdFourBar(420);
 				break;
 				case 7:
-				holdChainBar();
-				holdFourBar();
+				holdChainBar(403);
+				holdFourBar(475);
 				break;
 				case 8:
-				holdChainBar();
-				holdFourBar();
+				holdChainBar(592);
+				holdFourBar(558);
 				break;
 				case 9:
-				holdChainBar();
-				holdFourBar();
-				break;
+				holdChainBar(619);
+				holdFourBar(666);
+				break;/*
 				case 10:
 				holdChainBar();
 				holdFourBar();
@@ -466,7 +472,7 @@ task SmoothMobileGoalLift()
 	bool wasPressed=false;
 	const float kp=-0.75; // proportional constant
 	//const float kd=-.25; // derivatie constant
-	int mapLevelToTarget[4]={-1325,-675,-300, 20};
+	int mapLevelToTarget[4]={-1350,-675,-300, 20};
 
 	while (true)
 	{
