@@ -5,7 +5,7 @@
 const int MB_POWER = 60; // power to mobile goal lift
 const int FOURBAR_POWER = 100; //power to fourbar
 const int CHAINBAR_POWER=80; // power to chainbar
-const int ROLLER_POWER=100; // power to chainbar
+const int ROLLER_POWER=127; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY=0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY=20;
@@ -34,7 +34,8 @@ const int LEFT_MB_MAX=-1220;
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-#include "KeymapJack.h"
+//#include "KeymapSinglePlayer.h"
+#include "KeymapTwoPlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -254,21 +255,21 @@ void holdFourBar(int target)
 }
 
 void resetMobileGoalEncoder(const float t){// t is the time to move up
-motor[mb_left]=MB_POWER;
-motor[mb_right]=MB_POWER;
-nMotorEncoder[mb_left]=0;
-nMotorEncoder[mb_right]=0;
+	motor[mb_left]=MB_POWER;
+	motor[mb_right]=MB_POWER;
+	nMotorEncoder[mb_left]=0;
+	nMotorEncoder[mb_right]=0;
 
-clearTimer(T2);
-while (time1(T2)<t) {
-	mobileGoalUp();
-}
+	clearTimer(T2);
+	while (time1(T2)<t) {
+		mobileGoalUp();
+	}
 
-motor[mb_left]=0;
-motor[mb_right]=0;
+	motor[mb_left]=0;
+	motor[mb_right]=0;
 
-nMotorEncoder[mb_left]=0;
-nMotorEncoder[mb_right]=0;
+	nMotorEncoder[mb_left]=0;
+	nMotorEncoder[mb_right]=0;
 
 }
 
@@ -347,6 +348,8 @@ int coneCount=0;
 
 task SpecialControls()
 {
+	bool wasPressedIncrement=false;
+	bool wasPressedDecrement=false;
 	while (true)
 	{
 		if (ButtonSpecialPickUp)
@@ -364,77 +367,90 @@ task SpecialControls()
 		{
 			holdChainBar(440);
 		}
-
 		if (vexRT[Btn8L]){
-		holdFourBar(600);
-	}
+			//holdFourBar(600);
+		}
 #endif
-}
+
 
 
 #ifdef ButtonConeCountIncrement //Added this bunch of ifdef so that even if those buttons are not bound to anything, there is no compiler error
 #ifdef ButtonConeCountDecrement
-	if (ButtonConeCountIncrement) coneCount++;
-	if (ButtonConeCountDecrement) coneCount--;
-#ifdef ButtonConeCountReset
-	if (ButtonConeCountReset) coneCount=0;
-#endif
-#ifdef ButtonSpeicalDropOff
-	if (ButtonSpecialDropOff)
-	{
-		switch(coneCount)
-		{
-		case 0:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 1:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 2:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 3:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 4:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 5:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 6:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 7:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 8:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 9:
-			holdChainBar();
-			holdFourBar();
-			break;
-		case 10:
-			holdChainBar();
-			holdFourBar();
-			break;
-		}
-	}
-#endif
-#endif
-#endif
-}
 
+
+		if (ButtonConeCountIncrement)
+		{	if (!wasPressedIncrement)
+			{if(coneCount<10)coneCount++; wasPressedIncrement=true;}
+
+		} else {wasPressedIncrement=false;}
+
+		if (ButtonConeCountDecrement) {
+			if (!wasPressedDecrement){
+				if (coneCount>0)
+					coneCount--;wasPressedDecrement=true;}
+			} else {wasPressedDecrement=false;
+
+		}
+
+#ifdef ButtonConeCountReset
+		if (ButtonConeCountReset) coneCount=0;
+#endif
+#ifdef ButtonSpecialDropOff
+		if (ButtonSpecialDropOff)
+		{
+			switch(coneCount)
+			{
+			case 0:
+				holdChainBar(1950);
+				holdFourBar(675);
+				break;
+			case 1:
+				holdChainBar(496);
+				holdFourBar(50);
+				break;
+			case 2:
+				holdChainBar(360);
+				holdFourBar(50);
+				break;
+			case 3:
+				holdChainBar(525);
+				holdFourBar(200);
+				break;
+			case 4:
+				holdChainBar(324);
+				holdFourBar(335);
+				break;
+			case 5:
+				holdChainBar(350);
+				holdFourBar(400);
+				break;/*
+				case 6:
+				holdChainBar();
+				holdFourBar();
+				break;
+				case 7:
+				holdChainBar();
+				holdFourBar();
+				break;
+				case 8:
+				holdChainBar();
+				holdFourBar();
+				break;
+				case 9:
+				holdChainBar();
+				holdFourBar();
+				break;
+				case 10:
+				holdChainBar();
+				holdFourBar();
+				break;*/
+			}
+		}
+#endif
+#endif
+#endif
+	}
+}
 
 int level=3;
 int target=0;
