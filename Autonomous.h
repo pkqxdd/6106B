@@ -4,7 +4,6 @@
 holdChainBar(440);
 holdFourBar(1000);
 
-
 nMotorEncoder(front_left)=0;
 nMotorEncoder(front_right)=0;
 nMotorEncoder(back_left)=0;
