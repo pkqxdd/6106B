@@ -82,7 +82,7 @@ void fourBarLeftUp()
 
 void fourBarRightUp()
 {
-	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY-4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+	motor[fb_right] = FOURBAR_POWER+FOURBAR_ANTIGRAVITY+5;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
 void fourBarMove(int powerLeft,int powerRight)
@@ -423,19 +423,19 @@ task SpecialControls()
 				holdFourBar(200);
 				break;
 			case 4:
-				holdChainBar(324);
-				holdFourBar(335);
+				holdChainBar(370);
+				holdFourBar(350);
 				break;
 			case 5:
-				holdChainBar(350);
+				holdChainBar(415);
 				holdFourBar(400);
 				break;
 				case 6:
-				holdChainBar(353);
+				holdChainBar(420);
 				holdFourBar(420);
 				break;
 				case 7:
-				holdChainBar(403);
+				holdChainBar(503);
 				holdFourBar(475);
 				break;
 				case 8:
@@ -472,7 +472,7 @@ task SmoothMobileGoalLift()
 	bool wasPressed=false;
 	const float kp=-0.75; // proportional constant
 	//const float kd=-.25; // derivatie constant
-	int mapLevelToTarget[4]={-1350,-675,-300, 20};
+	int mapLevelToTarget[4]={-1325,-650,-300, 20};
 
 	while (true)
 	{
