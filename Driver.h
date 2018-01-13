@@ -490,7 +490,7 @@ task SmoothMobileGoalLift()
     bool wasPressed = false;
     const float kp = -0.75; // proportional constant
     //const float kd=-.25; // derivatie constant
-    int mapLevelToTarget[4] = {-1350, -675, -300, 20};
+    int mapLevelToTarget[4] = {-1300, -675, -300, 20};
 
     while (true)
     {
