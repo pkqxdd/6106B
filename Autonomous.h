@@ -3,11 +3,7 @@
 
 startTask(SmoothMobileGoalLift);
 
-<<<<<<< HEAD
-
-=======
 resetEncoders();
->>>>>>> 7d7b12eba5fc3c1fb2bdb6316d635617113a4802
 
 // Initializing
 holdChainBar(1950);
@@ -49,7 +45,8 @@ AbsoluteMoveAllWheelsTo(-500);
 
 stopTask(SmoothMobileGoalLift);
 
-=======
+/*
+
 // Move to the mobile goal
 AbsoluteMoveAllWheelsTo(3000);
 wait1Msec(1000); // wait to stop
@@ -65,7 +62,6 @@ AbsoluteMoveAllWheelsTo(0);
 
 
 stopTask(SmoothMobileGoalLift);
+*/
 
-
->>>>>>> 7d7b12eba5fc3c1fb2bdb6316d635617113a4802
 #endif

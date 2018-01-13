@@ -2,7 +2,7 @@
 #define autonomousHelpers
 #include "Driver.h"
 
-<<<<<<< HEAD
+
 void ClearEncoders()
 {
 nMotorEncoder[front_left]=0;
@@ -16,13 +16,11 @@ void TurnCW(int degrees)
 	moveLeftWheels(/*turn constant*/500 * degrees/360);
 	moveRightWheels(-);
 }
-=======
 void MoveAllWheelsStraight(const int power){
 #define fl nMotorEncoder[front_left]*FRONT_LEFT_DIRECTION
 #define bl nMotorEncoder[back_left]*BACK_LEFT_DIRECTION
 #define fr nMotorEncoder[front_right]*FRONT_RIGHT_DIRECTION
 #define br nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION 
->>>>>>> 7d7b12eba5fc3c1fb2bdb6316d635617113a4802
 
 #define scaleFactor 0.5
 
@@ -49,15 +47,12 @@ void AbsoluteMoveAllWheelsTo(int target){
 	nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION ) / 4 //average
 
 
-<<<<<<< HEAD
 if (currLoc<target)
 {
 while (currLoc<target)
 { //if average of four wheels...
-=======
 if (currLoc<target){
 while (currLoc<target){ // go forward
->>>>>>> 7d7b12eba5fc3c1fb2bdb6316d635617113a4802
 
 	MoveAllWheelsStraight(80);
 	// moveLeftWheels(100);
@@ -65,15 +60,13 @@ while (currLoc<target){ // go forward
 
 }
 }
-<<<<<<< HEAD
 else
  {
 	while (currLoc>target)
 	{ //if average of four wheels...
-=======
+
 else {
 	while (currLoc>target){ //go backward
->>>>>>> 7d7b12eba5fc3c1fb2bdb6316d635617113a4802
 
 	MoveAllWheelsStraight(-80);
 	// moveLeftWheels(-100);
