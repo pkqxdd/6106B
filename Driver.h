@@ -44,13 +44,13 @@ const int LEFT_MB_MAX = -1220;
 #define max(a, b) ((a)>(b)?(a):(b))
 
 
-void moveLeftWheels(int power)
+void moveLeftWheels(const int power)
 {
     motor[front_left] = power;
     motor[back_left] = power;
 }
 
-void moveRightWheels(int power)
+void moveRightWheels(const int power)
 {
     motor[front_right] = power;
     motor[back_right] = power;
@@ -86,7 +86,7 @@ void fourBarRightUp()
                       4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
-void fourBarMove(int powerLeft, int powerRight)
+void fourBarMove(const int powerLeft, const int powerRight)
 {
     motor[fb_left] = powerLeft;
     motor[fb_right] = powerRight;
@@ -132,7 +132,7 @@ void chainBarUp()
     motor[chainbar] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
 }
 
-void chainBarMove(int power)
+void chainBarMove(const int power)
 {
     motor[chainbar] = power;
 }
@@ -166,10 +166,10 @@ task lockChainbar()
         err = chainbarTarget - currLoc;
         powerOutput = CHAINBAR_ANTIGRAVITY + //Base power
                       err * kp + // Proportional
-                      (lastErr - err) * kd;//+
-        //(currLoc>2705?-CHAINBAR_ANTIGRAVITY:0);
+                      (lastErr - err) * kd;
         lastErr = err;
         chainBarMove(powerOutput);
+        abortTimeSlice();
     }
 #undef currLoc
 }
@@ -203,6 +203,7 @@ task lockFourBar()
         lastErrLeft = errLeft;
         lastErrRight = errRight;
         fourBarMove(powerOutputLeft, powerOutputRight);
+        abortTimeSlice();
     }
 #undef currLocLeft
 #undef currLocRight
@@ -235,7 +236,7 @@ void holdChainBar(int target)
 
 }
 
-void holdFourBar(int target)
+void holdFourBar(const int target)
 {
     fourbarTarget = target;
     if (isFourBarLocked)
@@ -279,7 +280,9 @@ task WheelControls()
     {
         moveLeftWheels(AxisLeftWheels);
         moveRightWheels(AxisRightWheels);
-    }
+    abortTimeSlice();
+
+        }
 }
 
 task FourBarControls()
@@ -298,7 +301,8 @@ task FourBarControls()
             fourBarDown();
         }
         if (!isFourBarLocked) fourBarStop();
-    }
+    abortTimeSlice();
+        }
 }
 
 task RollerControls()
@@ -319,7 +323,8 @@ task RollerControls()
             if (shouldStop) rollerZero();
             else rollerStop();
         }
-    }
+    abortTimeSlice();
+        }
 }
 
 task ChainBarControls()
@@ -337,7 +342,8 @@ task ChainBarControls()
             chainBarDown();
         }
         if (!isChainBarLocked) chainBarStop();
-    }
+    abortTimeSlice();
+        }
 }
 
 int coneCount = 0;
@@ -433,7 +439,7 @@ task SpecialControls()
                     holdFourBar(335);
                     break;
                 case 5:
-                    holdChainBar(350);
+                    holdChainBar(330);
                     holdFourBar(400);
                     break;
                 case 6:
@@ -461,10 +467,11 @@ task SpecialControls()
 #endif
 #endif
 #endif
+abortTimeSlice();
     }
 }
 
-int level = 3;
+int mb_level = 3;
 int target = 0;
 int leftEncoder, rightEncoder, powerOutputLeft, powerOutputRight = 0;
 int errLeft, errRight = 0;
@@ -487,7 +494,7 @@ task SmoothMobileGoalLift()
             if (!wasPressed)
             {
                 wasPressed = true;
-                if (level < 3) level += 1;
+                if (mb_level < 3) mb_level += 1;
                 else resetMobileGoalEncoder(200);
             }
         } else if (ButtonMobileGoalDown)
@@ -495,14 +502,14 @@ task SmoothMobileGoalLift()
             if (!wasPressed)
             {
                 wasPressed = true;
-                if (level > 0) level -= 1;
+                if (mb_level > 0) mb_level -= 1;
             }
         } else
         {
             wasPressed = false;
         }
 
-        target = mapLevelToTarget[level];
+        target = mapLevelToTarget[mb_level];
 
         leftEncoder = left;
         rightEncoder = right;
@@ -512,8 +519,11 @@ task SmoothMobileGoalLift()
         powerOutputRight = errRight * kp;
         motor[mb_left] = powerOutputLeft;
         motor[mb_right] = powerOutputRight; //smoothing both sides to make them balance
-    }
+abortTimeSlice();
+       }
 }
+
+
 
 #undef right
 #undef left
