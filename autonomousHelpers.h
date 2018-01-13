@@ -16,6 +16,17 @@ void turnClockwise(const int degrees)
 
 }
 
+void turnClockwise180()
+{
+
+	moveLeftWheels(100);
+	moveRightWheels(-100);
+	wait1Msec(1850);
+	moveRightWheels(0);
+	moveLeftWheels(0);
+
+}
+
 
 void moveAllWheelsStraight(const int power){
 #define fl nMotorEncoder[front_left]*FRONT_LEFT_DIRECTION
