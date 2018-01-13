@@ -424,20 +424,20 @@ task SpecialControls()
             switch (coneCount)
             {
                 case 0:
+                		holdFourBar(675);
                     holdChainBar(1950);
-                    holdFourBar(675);
                     break;
                 case 1:
-                    holdChainBar(496);
                     holdFourBar(50);
+                    holdChainBar(496);
                     break;
                 case 2:
-                    holdChainBar(360);
                     holdFourBar(50);
+                    holdChainBar(360);
                     break;
                 case 3:
+                		holdFourBar(200);
                     holdChainBar(525);
-                    holdFourBar(200);
                     break;
                 case 4:
                     holdChainBar(324);

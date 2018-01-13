@@ -6,7 +6,7 @@ nMotorEncoder[mb_left]=0;
 nMotorEncoder[mb_right]=0;
 
 clearTimer(T1);
-while (time1(T1)<2500) {
+while (time1(T1)<2000) {
 	mobileGoalUp();
 }
 
@@ -14,11 +14,8 @@ while (time1(T1)<2500) {
 
 motor[mb_left]=0;
 motor[mb_right]=0;
-clearTimer(T1);
 
-while (time1(T1)<500) {
-
-}
+wait1Msec(500);
 
 
 nMotorEncoder[mb_left]=0;

@@ -5,35 +5,45 @@ startTask(SmoothMobileGoalLift);
 
 resetEncoders();
 
+motor[roller]=ROLLER_POWER;
 // Initializing
 holdChainBar(1950);
 holdFourBar(675);
-
 moveToMobileGoalLevel(0);
+absoluteMoveAllWheelsTo(3200);
 
-
-AbsoluteMoveAllWheelsTo(3200);
 wait1Msec(500);
-moveToMobileGoalLevel(3);
+moveToMobileGoalLevel(1);
 rollerOut();
-ClearEncoders();
-wait1Msec(200);
+wait1Msec(1000);
+
+
+//rnClockwise(360);
+
+//turnClockwise(360);
+
 //this
-/*
-AbsoluteMoveAllWheelsTo(-3000);
-ClearEncoders();
+
+absoluteMoveAllWheelsTo(0);
+
+turnClockwise(180);
+resetEncoders();
+
+
+wait1Msec(200);
+absoluteMoveAllWheelsTo(200);
 moveToMobileGoalLevel(0);
-TurnCW(90);
-ClearEncoders();
-AbsoluteMoveAllWheelsTo(400);*/
+wait1Msec(1000);
+absoluteMoveAllWheelsTo(200);
+
 //or this
 
-
-AbsoluteMoveAllWheelsTo(-2000);
+/*
+absoluteMoveAllWheelsTo(-2000);
 resetEncoders();
 //TurnCW(180);
 resetEncoders();
-AbsoluteMoveAllWheelsTo(1500);
+absoluteMoveAllWheelsTo(1500);
 resetEncoders();
 holdFourBar(100);
 wait1Msec(100);
@@ -42,7 +52,9 @@ wait1Msec(100);
 holdFourBar(675);
 AbsoluteMoveAllWheelsTo(-500);
 
+*/
 
+moveToMobileGoalLevel(3);
 
 stopTask(SmoothMobileGoalLift);
 
@@ -61,8 +73,8 @@ wait1Msec(2000); // wait for mobile goal lift
 AbsoluteMoveAllWheelsTo(0);
 
 
-
-stopTask(SmoothMobileGoalLift);
 */
+
+
 
 #endif
