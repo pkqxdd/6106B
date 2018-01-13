@@ -11,16 +11,19 @@ nMotorEncoder[back_left]=0;
 nMotorEncoder[back_right]=0;
 }
 
+/*
 void TurnCW(int degrees)
 {
-	moveLeftWheels(/*turn constant*/500 * degrees/360);
+	moveLeftWheels(500 * degrees/360);
 	moveRightWheels(-);
 }
+*/
+
 void MoveAllWheelsStraight(const int power){
 #define fl nMotorEncoder[front_left]*FRONT_LEFT_DIRECTION
 #define bl nMotorEncoder[back_left]*BACK_LEFT_DIRECTION
 #define fr nMotorEncoder[front_right]*FRONT_RIGHT_DIRECTION
-#define br nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION 
+#define br nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION
 
 #define scaleFactor 0.5
 
@@ -31,11 +34,11 @@ motor[front_left]	= power - diffFront;
 motor[front_right]	= power + diffFront;
 motor[back_left]  	= power - diffBack;
 motor[back_right] 	= power + diffBack;
- 
-#undef front_left 
-#undef back_left 
+
+#undef front_left
+#undef back_left
 #undef front_right
-#undef back_right 
+#undef back_right
 }
 
 void AbsoluteMoveAllWheelsTo(int target){
@@ -47,23 +50,15 @@ void AbsoluteMoveAllWheelsTo(int target){
 	nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION ) / 4 //average
 
 
-if (currLoc<target)
-{
-while (currLoc<target)
-{ //if average of four wheels...
+
 if (currLoc<target){
 while (currLoc<target){ // go forward
 
 	MoveAllWheelsStraight(80);
 	// moveLeftWheels(100);
 	// moveRightWheels(95);
-
 }
 }
-else
- {
-	while (currLoc>target)
-	{ //if average of four wheels...
 
 else {
 	while (currLoc>target){ //go backward
