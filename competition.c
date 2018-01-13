@@ -38,17 +38,17 @@
 
 void pre_auton() {
  bStopTasksBetweenModes = true;
-#include "pre_auton.h"
+//#include "pre_auton.h"
 }
 
 #include "autonomousHelpers.h"
 
 task autonomous() {
-
+#include "pre_auton.h"
 #include "Autonomous.h"
 }
 
 task usercontrol() {
-//	stopTask(autonomous);
+
 #include "UserControls.h"
 }
