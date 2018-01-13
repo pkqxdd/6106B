@@ -11,7 +11,6 @@ holdFourBar(675);
 
 moveToMobileGoalLevel(0);
 
-<<<<<<< HEAD
 
 AbsoluteMoveAllWheelsTo(3200);
 wait1Msec(500);
