@@ -2,28 +2,44 @@
 #define Autonomous
 startTask(SmoothMobileGoalLift);
 
-nMotorEncoder[front_left]=0;
-nMotorEncoder[front_right]=0;
-nMotorEncoder[back_left]=0;
-nMotorEncoder[back_right]=0;
+
 
 holdChainBar(1950);
 holdFourBar(675);
+
 moveToMobileGoalLevel(0);
 
 
-AbsoluteMoveAllWheelsTo(3000);
+AbsoluteMoveAllWheelsTo(3200);
 wait1Msec(500);
 moveToMobileGoalLevel(3);
 rollerOut();
-wait1Msec(2000);
-AbsoluteMoveAllWheelsTo(0);
-
-
-
-
-
+ClearEncoders();
+wait1Msec(200);
+//this
+AbsoluteMoveAllWheelsTo(-3000);
+ClearEncoders();
+moveToMobileGoalLevel(0);
+TurnCW(90);
+ClearEncoders();
+AbsoluteMoveAllWheelsTo(400);
+//or this
+/*
+AbsoluteMoveAllWheelsTo(-2000);
+ClearEncoders();
+TurnCW(180);
+ClearEncoders();
+AbsoluteMoveAllWheelsTo(1500);
+ClearEncoders();
+holdFourBar(100);
+wait1Msec(100);
+holdChainBar(1000);
+wait1Msec(100);
+holdFourBar(675);
+AbsoluteMoveAllWheelsTo(-500);
+*/
 
 
 stopTask(SmoothMobileGoalLift);
+
 #endif
