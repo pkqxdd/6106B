@@ -37,8 +37,8 @@
 #include "Driver.h"
 
 void pre_auton() {
-    bStopTasksBetweenModes = true;
-//#include "pre_auton.h"
+ bStopTasksBetweenModes = true;
+#include "pre_auton.h"
 }
 
 #include "autonomousHelpers.h"
