@@ -31,6 +31,11 @@ const int LEFT_MB_START = 0; //I2C 5
 const int LEFT_MB_TRAVEL = -375;
 const int LEFT_MB_MAX = -1220;
 
+const int FRONT_LEFT_DIRECTION = 1;
+const int FRONT_RIGHT_DIRECTION = 1;
+const int BACK_LEFT_DIRECTION = 1;
+const int BACK_RIGHT_DIRECTION = 1;
+
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
