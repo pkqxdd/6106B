@@ -19,27 +19,29 @@ rollerOut();
 ClearEncoders();
 wait1Msec(200);
 //this
+/*
 AbsoluteMoveAllWheelsTo(-3000);
 ClearEncoders();
 moveToMobileGoalLevel(0);
 TurnCW(90);
 ClearEncoders();
-AbsoluteMoveAllWheelsTo(400);
+AbsoluteMoveAllWheelsTo(400);*/
 //or this
-/*
+
+
 AbsoluteMoveAllWheelsTo(-2000);
-ClearEncoders();
-TurnCW(180);
-ClearEncoders();
+resetEncoders();
+//TurnCW(180);
+resetEncoders();
 AbsoluteMoveAllWheelsTo(1500);
-ClearEncoders();
+resetEncoders();
 holdFourBar(100);
 wait1Msec(100);
 holdChainBar(1000);
 wait1Msec(100);
 holdFourBar(675);
 AbsoluteMoveAllWheelsTo(-500);
-*/
+
 
 
 stopTask(SmoothMobileGoalLift);
@@ -56,7 +58,7 @@ rollerOut();
 wait1Msec(2000); // wait for mobile goal lift
 
 // go back to starting position
-AbsoluteMoveAllWheelsTo(0); 
+AbsoluteMoveAllWheelsTo(0);
 
 
 
