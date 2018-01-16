@@ -36,15 +36,16 @@
 
 #include "Driver.h"
 
+ #include "pre_auton.h"
+
 void pre_auton() {
- bStopTasksBetweenModes = true;
-//#include "pre_auton.h"
+bStopTasksBetweenModes = true;
+zeroMobileGoalEncoders(2500);
 }
 
 #include "autonomousHelpers.h"
 
 task autonomous() {
-#include "pre_auton.h"
 #include "Autonomous.h"
 }
 

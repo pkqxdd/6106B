@@ -226,7 +226,7 @@ void releaseFourBar()
     stopTask(lockFourBar);
 }
 
-void holdChainBar(int target)
+void holdChainBar(int target, const bool block=false, const int tolerance=50)
 {
     chainbarTarget = target;
     if (isChainBarLocked)
@@ -241,7 +241,7 @@ void holdChainBar(int target)
 
 }
 
-void holdFourBar(const int target)
+void holdFourBar(const int target, const bool block=false, const int tolerance=50)
 {
     fourbarTarget = target;
     if (isFourBarLocked)
