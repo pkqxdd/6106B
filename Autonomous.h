@@ -1,6 +1,7 @@
 #ifndef Autonomous
 #define Autonomous
 
+zeroMobileGoalEncoders(500);
 startTask(SmoothMobileGoalLift);
 
 resetEncoders();
@@ -16,7 +17,7 @@ absoluteMoveAllWheelsTo(2900);
 
 wait1Msec(500);
 moveToMobileGoalLevel(1);
-rollerOut();
+motor[roller]= -ROLLER_POWER;
 wait1Msec(500);
 
 
@@ -28,17 +29,20 @@ wait1Msec(500);
 
 absoluteMoveAllWheelsTo(300);
 
+
+rollerZero();
 turnClockwise180();
 resetEncoders();
 moveToMobileGoalLevel(3);
 
 wait1Msec(500);
-absoluteMoveAllWheelsTo(400);
+absoluteMoveAllWheelsTo(600);
 moveToMobileGoalLevel(0);
 
 
+
 holdFourBar(100);
-wait1Msec(500);
+wait1Msec(1000);
 holdChainBar(1000);
 
 wait1Msec(1000);
@@ -61,6 +65,7 @@ AbsoluteMoveAllWheelsTo(-500);
 
 
 moveToMobileGoalLevel(3);
+
 
 stopTask(SmoothMobileGoalLift);
 
