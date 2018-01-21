@@ -2,11 +2,11 @@
 #define drivers
 
 // -----------------BEGIN Global Constants Configuration-------------------
-const int MB_POWER = 60; // power to mobile goal lift
+const int MB_POWER = 80; // power to mobile goal lift
 const int FOURBAR_POWER = 100; //power to fourbar
 const int CHAINBAR_POWER = 80; // power to chainbar
 const int ROLLER_POWER = 127; // power to chainbar
-const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
+const int FOURBAR_ANTIGRAVITY = 0; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
 const int ROLLER_ANTIGRAVITY = 8;
@@ -39,8 +39,8 @@ const int BACK_RIGHT_DIRECTION = 1;
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-//#include "KeymapSinglePlayer.h"
-#include "KeymapTwoPlayer.h"
+#include "KeymapSinglePlayer.h"
+//#include "KeymapTwoPlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -63,21 +63,22 @@ void moveRightWheels(const int power)
 
 void mobileGoalUp()
 {
-    motor[mb_left] = MB_POWER + 50;
-    motor[mb_right] = MB_POWER + 50;
+    motor[mb] = MB_POWER+50;
 }
 
 
 void mobileGoalDown()
 {
-    motor[mb_left] = -MB_POWER;
-    motor[mb_right] = -MB_POWER;
+    motor[mb] = -MB_POWER;
 }
 
 void mobileGoalStop()
 {
-    motor[mb_left] = 0;
-    motor[mb_right] = 0;
+motor[mb]=0;
+}
+
+void mobileGoalMove(const int power){
+	motor[mb]=power;
 }
 
 void fourBarLeftUp()
@@ -155,8 +156,11 @@ void chainBarStop()
 
 int chainbarTarget = 0;
 int fourbarTarget = 0;
+int mobileGoalTarget=0;
 bool isFourBarLocked = false;
 bool isChainBarLocked = false;
+bool isMobileGoalLiftLocked=false;
+
 
 task lockChainbar()
 { // hold the chainbar in place. Call stoptask to release it
@@ -174,7 +178,27 @@ task lockChainbar()
                       (lastErr - err) * kd;
         lastErr = err;
         chainBarMove(powerOutput);
-        abortTimeSlice();
+        abortTimeslice();
+    }
+#undef currLoc
+}
+
+task lockMobileGoalLift()
+{ // hold the chainbar in place. Call stoptask to release it
+#define currLoc SensorValue[pot_mb]
+    const float kp = -0.25; // proportional constant
+    const float kd = -0.5; // derivatie constant
+    int lastErr, powerOutput = 0;
+    int err = 0;
+
+    while (true)
+    {
+        err = mobileGoalTarget - currLoc;
+        powerOutput =  err * kp + // Proportional
+                      (lastErr - err) * kd;
+        lastErr = err;
+        mobileGoalMove(powerOutput);
+        abortTimeslice();
     }
 #undef currLoc
 }
@@ -208,7 +232,7 @@ task lockFourBar()
         lastErrLeft = errLeft;
         lastErrRight = errRight;
         fourBarMove(powerOutputLeft, powerOutputRight);
-        abortTimeSlice();
+        abortTimeslice();
     }
 #undef currLocLeft
 #undef currLocRight
@@ -226,7 +250,13 @@ void releaseFourBar()
     stopTask(lockFourBar);
 }
 
-void holdChainBar(int target, const bool block=false, const int tolerance=50)
+void releaseMobileGoalLift()
+{
+    isMobileGoalLiftLocked = false;
+    stopTask(lockMobileGoalLift);
+}
+
+void holdChainBar(const int target)
 {
     chainbarTarget = target;
     if (isChainBarLocked)
@@ -235,6 +265,21 @@ void holdChainBar(int target, const bool block=false, const int tolerance=50)
     } else
     {
         isChainBarLocked = true;
+    }
+    startTask(lockChainbar);
+    return;
+
+}
+
+void holdMobileGoalLift(const int target)
+{
+    mobileGoalTarget = target;
+    if (isMobileGoalLiftLocked)
+    {
+        stopTask(lockMobileGoalLift);
+    } else
+    {
+        isMobileGoalLiftLocked = true;
     }
     startTask(lockChainbar);
     return;
@@ -256,26 +301,6 @@ void holdFourBar(const int target, const bool block=false, const int tolerance=5
 
 }
 
-void resetMobileGoalEncoder(const float t)
-{// t is the time to move up
-    motor[mb_left] = MB_POWER;
-    motor[mb_right] = MB_POWER;
-    nMotorEncoder[mb_left] = 0;
-    nMotorEncoder[mb_right] = 0;
-
-    clearTimer(T2);
-    while (time1(T2) < t)
-    {
-        mobileGoalUp();
-    }
-
-    motor[mb_left] = 0;
-    motor[mb_right] = 0;
-
-    nMotorEncoder[mb_left] = 0;
-    nMotorEncoder[mb_right] = 0;
-
-}
 
 //----------------END Utility Functions------------
 
@@ -285,9 +310,27 @@ task WheelControls()
     {
         moveLeftWheels(AxisLeftWheels);
         moveRightWheels(AxisRightWheels);
-    abortTimeSlice();
+    abortTimeslice();
 
         }
+}
+
+task MobileGoalControls(){
+
+while (true){
+
+if (ButtonMobileGoalUp){
+	mobileGoalUp()	;
+} else if (ButtonMobileGoalDown){
+	mobileGoalDown();
+} else {
+	mobileGoalStop();
+}
+
+
+abortTimeslice();
+}
+
 }
 
 task FourBarControls()
@@ -481,7 +524,7 @@ int target = 0;
 int leftEncoder, rightEncoder, powerOutputLeft, powerOutputRight = 0;
 int errLeft, errRight = 0;
 
-
+/*
 task SmoothMobileGoalLift()
 {
 #define left  (nMotorEncoder[mb_left]) //assuming left side has the negative reading
@@ -532,4 +575,6 @@ abortTimeSlice();
 
 #undef right
 #undef left
+*/
+
 #endif

@@ -5,12 +5,12 @@
 startTask (SpecialControls);
 startTask (WheelControls);
 //startTask (ArcadeWheelsControls);
-//startTask (MobileGoalControls);
+startTask (MobileGoalControls);
 startTask (FourBarControls);
 startTask (RollerControls);
 startTask (ChainBarControls);
 //startTask (FourbarLeftPassiveFollow);
-startTask (SmoothMobileGoalLift);
+//startTask (SmoothMobileGoalLift);
 //startTask (LCDControls);
 while (true)
 {
