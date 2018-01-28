@@ -9,7 +9,7 @@ const int ROLLER_POWER = 127; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 0; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
-const int ROLLER_ANTIGRAVITY = 8;
+const int ROLLER_ANTIGRAVITY = 0;
 
 const int POT_CHAINBAR_MIN = 1052;
 const int POT_CHAINBAR_MAX = 3190;
@@ -49,62 +49,62 @@ const int BACK_RIGHT_DIRECTION = 1;
 #define max(a, b) ((a)>(b)?(a):(b))
 
 
-void moveLeftWheels(const int power)
+inline void moveLeftWheels(const int power)
 {
     motor[front_left] = power;
     motor[back_left] = power;
 }
 
-void moveRightWheels(const int power)
+inline void moveRightWheels(const int power)
 {
     motor[front_right] = power;
     motor[back_right] = power;
 }
 
-void mobileGoalUp()
+inline void mobileGoalUp()
 {
     motor[mb] = MB_POWER+50;
 }
 
 
-void mobileGoalDown()
+inline void mobileGoalDown()
 {
     motor[mb] = -MB_POWER;
 }
 
-void mobileGoalStop()
+inline void mobileGoalStop()
 {
 motor[mb]=0;
 }
 
-void mobileGoalMove(const int power){
+inline void mobileGoalMove(const int power){
 	motor[mb]=power;
 }
 
-void fourBarLeftUp()
+inline void fourBarLeftUp()
 {
     motor[fb_left] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
-void fourBarRightUp()
+inline void fourBarRightUp()
 {
     motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
                       4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
-void fourBarMove(const int powerLeft, const int powerRight)
+inline void fourBarMove(const int powerLeft, const int powerRight)
 {
     motor[fb_left] = powerLeft;
     motor[fb_right] = powerRight;
 }
 
-void fourBarDown()
+inline void fourBarDown()
 {
     motor[fb_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
     motor[fb_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
-void fourBarStop()
+inline void fourBarStop()
 {
     motor[fb_left] = FOURBAR_ANTIGRAVITY;
     motor[fb_right] = FOURBAR_ANTIGRAVITY;
@@ -120,35 +120,34 @@ void rollerOut()
 {
     clearTimer(T1);
     while (time1(T1) < 2500) motor[roller] = -ROLLER_POWER;
-    return;
 }
 
-void rollerStop()
+inline void rollerStop()
 {
     motor[roller] = ROLLER_ANTIGRAVITY;
 }
 
-void rollerZero()
+inline void rollerZero()
 {
     motor[roller] = 0;
 }
 
-void chainBarUp()
+inline void chainBarUp()
 {
     motor[chainbar] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
 }
 
-void chainBarMove(const int power)
+inline void chainBarMove(const int power)
 {
     motor[chainbar] = power;
 }
 
-void chainBarDown()
+inline void chainBarDown()
 {
     motor[chainbar] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
 }
 
-void chainBarStop()
+inline void chainBarStop()
 {
     motor[chainbar] = CHAINBAR_ANTIGRAVITY;
 }
