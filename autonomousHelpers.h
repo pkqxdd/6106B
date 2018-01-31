@@ -3,63 +3,80 @@
 #include "Driver.h"
 
 
-void turnDegrees(const int degrees)
-{
-
-}
-
-
-void moveAllWheelsStraight(const int power){
-#define fl nMotorEncoder[front_left]*FRONT_LEFT_DIRECTION
-#define bl nMotorEncoder[back_left]*BACK_LEFT_DIRECTION
-#define fr nMotorEncoder[front_right]*FRONT_RIGHT_DIRECTION
-#define br nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION
-
-#define scaleFactor 0.25
-
-int diffFront= scaleFactor * (fr-fl);
-int diffBack = scaleFactor * (br-bl);
-
-motor[front_left]	= power - diffBack;
-motor[front_right]	= power + diffBack;
-motor[back_left]  	= power - diffBack;
-motor[back_right] 	= power + diffBack;
-
-#undef front_left
-#undef back_left
-#undef front_right
-#undef back_right
-#undef scaleFactor
-}
-
-void absoluteMoveAllWheelsTo(const int target){
-//#define currLoc (abs(nMotorEncoder(front_left))+abs(nMotorEncoder(back_left))+abs(nMotorEncoder(front_right))+abs(nMotorEncoder(back_right)))/4
-#define currLoc (\
-	nMotorEncoder[front_left]*FRONT_LEFT_DIRECTION + \
-	nMotorEncoder[front_right]*FRONT_RIGHT_DIRECTION + \
-	nMotorEncoder[back_left]*BACK_LEFT_DIRECTION + \
-	nMotorEncoder[back_right]*BACK_RIGHT_DIRECTION ) / 4 //average
-
-
-
-
-
-
-moveLeftWheels(0); //stop
-moveRightWheels(0);
-return;
-#undef currLoc
-}
-
-
-
-void moveToMobileGoalLevel(const int level)
-{
-}
 
 void resetEncoders(){
 SensorValue[en_front_left]=0;
 SensorValue[en_front_right]=0;
 }
+
+
+
+float wheelsTarget=0;
+
+
+
+task tMoveWheels(){ //distance in inches
+#define currLocLeft SensorValue[en_front_left]
+#define currLocRight SensorValue[en_front_right]
+
+const float distance=wheelsTarget;
+static const float ticksPerInches=360/(PI*4);
+resetEncoders();
+
+
+    const float kp = 3; // proportional constant
+    const float kd = 3; // derivatie constant
+    int lastErrLeft, lastErrRight = 0;
+    int powerOutputLeft, powerOutputRight = 0;
+    int errLeft, errRight = 0;
+
+    while (true)
+    {
+        errLeft = distance*ticksPerInches-currLocLeft*EN_FRONT_LEFT_DIRECTION;
+        errRight = distance*ticksPerInches-currLocRight*EN_FRONT_RIGHT_DIRECTION;
+
+        powerOutputLeft =
+                          errLeft * kp + // Proportional
+                          (lastErrLeft - errLeft) * kd;
+
+        powerOutputRight =
+                           errRight * kp + // Proportional
+                           (lastErrRight - errRight) * kd;
+
+        lastErrLeft = errLeft;
+        lastErrRight = errRight;
+        moveLeftWheels(powerOutputLeft);
+        moveRightWheels(powerOutputRight);
+    }
+
+
+}
+
+void moveWheels(const float distance,const float tolerance=10){
+static const float ticksPerInches=360/(PI*4);
+
+
+wheelsTarget=distance;
+stopTask(tMoveWheels);
+startTask(tMoveWheels);
+while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches,tolerance) and
+    						approxEq(currLocRight*EN_FRONT_RIGHT_DIRECTION,distance*ticksPerInches,tolerance) ))
+
+    						{}
+    						return;
+
+}
+
+
+#undef currLocLeft
+#undef currLocRight
+
+void turn(const int degrees)//positive for turning clockwise
+{
+stopTask(tMoveWheels);
+
+
+}
+
 
 #endif

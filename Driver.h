@@ -23,7 +23,6 @@ const int POT_FOURBAR_RIGHT_DIRECTION = 1;
 const int POT_FOURBAR_RIGHT_MAX = 3800;
 const int POT_FOURBAR_RIGHT_MIN = 1515;
 
-
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
 
@@ -31,6 +30,9 @@ const int FRONT_LEFT_DIRECTION = 1;
 const int FRONT_RIGHT_DIRECTION = 1;
 const int BACK_LEFT_DIRECTION = 1;
 const int BACK_RIGHT_DIRECTION = 1;
+
+const int EN_FRONT_LEFT_DIRECTION=-1;
+const int EN_FRONT_RIGHT_DIRECTION=-1;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
@@ -190,26 +192,6 @@ task lockChainbar()
         lastErr = err;
         allErr+=err;
         chainBarMove(powerOutput);
-        abortTimeslice();
-    }
-#undef currLoc
-}
-
-task lockMobileGoalLift()
-{ // hold the chainbar in place. Call stoptask to release it
-#define currLoc SensorValue[pot_mb]
-    const float kp = -0.25; // proportional constant
-    const float kd = -0.5; // derivatie constant
-    int lastErr, powerOutput = 0;
-    int err = 0;
-
-    while (true)
-    {
-        err = mobileGoalTarget - currLoc;
-        powerOutput =  err * kp + // Proportional
-                      (lastErr - err) * kd;
-        lastErr = err;
-        mobileGoalMove(powerOutput);
         abortTimeslice();
     }
 #undef currLoc

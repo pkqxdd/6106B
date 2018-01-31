@@ -1,6 +1,6 @@
 #ifndef Autonomous
 #define Autonomous
-
+/*
 zeroMobileGoalEncoders(500);
 startTask(SmoothMobileGoalLift);
 
@@ -62,13 +62,13 @@ wait1Msec(100);
 
 AbsoluteMoveAllWheelsTo(-500);
 */
-
+/*
 
 moveToMobileGoalLevel(3);
 
 
 stopTask(SmoothMobileGoalLift);
-
+*/
 /*
 
 // Move to the mobile goal
@@ -84,8 +84,9 @@ wait1Msec(2000); // wait for mobile goal lift
 AbsoluteMoveAllWheelsTo(0);
 
 
+
+
+
 */
-
-
-
+stopTask(tMoveWheels);
 #endif
