@@ -4,6 +4,7 @@
 #pragma config(Sensor, in2,    pot_fourbar_right, sensorPotentiometer)
 #pragma config(Sensor, in3,    pot_chainbar,   sensorPotentiometer)
 #pragma config(Sensor, in5,    pot_mb,         sensorPotentiometer)
+#pragma config(Sensor, in6,    gyro,           sensorGyro)
 #pragma config(Sensor, dgtl1,  en_front_left,  sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  en_front_right, sensorQuadEncoder)
 #pragma config(Motor,  port1,           mb,            tmotorVex393_HBridge, openLoop)
