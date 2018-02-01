@@ -24,11 +24,9 @@
 task main()
 {
 //#include "Autonomous.h"
-startTask(WheelControls);
 while (true){
-	if (vexRT[Btn8R]){moveWheels(40,true,15);moveWheels(-40,true,15);}
-	if (vexRT[Btn7L]){turn(90);turn(-90);}
-	if (vexRT[Btn7D] or vexRT[Btn8D]){releaseWheels();}
+startTask(WheelControls);
+if (vexRT[Btn5D])mobileGoal(2000);
+if (vexRT[Btn5U])mobileGoal(3250,false,5);
 }
-
 }
