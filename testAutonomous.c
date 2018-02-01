@@ -4,6 +4,7 @@
 #pragma config(Sensor, in2,    pot_fourbar_right, sensorPotentiometer)
 #pragma config(Sensor, in3,    pot_chainbar,   sensorPotentiometer)
 #pragma config(Sensor, in5,    pot_mb,         sensorPotentiometer)
+#pragma config(Sensor, in6,    gyro,           sensorGyro)
 #pragma config(Sensor, dgtl1,  en_front_left,  sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  en_front_right, sensorQuadEncoder)
 #pragma config(Motor,  port1,           mb,            tmotorVex393_HBridge, openLoop)
@@ -25,7 +26,9 @@ task main()
 //#include "Autonomous.h"
 startTask(WheelControls);
 while (true){
-	if (vexRT[Btn8R]){moveWheels(10);}
+	if (vexRT[Btn8R]){moveWheels(40,true,15);moveWheels(-40,true,15);}
+	if (vexRT[Btn7L]){turn(90);turn(-90);}
+	if (vexRT[Btn7D] or vexRT[Btn8D]){releaseWheels();}
 }
 
 }
