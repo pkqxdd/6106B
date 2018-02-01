@@ -33,6 +33,8 @@ const int BACK_RIGHT_DIRECTION = 1;
 
 const int EN_FRONT_LEFT_DIRECTION=-1;
 const int EN_FRONT_RIGHT_DIRECTION=-1;
+const int EN_MAX=3200;
+const int EN_MIN=940;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
@@ -87,7 +89,7 @@ bool approxEq(const float a, const float b, const float tolerance){
 motor[mb]=0;
 }
 
- void mobileGoalMove(const int power){
+ void moveMobileGoal(const int power){
 	motor[mb]=power;
 }
 
@@ -167,10 +169,8 @@ void chainBarUp()
 
 int chainbarTarget = 0;
 int fourbarTarget = 0;
-int mobileGoalTarget=0;
 bool isFourBarLocked = false;
 bool isChainBarLocked = false;
-bool isMobileGoalLiftLocked=false;
 
 
 task lockChainbar()

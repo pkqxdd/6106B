@@ -37,7 +37,7 @@ task tTurn(){
 
 float wheelsTarget=0;
 bool correctDirection=false;
-
+bool resetGyro=false;
 
 task tMoveWheels(){ //distance in inches
 #define currLocLeft SensorValue[en_front_left]
@@ -45,8 +45,9 @@ task tMoveWheels(){ //distance in inches
 
 const float distance=wheelsTarget;
 static const float ticksPerInches=360/(PI*4);
+
 resetEncoders();
-if (correctDirection) SensorValue[gyro]=0;
+if (correctDirection){if (resetGyro) SensorValue[gyro]=0;}
 
 		long long sumLeft=0,sumRight=0;
     const float kp = 1; // proportional constant
@@ -77,7 +78,7 @@ if (correctDirection) SensorValue[gyro]=0;
 			}
 
         lastErrLeft = errLeft;
-        lastErrRight = errRight;
+        lastErrRight= errRight;
         sumLeft+=errLeft;
         sumRight+=errRight;
         moveLeftWheels(powerOutputLeft);
@@ -88,6 +89,31 @@ if (correctDirection) SensorValue[gyro]=0;
 
 }
 
+int mobileGoalTarget=0;
+
+task tMoveMobileGoal(){
+	  const float kp = -1; // proportional constant
+    const float ki = 0;
+    const float kd = 5; // derivatie constant
+    int lastErr, allErr, powerOutput = 0;
+    int err = 0;
+
+    while (true)
+    {
+        err = mobileGoalTarget - SensorValue[pot_mb];
+        powerOutput =
+                      err * kp + // Proportional
+                      allErr*ki+
+                      (lastErr - err) * kd;
+        lastErr = err;
+        allErr+=err;
+        moveMobileGoal(powerOutput);
+        abortTimeslice();
+    }
+
+}
+
+
 void releaseWheels(){
 	stopTask(tTurn);
 	stopTask(tMoveWheels);
@@ -95,11 +121,11 @@ void releaseWheels(){
 
 
 
-void moveWheels(const float distance,bool straight=false,const float tolerance=20){
+void moveWheels(const float distance,const bool straight=false,const bool resetGyroscope=false,const float tolerance=20){
 static const float ticksPerInches=360/(PI*4);
 
 correctDirection=straight;
-
+resetGyro=resetGyroscope;
 wheelsTarget=distance;
 releaseWheels();
 startTask(tMoveWheels);
@@ -127,6 +153,19 @@ gyroTarget=degrees*10;
 startTask(tTurn);
 
 while(not approxEq(SensorValue[gyro],degrees*10,10)){}
+
+}
+
+void mobileGoal(const int target,bool block=false,int tolerance=20){
+	stopTask(tMoveMobileGoal);
+	mobileGoalTarget=target;
+	startTask(tMoveMobileGoal);
+	if (block){
+		while (not approxEq(target,SensorValue[pot_mb],tolerance))
+			{}
+
+}
+
 
 }
 
