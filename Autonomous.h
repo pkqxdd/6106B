@@ -9,7 +9,7 @@ turn(45,5);
 wait1Msec(200);
 moveWheels(48,true,1.25);
 
-wait1Msec(1000);
+wait1Msec(500);
 
 mobileGoal(940,true);
 
@@ -25,12 +25,12 @@ moveWheels(30);
 turn(-95);
 
 
-mobileGoal(2000,true,50);
+mobileGoal(2000,false,50);
 moveWheels(24,true,4);
-wait1Msec(2000);
+wait1Msec(500);
 
 moveWheels(-20,5);
-wait1Msec(2000);
+wait1Msec(500);
 
 releaseWheels();
 #endif
