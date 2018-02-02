@@ -121,7 +121,7 @@ void releaseWheels(){
 
 
 
-void moveWheels(const float distance,const bool straight=false,const bool resetGyroscope=false,const float tolerance=20){
+void moveWheels(const float distance,const bool straight=false,const float tolerance=0.5,const bool resetGyroscope=true){
 static const float ticksPerInches=360/(PI*4);
 
 correctDirection=straight;
@@ -131,8 +131,8 @@ releaseWheels();
 startTask(tMoveWheels);
 
 
-while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches,tolerance) and
-    						approxEq(currLocRight*EN_FRONT_RIGHT_DIRECTION,distance*ticksPerInches,tolerance) ))
+while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches,tolerance*ticksPerInches) and
+    						approxEq(currLocRight*EN_FRONT_RIGHT_DIRECTION,distance*ticksPerInches,tolerance*ticksPerInches) ))
     						{}
 
     						return;
@@ -143,16 +143,16 @@ while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches
 #undef currLocLeft
 #undef currLocRight
 
-void turn(const int degrees)//positive for turning counter-clockwise
+void turn(const int degrees,int tolerance=10)//positive for turning counter-clockwise
 {
 	SensorValue[gyro]=0;
 	if (degrees>360 or degrees<-360) return; // Cannot throw in robotC
 releaseWheels();
 
-gyroTarget=degrees*10;
+gyroTarget=-degrees*10;
 startTask(tTurn);
 
-while(not approxEq(SensorValue[gyro],degrees*10,10)){}
+while(not approxEq(SensorValue[gyro],-degrees*10,tolerance)){}
 
 }
 

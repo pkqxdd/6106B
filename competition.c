@@ -32,7 +32,13 @@
 
 
 void pre_auton() {
+
 bStopTasksBetweenModes = true;
+	SensorValue[gyro]=0;
+	SensorType[gyro]=sensorNone;
+	SensorType[gyro]=sensorGyro;
+	SensorValue[gyro]=0;
+	wait1Msec(3000);
 }
 
 #include "autonomousHelpers.h"
@@ -42,6 +48,6 @@ task autonomous() {
 }
 
 task usercontrol() {
-stopTask(tMoveWheels);
+releaseWheels();
 #include "UserControls.h"
 }
