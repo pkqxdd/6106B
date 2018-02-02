@@ -24,9 +24,10 @@
 task main()
 {
 //#include "Autonomous.h"
+//startTask(WheelControls);
 while (true){
-startTask(WheelControls);
-if (vexRT[Btn5D])mobileGoal(2000);
-if (vexRT[Btn5U])mobileGoal(3250,false,5);
+if (vexRT[Btn8R]){
+#include "Autonomous.h"
+}
 }
 }
