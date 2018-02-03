@@ -44,7 +44,7 @@ bStopTasksBetweenModes = true;
 #include "autonomousHelpers.h"
 
 task autonomous() {
-#include "skillChallenge.h"
+#include "autonomous10Points.h"
 }
 
 task usercontrol() {

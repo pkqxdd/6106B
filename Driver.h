@@ -9,7 +9,7 @@ const int ROLLER_POWER = 100; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
-const int ROLLER_ANTIGRAVITY = 0;
+const int ROLLER_ANTIGRAVITY = 20;
 
 const int POT_CHAINBAR_MIN = 0;
 const int POT_CHAINBAR_MAX = 2050;
@@ -166,6 +166,11 @@ void chainBarUp()
     motor[chainbar] = CHAINBAR_ANTIGRAVITY;
 }
 
+void chainBarStay(){
+	motor[chainbar]=min(CHAINBAR_ANTIGRAVITY,(SensorValue[pot_chainbar]-200)*0.5);
+}
+
+
 
 int chainbarTarget = 0;
 int fourbarTarget = 0;
@@ -176,9 +181,9 @@ bool isChainBarLocked = false;
 task lockChainbar()
 { // hold the chainbar in place. Call stoptask to release it
 #define currLoc SensorValue[pot_chainbar]
-    const float kp = -0.25; // proportional constant
+    const float kp = -0.3; // proportional constant
     const float ki = 0;
-    const float kd = -0.5; // derivatie constant
+    const float kd = -5; // derivatie constant
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
@@ -367,15 +372,19 @@ task RollerControls()
     bool shouldStop = true;
     while (true)
     {
-        if (ButtonRollerIn)
-        {
-            rollerIn();
-            shouldStop = false;
-        } else if (ButtonRollerOut)
+
+         if (ButtonRollerOut)
         {
             rollerOut();
             shouldStop = true;
-        } else
+
+        }
+           else if (ButtonRollerIn)
+        {
+            rollerIn();
+            shouldStop = false;
+       }
+        else
         {
             if (shouldStop) rollerZero();
             else rollerStop();
@@ -386,19 +395,44 @@ task RollerControls()
 
 task ChainBarControls()
 {
+		bool overrideMode=false;
     while (true)
     {
         while (ButtonChainBarUp)
         {
+        	overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
+            if (SensorValue[pot_chainbar]>=220)
             chainBarUp();
         }
         while (ButtonChainBarDown)
         {
+        	overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
             chainBarDown();
         }
-        if (!isChainBarLocked) chainBarStop();
+
+        while (ButtonChainBarOverrideUp){
+        	overrideMode=true;
+        	if (isChainBarLocked) releaseChainBar();
+            chainBarUp();
+      	}
+
+       while (ButtonChainBarOverrideDown)
+        {
+        		overrideMode=true;
+            if (isChainBarLocked) releaseChainBar();
+            chainBarDown();
+        }
+
+        if (!isChainBarLocked) {
+        	if (not overrideMode){
+        	if (SensorValue[pot_chainbar]<300) chainBarStay();
+        	else
+        	chainBarStop();
+     } else {chainBarStop();}
+
+      	}
     abortTimeslice();
         }
 }
@@ -413,7 +447,11 @@ task SpecialControls()
     {
         if (ButtonSpecialPickUp)
         {
+        				if (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN > 250)
                 holdChainBar(1300);
+              	else {
+              	holdChainBar(1350);
+              }
         }
 #ifdef ButtonSpecialDropOffLow
         if (ButtonSpecialDropOffLow)
@@ -471,20 +509,20 @@ task SpecialControls()
             {
                 case 0:
                 		holdFourBar(0);
-                    holdChainBar(529);
+                    holdChainBar(449);
                     break;
                 case 1:
                     holdFourBar(0);
-                    holdChainBar(519);
+                    holdChainBar(350);
                     break;
                 case 2:
                    	holdChainBar(1300,120);
-                    holdFourBar(150);
-                    holdChainBar(500);
+                    holdFourBar(180);
+                    holdChainBar(350);
                     break;
                 case 3:
                 		holdChainBar(1300,120);
-                		holdFourBar(200);
+                		holdFourBar(300);
                     holdChainBar(645);
                     break;
                 case 4:

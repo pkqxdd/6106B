@@ -27,7 +27,7 @@ task main()
 //startTask(WheelControls);
 while (true){
 if (vexRT[Btn8R]){
-#include "skillChallenge.h"
+#include "autonomous10Points.h"
 }
 }
 }
