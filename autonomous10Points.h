@@ -21,31 +21,20 @@ wait1Msec(500);
 
 
 mb_in(true);
-turn(178,5);
+turn(179,5);
 
 wait1Msec(300);
 holdFourBar(0);
 holdChainBar(400);
 
-moveWheels(37,true,1.5);
+moveWheels(40,true,1.5);
 //motor[roller]=-ROLLER_POWER;
 
 wait1Msec(300);
 
-turn(-45);
-wait1Msec(200);
 
-moveWheels(24,true,2);
-turn(95);
-motor[roller]=0;
+mb_out(true);
 
-mb_mid(false);
-
-wait1Msec(300);
-moveWheels(24,true,4);
-wait1Msec(500);
-mb_out(false);
-moveWheels(-16,4);
-
+moveWheels(-10,true,2);
 
 #endif

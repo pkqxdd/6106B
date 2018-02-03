@@ -25,3 +25,5 @@
 #define ButtonConeCountIncrement vexRT[Btn8RXmtr2]
 #define ButtonConeCountDecrement vexRT[Btn8DXmtr2]
 #define ButtonConeCountReset vexRT[Btn8LXmtr2]
+#define ButtonChainBarOverrideUp vexRT[Btn6UXmtr2]
+#define ButtonChainBarOverrideDown vexRT[Btn6DXmtr2]
