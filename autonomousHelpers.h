@@ -82,7 +82,7 @@ if (correctDirection){if (resetGyro) SensorValue[gyro]=0;}
         sumLeft+=errLeft;
         sumRight+=errRight;
         moveLeftWheels(powerOutputLeft);
-        moveRightWheels(powerOutputRight);
+        moveRightWheels(powerOutputRight*0.95);
         abortTimeslice();
     }
 

@@ -5,7 +5,7 @@
 const int MB_POWER = 127; // power to mobile goal lift
 const int FOURBAR_POWER = 90; //power to fourbar
 const int CHAINBAR_POWER = 80; // power to chainbar
-const int ROLLER_POWER = 127; // power to chainbar
+const int ROLLER_POWER = 100; // power to chainbar
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
@@ -358,7 +358,7 @@ task FourBarControls()
             fourBarDown();
         }
         if (!isFourBarLocked) fourBarStop();
-    abortTimeSlice();
+    abortTimeslice();
         }
 }
 
@@ -413,7 +413,7 @@ task SpecialControls()
     {
         if (ButtonSpecialPickUp)
         {
-                holdChainBar(1200);
+                holdChainBar(1300);
         }
 #ifdef ButtonSpecialDropOffLow
         if (ButtonSpecialDropOffLow)
@@ -471,50 +471,50 @@ task SpecialControls()
             {
                 case 0:
                 		holdFourBar(0);
-                    holdChainBar(429);
+                    holdChainBar(529);
                     break;
                 case 1:
                     holdFourBar(0);
-                    holdChainBar(419);
+                    holdChainBar(519);
                     break;
                 case 2:
-                   	holdChainBar(1200,120);
+                   	holdChainBar(1300,120);
                     holdFourBar(150);
-                    holdChainBar(400);
+                    holdChainBar(500);
                     break;
                 case 3:
-                		holdChainBar(1200,120);
+                		holdChainBar(1300,120);
                 		holdFourBar(200);
-                    holdChainBar(545);
+                    holdChainBar(645);
                     break;
                 case 4:
-                		holdChainBar(1200,120);
-                    holdChainBar(405);
+                		holdChainBar(1300,120);
+                    holdChainBar(505);
                     holdFourBar(370);
                     break;
                 case 5:
-                		holdChainBar(1200,120);
-                    holdChainBar(435);
+                		holdChainBar(1300,120);
+                    holdChainBar(535);
                     holdFourBar(510);
                     break;
                 case 6:
-                		holdChainBar(1200,120);
-                    holdChainBar(573);
+                		holdChainBar(1300,120);
+                    holdChainBar(673);
                     holdFourBar(550);
                     break;
                 case 7:
-                		holdChainBar(1200,120);
-                    holdChainBar(615);
+                		holdChainBar(1300,120);
+                    holdChainBar(715);
                     holdFourBar(710);
                     break;
                 case 8:
-                		holdChainBar(1200,120);
-                    holdChainBar(705);
+                		holdChainBar(1300,120);
+                    holdChainBar(805);
                     holdFourBar(860);
                     break;
                 case 9:
                 		holdChainBar(1260,120);
-                    holdChainBar(655);
+                    holdChainBar(755);
                     holdFourBar(970);
                     break;
             }
