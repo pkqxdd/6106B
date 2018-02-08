@@ -12,9 +12,9 @@ SensorValue[en_front_right]=0;
 int gyroTarget=0;
 
 task tTurn(){
-    const float kp = 0.6; // proportional constant
+    const float kp = 0.55; // proportional constant
     const float ki = 0;
-    const float kd = 5; // derivatie constant
+    const float kd = 20; // derivatie constant
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
@@ -134,7 +134,7 @@ startTask(tMoveWheels);
 while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches,tolerance*ticksPerInches) and
     						approxEq(currLocRight*EN_FRONT_RIGHT_DIRECTION,distance*ticksPerInches,tolerance*ticksPerInches) ))
     						{}
-
+								//stopTask(tMoveWheels);
     						return;
 
 }
