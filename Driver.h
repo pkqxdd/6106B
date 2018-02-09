@@ -1,5 +1,9 @@
 #ifndef drivers
 #define drivers
+#ifndef ever
+#define ever ;;
+#endif
+
 
 // -----------------BEGIN Global Constants Configuration-------------------
 const int MB_POWER = 127; // power to mobile goal lift
@@ -187,7 +191,7 @@ task lockChainbar()
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
-    while (true)
+    for(ever)
     {
         err = chainbarTarget - currLoc;
         powerOutput = CHAINBAR_ANTIGRAVITY + //Base power
@@ -214,7 +218,7 @@ task lockFourBar()
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
 
-    while (true)
+    for(ever)
     {
         //POT_MIN is the value when the fourbar is physically at its lowest location
         errLeft = fourbarTarget - (currLocLeft - POT_FOURBAR_LEFT_MIN) * POT_FOURBAR_LEFT_DIRECTION;
@@ -320,7 +324,7 @@ fourbarTarget = target;
 
 task WheelControls()
 {
-    while (true) // a foreverloop
+    for(ever) // a foreverloop
     {
         moveLeftWheels(AxisLeftWheels);
         moveRightWheels(AxisRightWheels);
@@ -331,7 +335,7 @@ task WheelControls()
 
 task MobileGoalControls(){
 
-while (true){
+for(ever){
 
 if (ButtonMobileGoalUp){
 	mobileGoalUp()	;
@@ -349,7 +353,7 @@ abortTimeslice();
 
 task FourBarControls()
 {
-    while (true)
+    for(ever)
     {
         while (ButtonFourbarUp)
         {
@@ -370,7 +374,7 @@ task FourBarControls()
 task RollerControls()
 {
     bool shouldStop = true;
-    while (true)
+    for(ever)
     {
 
          if (ButtonRollerOut)
@@ -396,7 +400,7 @@ task RollerControls()
 task ChainBarControls()
 {
 		bool overrideMode=false;
-    while (true)
+    for(ever)
     {
         while (ButtonChainBarUp)
         {
@@ -443,7 +447,7 @@ task SpecialControls()
 {
     bool wasPressedIncrement = false;
     bool wasPressedDecrement = false;
-    while (true)
+    for(ever)
     {
         if (ButtonSpecialPickUp)
         {
@@ -508,8 +512,8 @@ task SpecialControls()
             switch (coneCount)
             {
                 case 0:
-                		holdFourBar(0);
-                    holdChainBar(449);
+                		holdFourBar(730);
+                    holdChainBar(2000);
                     break;
                 case 1:
                     holdFourBar(0);
