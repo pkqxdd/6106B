@@ -1,10 +1,3 @@
-#ifndef Autonomous
-#define Autonomous
-
-#define mb_in(block) mobileGoal(900,block,50)
-#define mb_mid(block) mobileGoal(2000,block)
-#define mb_out(block) mobileGoal(3290,block)
-
 motor[roller]=ROLLER_ANTIGRAVITY;
 
 
@@ -36,5 +29,3 @@ wait1Msec(300);
 mb_out(true);
 
 moveWheels(-10,true,2);
-
-#endif
