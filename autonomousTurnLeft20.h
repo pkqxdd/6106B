@@ -20,9 +20,11 @@ holdFourBar(630);
 wait1Msec(300);
 
 motor[roller]=-ROLLER_POWER;
+wait1Msec(200);
+holdFourBar(900);
+
 moveWheels(-44,true,1.5);
 
-holdFourBar(900);
 motor[roller]=0;
 
 turn(135);

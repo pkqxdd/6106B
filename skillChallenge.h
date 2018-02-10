@@ -1,6 +1,8 @@
 
 motor[roller]=ROLLER_ANTIGRAVITY;
 
+
+//holdFourBar(150);
 mb_out(false);
 
 holdFourBar(1030);
@@ -15,9 +17,11 @@ holdFourBar(630);
 wait1Msec(300);
 
 motor[roller]=-ROLLER_POWER;
+wait1Msec(200);
+holdFourBar(900);
+
 moveWheels(-44,true,1.5);
 
-holdFourBar(900);
 motor[roller]=0;
 
 turn(135);
@@ -34,7 +38,6 @@ mb_mid(false);
 
 wait1Msec(300);
 moveWheels(20,true,4);
-
 
 clearTimer(T1);
 while (time1(T1)<500){
@@ -55,25 +58,27 @@ wait1Msec(700);
 mb_mid(false);
 clearTimer(T1);
 releaseWheels();
-while (time1(T1)<1300){
+while (time1(T1)<1150){
 moveLeftWheels(35);
-moveRightWheels(35)';
+moveRightWheels(35);
 }
 
 moveLeftWheels(0);
 moveRightWheels(0);
 
 
-mb_out(false);
+
 turn(90);
 wait1Msec(300);
 
-moveWheels(16,true,2);
-turn(95);
+moveWheels(15,true,2);
+
+mb_out(false);
+turn(93);
 
 wait1Msec(300);
 
-moveWheels(22,false,2);
+moveWheels(24,false,2);
 wait1Msec(300);
 mb_in(true);
 wait1Msec(300);
