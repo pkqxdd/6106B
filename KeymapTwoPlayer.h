@@ -18,6 +18,9 @@
 #define ButtonMobileGoalUp vexRT[Btn5U]
 #define ButtonMobileGoalDown vexRT[Btn5D]
 
+#define ButtonChainBarOverrideStart vexRT[Btn8D]
+#define ButtonChainBarOverrideStop vexRT[Btn8L]
+
 
 //----------------Second Player-------------
 

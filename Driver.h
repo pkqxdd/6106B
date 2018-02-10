@@ -402,16 +402,19 @@ task ChainBarControls()
 		bool overrideMode=false;
     for(ever)
     {
+    		if (ButtonChainBarOverrideStart) {overrideMode=true;}
+    		else if (ButtonChainBarOverrideStop) {overrideMode=false;}
+
         while (ButtonChainBarUp)
         {
-        	overrideMode=false;
+        	//overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
             if (SensorValue[pot_chainbar]>=220)
             chainBarUp();
         }
         while (ButtonChainBarDown)
         {
-        	overrideMode=false;
+        	//overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
             chainBarDown();
         }
