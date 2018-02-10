@@ -2,14 +2,26 @@
 #define autonomousHelpers
 #include "Driver.h"
 
-
-
 void resetEncoders(){
 SensorValue[en_front_left]=0;
 SensorValue[en_front_right]=0;
+SensorValue[en_back_left]=0;
+SensorValue[en_back_right]=0;
 }
 
 int gyroTarget=0;
+
+int gyro(){
+
+return (SensorValue[gyro_left]+SensorValue[gyro_right])/2;
+
+}
+
+void resetGyro(){
+	SensorValue[gyro_left]=0;
+	SensorValue[gyro_right]=0;
+}
+
 
 task tTurn(){
     const float kp = 0.55; // proportional constant
@@ -20,7 +32,7 @@ task tTurn(){
 
     while (true)
     {
-        err = gyroTarget - SensorValue[gyro];
+        err = gyroTarget - gyro();
         powerOutput =
                       err * kp + // Proportional
                       allErr*ki+
@@ -37,17 +49,17 @@ task tTurn(){
 
 float wheelsTarget=0;
 bool correctDirection=false;
-bool resetGyro=false;
+bool shouldResetGyro=false;
 
 task tMoveWheels(){ //distance in inches
-#define currLocLeft SensorValue[en_front_left]
-#define currLocRight SensorValue[en_front_right]
+#define currLocLeft (SensorValue[en_front_left]-SensorValue[en_back_left])/2
+#define currLocRight (SensorValue[en_front_right]+SensorValue[en_back_right])/2
 
 const float distance=wheelsTarget;
 static const float ticksPerInches=360/(PI*4);
 
 resetEncoders();
-if (correctDirection){if (resetGyro) SensorValue[gyro]=0;}
+if (correctDirection){if (shouldResetGyro) resetGyro();}
 
 		long long sumLeft=0,sumRight=0;
     const float kp = 1; // proportional constant
@@ -73,8 +85,8 @@ if (correctDirection){if (resetGyro) SensorValue[gyro]=0;}
                            (lastErrRight - errRight) * kd;
 
 				if (correctDirection){
-					powerOutputLeft+=SensorValue[gyro];
-					powerOutputRight-=SensorValue[gyro];
+					powerOutputLeft+=gyro();
+					powerOutputRight-=gyro();
 			}
 
         lastErrLeft = errLeft;
@@ -121,11 +133,11 @@ void releaseWheels(){
 
 
 
-void moveWheels(const float distance,const bool straight=false,const float tolerance=0.5,const bool resetGyroscope=true){
+void moveWheels(const float distance,const bool straight=false,const float tolerance=0.5,const bool shouldResetGyroscope=true){
 static const float ticksPerInches=360/(PI*4);
 
 correctDirection=straight;
-resetGyro=resetGyroscope;
+shouldResetGyro=shouldResetGyroscope;
 wheelsTarget=distance;
 releaseWheels();
 startTask(tMoveWheels);
@@ -145,14 +157,14 @@ while (not (approxEq(currLocLeft*EN_FRONT_LEFT_DIRECTION,distance*ticksPerInches
 
 void turn(const int degrees,int tolerance=10)//positive for turning counter-clockwise
 {
-	SensorValue[gyro]=0;
+	resetGyro();
 	if (degrees>360 or degrees<-360) return; // Cannot throw in robotC
 releaseWheels();
 
 gyroTarget=-degrees*10;
 startTask(tTurn);
 
-while(not approxEq(SensorValue[gyro],-degrees*10,tolerance)){}
+while(not approxEq(gyro(),-degrees*10,tolerance)){}
 
 }
 
