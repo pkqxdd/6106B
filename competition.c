@@ -4,9 +4,12 @@
 #pragma config(Sensor, in2,    pot_fourbar_right, sensorPotentiometer)
 #pragma config(Sensor, in3,    pot_chainbar,   sensorPotentiometer)
 #pragma config(Sensor, in5,    pot_mb,         sensorPotentiometer)
-#pragma config(Sensor, in6,    gyro,           sensorGyro)
+#pragma config(Sensor, in6,    gyro_right,     sensorGyro)
+#pragma config(Sensor, in7,    gyro_left,      sensorGyro)
 #pragma config(Sensor, dgtl1,  en_front_left,  sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  en_front_right, sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  en_back_left,   sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  en_back_right,  sensorQuadEncoder)
 #pragma config(Motor,  port1,           mb,            tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           front_left,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           front_right,   tmotorVex393_MC29, openLoop, reversed)
@@ -31,8 +34,8 @@
 
 
 int autonSel=0;
-const int nAutons=3;
-const string autonNames[3]={"Left 20 Points","Left 10 Points","Skill Challenge"};
+const int nAutons=5;
+const string autonNames[5]={"Left 20 Points","Right 20 Points","Left 10 Points","Right 10 Points","Skill Challenge"};
 
 
 void pre_auton() {
@@ -72,9 +75,15 @@ case 0:
 #include "autonomousTurnLeft20.h"
 break;
 case 1:
-#include "autonomousTurnLeft10.h"
+#include "autonomousTurnRight20.h"
 break;
 case 2:
+#include "autonomousTurnLeft10.h"
+break;
+case 3:
+#include "autonomousTurnRight10.h"
+break;
+case 4:
 #include "skillChallenge.h"
 break;
 

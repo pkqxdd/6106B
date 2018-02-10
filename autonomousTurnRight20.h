@@ -1,6 +1,3 @@
-#define mb_in(block) mobileGoal(900,block,50)
-#define mb_mid(block) mobileGoal(2000,block,30)
-#define mb_out(block) mobileGoal(3250,block,30)
 
 motor[roller]=ROLLER_ANTIGRAVITY;
 
@@ -25,7 +22,7 @@ moveWheels(-44,true,1.5);
 holdFourBar(900);
 motor[roller]=0;
 
-turn(135);
+turn(-135);
 
 holdChainBar(600);
 
@@ -33,7 +30,7 @@ wait1Msec(300);
 holdFourBar(400);
 
 moveWheels(23,true,2);
-turn(100);
+turn(-100);
 
 mb_mid(false);
 
