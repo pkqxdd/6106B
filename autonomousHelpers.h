@@ -52,7 +52,7 @@ bool correctDirection=false;
 bool shouldResetGyro=false;
 
 task tMoveWheels(){ //distance in inches
-#define currLocLeft (SensorValue[en_front_left]-SensorValue[en_back_left])/2
+#define currLocLeft -SensorValue[en_back_left]
 #define currLocRight (SensorValue[en_front_right]+SensorValue[en_back_right])/2
 
 const float distance=wheelsTarget;

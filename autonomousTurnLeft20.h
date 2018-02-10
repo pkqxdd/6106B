@@ -12,8 +12,8 @@ holdFourBar(1030);
 holdChainBar(2100);
 
 wait1Msec(400);
-moveWheels(49,true,1.25);
-
+moveWheels(49,true,2.2);
+wait1Msec(200);
 mb_in(true);
 
 holdFourBar(630);
@@ -49,7 +49,7 @@ while (time1(T1)<500){
 	moveRightWheels(127);
 }
 
-mobileGoal(2760,true,50);
+mobileGoal(2660,true,50);
 wait1Msec(500);
 
 
