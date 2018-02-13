@@ -35,10 +35,10 @@ const int FRONT_RIGHT_DIRECTION = 1;
 const int BACK_LEFT_DIRECTION = 1;
 const int BACK_RIGHT_DIRECTION = 1;
 
-const int EN_FRONT_LEFT_DIRECTION=-1;
-const int EN_FRONT_RIGHT_DIRECTION=-1;
-const int EN_MAX=3200;
-const int EN_MIN=940;
+const int EN_FRONT_LEFT_DIRECTION = -1;
+const int EN_FRONT_RIGHT_DIRECTION = -1;
+const int EN_MAX = 3200;
+const int EN_MIN = 940;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
@@ -56,71 +56,76 @@ const int EN_MIN=940;
 #define not !
 
 
-bool approxEq(const float a, const float b, const float tolerance){
-	if (a==b) return true;
-	else if (a>b){
-		return a-tolerance<=b;
-	} else {
-	return a+tolerance>=b;}
+bool approxEq(const float a, const float b, const float tolerance)
+{
+    if (a == b) return true;
+    else if (a > b)
+    {
+        return a - tolerance <= b;
+    } else
+    {
+        return a + tolerance >= b;
+    }
 }
 
 
- void moveLeftWheels(const int power)
+void moveLeftWheels(const int power)
 {
     motor[front_left] = power;
     motor[back_left] = power;
 }
 
- void moveRightWheels(const int power)
+void moveRightWheels(const int power)
 {
     motor[front_right] = power;
     motor[back_right] = power;
 }
 
- void mobileGoalUp()
+void mobileGoalUp()
 {
     motor[mb] = MB_POWER;
 }
 
 
- void mobileGoalDown()
+void mobileGoalDown()
 {
     motor[mb] = -MB_POWER;
 }
 
- void mobileGoalStop()
+void mobileGoalStop()
 {
-motor[mb]=0;
+    motor[mb] = 0;
 }
 
- void moveMobileGoal(const int power){
-	motor[mb]=power;
+void moveMobileGoal(const int power)
+{
+    motor[mb] = power;
 }
 
- void fourBarLeftUp()
+void fourBarLeftUp()
 {
     motor[fb_left] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
- void fourBarRightUp()
+void fourBarRightUp()
 {
     motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
                       4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
 }
 
- void fourBarMove(const int powerLeft, const int powerRight)
+void fourBarMove(const int powerLeft, const int powerRight)
 {
     motor[fb_left] = powerLeft;
     motor[fb_right] = powerRight;
 }
 
- void fourBarDown()
+void fourBarDown()
 {
     motor[fb_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
     motor[fb_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
- void fourBarStop()
+void fourBarStop()
 {
     motor[fb_left] = FOURBAR_ANTIGRAVITY;
     motor[fb_right] = FOURBAR_ANTIGRAVITY;
@@ -135,7 +140,7 @@ void rollerIn()
 
 void rollerOut()
 {
-		motor[roller]=-ROLLER_POWER;
+    motor[roller] = -ROLLER_POWER;
     //clearTimer(T1);
     //while (time1(T1) < 2500) motor[roller] = -ROLLER_POWER;
 }
@@ -155,25 +160,25 @@ void chainBarUp()
     motor[chainbar] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
 }
 
- void chainBarMove(const int power)
+void chainBarMove(const int power)
 {
     motor[chainbar] = power;
 }
 
- void chainBarDown()
+void chainBarDown()
 {
     motor[chainbar] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
 }
 
- void chainBarStop()
+void chainBarStop()
 {
     motor[chainbar] = CHAINBAR_ANTIGRAVITY;
 }
 
-void chainBarStay(){
-	motor[chainbar]=min(CHAINBAR_ANTIGRAVITY,(SensorValue[pot_chainbar]-200)*0.5);
+void chainBarStay()
+{
+    motor[chainbar] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 200) * 0.5);
 }
-
 
 
 int chainbarTarget = 0;
@@ -191,15 +196,14 @@ task lockChainbar()
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
-    for(ever)
+    for (ever)
     {
         err = chainbarTarget - currLoc;
         powerOutput = CHAINBAR_ANTIGRAVITY + //Base power
                       err * kp + // Proportional
-                      allErr*ki+
-                      (lastErr - err) * kd;
+                      allErr * ki + (lastErr - err) * kd;
         lastErr = err;
-        allErr+=err;
+        allErr += err;
         chainBarMove(powerOutput);
         abortTimeslice();
     }
@@ -218,7 +222,7 @@ task lockFourBar()
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
 
-    for(ever)
+    for (ever)
     {
         //POT_MIN is the value when the fourbar is physically at its lowest location
         errLeft = fourbarTarget - (currLocLeft - POT_FOURBAR_LEFT_MIN) * POT_FOURBAR_LEFT_DIRECTION;
@@ -269,9 +273,10 @@ void holdChainBar(const int target)
 
 }
 
-void holdChainBar(const int target, const float tolerance){
-	    chainbarTarget = target;
-	    #define currLoc SensorValue[pot_chainbar]
+void holdChainBar(const int target, const float tolerance)
+{
+    chainbarTarget = target;
+#define currLoc SensorValue[pot_chainbar]
     if (isChainBarLocked)
     {
         stopTask(lockChainbar);
@@ -280,8 +285,9 @@ void holdChainBar(const int target, const float tolerance){
         isChainBarLocked = true;
     }
     startTask(lockChainbar);
-    while (!approxEq(target,currLoc,tolerance)){
-    	//blocks
+    while (!approxEq(target, currLoc, tolerance))
+    {
+        //blocks
     }
     return;
 #undef currLoc
@@ -302,8 +308,9 @@ void holdFourBar(const int target)
 
 }
 
-void holdFourBar(const int target, const float tolerance){
-fourbarTarget = target;
+void holdFourBar(const int target, const float tolerance)
+{
+    fourbarTarget = target;
     if (isFourBarLocked)
     {
         stopTask(lockFourBar);
@@ -312,8 +319,11 @@ fourbarTarget = target;
         isFourBarLocked = true;
     }
     startTask(lockFourBar);
-    while (not(approxEq(target,SensorValue[pot_fourbar_left],tolerance) and approxEq(target,SensorValue[pot_fourbar_right],tolerance ))){
-    	//blocks
+    while (not(approxEq(target, SensorValue[pot_fourbar_left], tolerance) and approxEq(target,
+                                                                                       SensorValue[pot_fourbar_right],
+                                                                                       tolerance)))
+    {
+        //blocks
     };
     return;
 #undef currLoc
@@ -324,36 +334,41 @@ fourbarTarget = target;
 
 task WheelControls()
 {
-    for(ever) // a foreverloop
+    for (ever) // a foreverloop
     {
         moveLeftWheels(AxisLeftWheels);
         moveRightWheels(AxisRightWheels);
-    abortTimeslice();
+        abortTimeslice();
 
+    }
+}
+
+task MobileGoalControls()
+{
+
+    for (ever)
+    {
+
+        if (ButtonMobileGoalUp)
+        {
+            mobileGoalUp();
+        } else if (ButtonMobileGoalDown)
+        {
+            mobileGoalDown();
+        } else
+        {
+            mobileGoalStop();
         }
-}
-
-task MobileGoalControls(){
-
-for(ever){
-
-if (ButtonMobileGoalUp){
-	mobileGoalUp()	;
-} else if (ButtonMobileGoalDown){
-	mobileGoalDown();
-} else {
-	mobileGoalStop();
-}
 
 
-abortTimeslice();
-}
+        abortTimeslice();
+    }
 
 }
 
 task FourBarControls()
 {
-    for(ever)
+    for (ever)
     {
         while (ButtonFourbarUp)
         {
@@ -367,81 +382,82 @@ task FourBarControls()
             fourBarDown();
         }
         if (!isFourBarLocked) fourBarStop();
-    abortTimeslice();
-        }
+        abortTimeslice();
+    }
 }
 
 task RollerControls()
 {
     bool shouldStop = true;
-    for(ever)
+    for (ever)
     {
 
-         if (ButtonRollerOut)
+        if (ButtonRollerOut)
         {
             rollerOut();
             shouldStop = true;
 
-        }
-           else if (ButtonRollerIn)
+        } else if (ButtonRollerIn)
         {
             rollerIn();
             shouldStop = false;
-       }
-        else
+        } else
         {
             if (shouldStop) rollerZero();
             else rollerStop();
         }
-    abortTimeslice();
-        }
+        abortTimeslice();
+    }
 }
 
 task ChainBarControls()
 {
-		bool overrideMode=false;
-    for(ever)
+    bool overrideMode = false;
+    for (ever)
     {
-    		if (ButtonChainBarOverrideStart) {overrideMode=true;}
-    		else if (ButtonChainBarOverrideStop) {overrideMode=false;}
+        if (ButtonChainBarOverrideStart) { overrideMode = true; }
+        else if (ButtonChainBarOverrideStop) { overrideMode = false; }
 
         while (ButtonChainBarUp)
         {
-        	//overrideMode=false;
+            //overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
-            if (SensorValue[pot_chainbar]>=220)
-            chainBarUp();
+            if (SensorValue[pot_chainbar] >= 220)
+                chainBarUp();
         }
         while (ButtonChainBarDown)
         {
-        	//overrideMode=false;
+            //overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
             chainBarDown();
         }
 
-        while (ButtonChainBarOverrideUp){
-        	overrideMode=true;
-        	if (isChainBarLocked) releaseChainBar();
-            chainBarUp();
-      	}
-
-       while (ButtonChainBarOverrideDown)
+        while (ButtonChainBarOverrideUp)
         {
-        		overrideMode=true;
+            overrideMode = true;
+            if (isChainBarLocked) releaseChainBar();
+            chainBarUp();
+        }
+
+        while (ButtonChainBarOverrideDown)
+        {
+            overrideMode = true;
             if (isChainBarLocked) releaseChainBar();
             chainBarDown();
         }
 
-        if (!isChainBarLocked) {
-        	if (not overrideMode){
-        	if (SensorValue[pot_chainbar]<300) chainBarStay();
-        	else
-        	chainBarStop();
-     } else {chainBarStop();}
+        if (!isChainBarLocked)
+        {
+            if (not overrideMode)
+            {
+                if (SensorValue[pot_chainbar] < 300) chainBarStay();
+                else
+                    chainBarStop();
+            } else { chainBarStop(); }
 
-      	}
-    abortTimeslice();
         }
+        abortTimeslice();
+    }
 }
 
 int coneCount = 0;
@@ -450,15 +466,16 @@ task SpecialControls()
 {
     bool wasPressedIncrement = false;
     bool wasPressedDecrement = false;
-    for(ever)
+    for (ever)
     {
         if (ButtonSpecialPickUp)
         {
-        				if (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN > 250)
+            if (SensorValue[pot_fourbar_right] - POT_FOURBAR_RIGHT_MIN > 250)
                 holdChainBar(1300);
-              	else {
-              	holdChainBar(1350);
-              }
+            else
+            {
+                holdChainBar(1350);
+            }
         }
 #ifdef ButtonSpecialDropOffLow
         if (ButtonSpecialDropOffLow)
@@ -515,7 +532,7 @@ task SpecialControls()
             switch (coneCount)
             {
                 case 0:
-                		holdFourBar(730);
+                    holdFourBar(730);
                     holdChainBar(2000);
                     break;
                 case 1:
@@ -523,42 +540,42 @@ task SpecialControls()
                     holdChainBar(350);
                     break;
                 case 2:
-                   	holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdFourBar(180);
                     holdChainBar(350);
                     break;
                 case 3:
-                		holdChainBar(1300,120);
-                		holdFourBar(300);
+                    holdChainBar(1300, 120);
+                    holdFourBar(300);
                     holdChainBar(645);
                     break;
                 case 4:
-                		holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdChainBar(505);
                     holdFourBar(370);
                     break;
                 case 5:
-                		holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdChainBar(535);
                     holdFourBar(510);
                     break;
                 case 6:
-                		holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdChainBar(673);
                     holdFourBar(550);
                     break;
                 case 7:
-                		holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdChainBar(715);
                     holdFourBar(710);
                     break;
                 case 8:
-                		holdChainBar(1300,120);
+                    holdChainBar(1300, 120);
                     holdChainBar(805);
                     holdFourBar(860);
                     break;
                 case 9:
-                		holdChainBar(1260,120);
+                    holdChainBar(1260, 120);
                     holdChainBar(755);
                     holdFourBar(970);
                     break;
@@ -567,8 +584,8 @@ task SpecialControls()
 #endif
 #endif
 #endif
-if (vexRT[Btn7RXmtr2]){holdFourBar(0);}
-abortTimeslice();
+        if (vexRT[Btn7RXmtr2]) { holdFourBar(0); }
+        abortTimeslice();
     }
 }
 
