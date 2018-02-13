@@ -35,7 +35,7 @@ task tTurn()
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
-    while (true)
+    for(ever)
     {
         err = gyroTarget - gyro();
         powerOutput = err * kp + // Proportional
@@ -73,7 +73,7 @@ task tMoveWheels()
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
 
-    while (true)
+    for(ever)
     {
         errLeft = distance * ticksPerInches - currLocLeft * EN_FRONT_LEFT_DIRECTION;
         errRight = distance * ticksPerInches - currLocRight * EN_FRONT_RIGHT_DIRECTION;
@@ -111,7 +111,7 @@ task tMoveMobileGoal()
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
-    while (true)
+    for(ever)
     {
         err = mobileGoalTarget - SensorValue[pot_mb];
         powerOutput = err * kp + // Proportional
