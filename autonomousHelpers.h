@@ -147,8 +147,7 @@ void moveWheels(const float distance, const bool straight = false, const float t
     while (not(
             approxEq(currLocLeft * EN_FRONT_LEFT_DIRECTION, distance * ticksPerInches, tolerance * ticksPerInches) and
             approxEq(currLocRight * EN_FRONT_RIGHT_DIRECTION, distance * ticksPerInches,
-                     tolerance * ticksPerInches))) {}
-    //stopTask(tMoveWheels);
+                     tolerance * ticksPerInches))) {} //blocks when target not reached
     return;
 
 }
@@ -157,16 +156,16 @@ void moveWheels(const float distance, const bool straight = false, const float t
 #undef currLocLeft
 #undef currLocRight
 
-void turn(const int degrees, int tolerance = 10)//positive for turning counter-clockwise
+void turn(const int degrees, int tolerance = 10) //positive number for turning clockwise
 {
     resetGyro();
-    if (degrees > 360 or degrees < -360) return; // Cannot throw in robotC
+    if (degrees > 360 or degrees < -360) return; // Cannot throw an exception in robotC. Just return
     releaseWheels();
 
     gyroTarget = -degrees * 10;
     startTask(tTurn);
 
-    while (not approxEq(gyro(), -degrees * 10, tolerance)) {}
+    while (not approxEq(gyro(), -degrees * 10, tolerance)) {} //blocks when target not reached
 
 }
 
@@ -177,7 +176,7 @@ void mobileGoal(const int target, bool block = false, int tolerance = 20)
     startTask(tMoveMobileGoal);
     if (block)
     {
-        while (not approxEq(target, SensorValue[pot_mb], tolerance)) {}
+        while (not approxEq(target, SensorValue[pot_mb], tolerance)) {} //blocks when target not reached
 
     }
 
