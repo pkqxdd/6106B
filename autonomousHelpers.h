@@ -31,7 +31,7 @@ task tTurn()
 {
     const float kp = 0.3; // proportional constant
     const float ki = 0;
-    const float kd = 20; // derivatie constant
+    const float kd = 0; // derivatie constant
     static int lastMeasure=nSysTime;
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
@@ -81,7 +81,7 @@ task tMoveWheels()
     long long sumLeft = 0, sumRight = 0;
     float kp = 1; // proportional constant
     const float ki = 0.00001;
-    const float kd = 80; // derivatie constant
+    const float kd = 0; // derivatie constant
     int lastErrLeft, lastErrRight = 0;
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
@@ -136,7 +136,7 @@ task tMoveMobileGoal()
 {
     const float kp = -1; // proportional constant
     const float ki = 0;
-    const float kd = 5; // derivatie constant
+    const float kd = 0; // derivatie constant
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
