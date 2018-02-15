@@ -24,59 +24,39 @@
 #define ever ;;
 #include "Driver.h"
 #include "autonomousHelpers.h"
+int lastBatteryLevel=nImmediateBatteryLevel;
+
 
 task main()
 {
-//#include "Autonomous.h"
-//startTask(WheelControls);
+	while(true){
+		if(vexRT[Btn7L]){
+			clearTimer(T4);
+			clearDebugStream();
+			while (nImmediateBatteryLevel>7500){
 
-for(ever){
-if (vexRT[Btn7L]){
-	stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(10,true);
-}
-else if (vexRT[Btn7R]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(20,true);
-}
-else if (vexRT[Btn8L]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(30,true);
-}
-else if (vexRT[Btn8R]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(40,true);
-}
-
-else if (vexRT[Btn7U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-10,true);
-}
-else if (vexRT[Btn8U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-20,true);
-}
-else if (vexRT[Btn7D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-30,true);
-}
-else if (vexRT[Btn8D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-40,true);
-}
-else if (vexRT[Btn5U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	turn(45);
-}
-else if (vexRT[Btn5D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	turn(90);
-}
-
-else if (vexRT[Btn6U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	turn(-45);
-}
-
-else if (vexRT[Btn6D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	turn(-90);
-}
-else {
-	if (vexRT[Ch2]>10|vexRT[Ch3]>10){
-	releaseWheels();
-	startTask(WheelControls);
-}
-	}
-
-}
-}
+				clearTimer(T1);
+				resetEncoders();
+				while (time1(T1)<1000){
+					moveLeftWheels(127);
+					moveRightWheels(127);
+				}
+				moveLeftWheels(0);
+				moveRightWheels(0);
+				writeDebugStreamLine("%f,%f,%f",nImmediateBatteryLevel/1000.0,
+				(-SensorValue(en_back_left)+SensorValue(en_front_left)+SensorValue(en_back_right)+SensorValue(en_front_right))/4/(360/(4*PI)),time1(T4)/1000.0);
+				wait1Msec(1000);
+				clearTimer(T1);
+				resetEncoders();
+				while (time1(T1)<1000){
+					moveLeftWheels(-127);
+					moveRightWheels(-127);
+				}
+				moveLeftWheels(0);
+				moveRightWheels(0);
+				writeDebugStreamLine("%f,%f,%f",nImmediateBatteryLevel/1000.0,
+				(-SensorValue(en_back_left)+SensorValue(en_front_left)+SensorValue(en_back_right)+SensorValue(en_front_right))/4/(360/(4*PI)),time1(T4)/1000.0);
+				wait1Msec(1000);
+			}
+		}
+}}
