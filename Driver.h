@@ -177,7 +177,7 @@ void chainBarStop()
 
 void chainBarStay()
 {
-    motor[chainbar] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 200) * 0.5);
+    motor[chainbar] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
 }
 
 
@@ -190,9 +190,9 @@ bool isChainBarLocked = false;
 task lockChainbar()
 { // hold the chainbar in place. Call stoptask to release it
 #define currLoc SensorValue[pot_chainbar]
-    const float kp = -0.3; // proportional constant
+    const float kp = -0.2; // proportional constant
     const float ki = 0;
-    const float kd = -5; // derivatie constant
+    const float kd = 0; // derivatie constant
     int lastErr, allErr, powerOutput = 0;
     int err = 0;
 
@@ -217,7 +217,7 @@ task lockFourBar()
 #define currLocLeft SensorValue[pot_fourbar_left]
 #define currLocRight SensorValue[pot_fourbar_right]
     const float kp = 0.25; // proportional constant
-    const float kd = 0.5; // derivatie constant
+    const float kd = 0; // derivatie constant
     int lastErrLeft, lastErrRight = 0;
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
@@ -422,7 +422,7 @@ task ChainBarControls()
         {
             //overrideMode=false;
             if (isChainBarLocked) releaseChainBar();
-            if (SensorValue[pot_chainbar] >= 220)
+            if (SensorValue[pot_chainbar] >= 1200)
                 chainBarUp();
         }
         while (ButtonChainBarDown)
@@ -450,7 +450,7 @@ task ChainBarControls()
         {
             if (not overrideMode)
             {
-                if (SensorValue[pot_chainbar] < 300) chainBarStay();
+                if (SensorValue[pot_chainbar] < 1200) chainBarStay();
                 else
                     chainBarStop();
             } else { chainBarStop(); }
@@ -471,10 +471,10 @@ task SpecialControls()
         if (ButtonSpecialPickUp)
         {
             if (SensorValue[pot_fourbar_right] - POT_FOURBAR_RIGHT_MIN > 250)
-                holdChainBar(1300);
+                holdChainBar(2853);
             else
             {
-                holdChainBar(1350);
+                holdChainBar(2803);
             }
         }
 #ifdef ButtonSpecialDropOffLow
@@ -532,52 +532,50 @@ task SpecialControls()
             switch (coneCount)
             {
                 case 0:
-                    holdFourBar(730);
-                    holdChainBar(2000);
+                    holdFourBar(50);
+                    holdChainBar(1225);
                     break;
                 case 1:
-                    holdFourBar(0);
-                    holdChainBar(350);
+                    holdFourBar(50);
+                    holdChainBar(1310);
                     break;
                 case 2:
-                    holdChainBar(1300, 120);
-                    holdFourBar(180);
-                    holdChainBar(350);
+                    holdFourBar(100);
+                    holdChainBar(1210);
                     break;
                 case 3:
-                    holdChainBar(1300, 120);
-                    holdFourBar(300);
-                    holdChainBar(645);
+                    holdFourBar(230);
+                    holdChainBar(1210);
                     break;
                 case 4:
-                    holdChainBar(1300, 120);
-                    holdChainBar(505);
-                    holdFourBar(370);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1210);
+                    holdFourBar(300);
                     break;
                 case 5:
-                    holdChainBar(1300, 120);
-                    holdChainBar(535);
-                    holdFourBar(510);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1390);
+                    holdFourBar(425);
                     break;
                 case 6:
-                    holdChainBar(1300, 120);
-                    holdChainBar(673);
-                    holdFourBar(550);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1385);
+                    holdFourBar(515);
                     break;
                 case 7:
-                    holdChainBar(1300, 120);
-                    holdChainBar(715);
-                    holdFourBar(710);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1360);
+                    holdFourBar(600);
                     break;
                 case 8:
-                    holdChainBar(1300, 120);
-                    holdChainBar(805);
-                    holdFourBar(860);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1425);
+                    holdFourBar(700);
                     break;
                 case 9:
-                    holdChainBar(1260, 120);
-                    holdChainBar(755);
-                    holdFourBar(970);
+                    holdChainBar(2800, 50);
+                    holdChainBar(1400);
+                    holdFourBar(900);
                     break;
             }
         }

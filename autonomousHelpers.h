@@ -66,6 +66,21 @@ float wheelsTarget = 0;
 bool correctDirection = false;
 bool shouldResetGyro = false;
 
+float velocity(const bool init=false){
+static int previousReadingTime[1000];
+static int previousReading[1000];
+
+
+if (init){
+for (int ii=0;ii<1000;ii++){
+
+previousReadingTime[ii]=nSysTime;
+previousReading[ii];
+
+}
+}
+
+}
 
 task tMoveWheels()
 { //distance in inches
@@ -110,6 +125,9 @@ task tMoveWheels()
             powerOutputRight -= gyro();
         }
 
+
+
+
         //formatted as Error P I D dt
 #ifdef DEBUG
         writeDebugStreamLine("Wheels at %d", nSysTime);
@@ -123,7 +141,7 @@ task tMoveWheels()
         lastErrLeft = errLeft;
         lastErrRight = errRight;
         moveLeftWheels(powerOutputLeft);
-        moveRightWheels(powerOutputRight * 0.95);
+        moveRightWheels(powerOutputRight);
         lastMeasure=nSysTime;
         abortTimeslice();
     }
@@ -179,7 +197,7 @@ void moveWheels(const float distance, const bool straight = false, const float t
                      tolerance * ticksPerInches))) {} //blocks when target not reached
     return;
 #ifdef DEBUG
-for (int ii=0;ii<10;ii++){
+for (int ii=0;ii<100;ii++){
 writeDebugStreamLine("!!!!!!!!Target %d reached at %d.", wheelsTarget,nSysTime);
 writeDebugStreamLine("!!!!!!!!Current reading: L: %d | R: %d",currLocLeft * EN_FRONT_LEFT_DIRECTION, currLocRight * EN_FRONT_RIGHT_DIRECTION);
 }
