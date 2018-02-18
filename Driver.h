@@ -185,8 +185,8 @@ void chainBarStop()
 
 void chainBarStay()
 {
-    motor[chainbar_left] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
-    motor[chainbar_right] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
+    motor[chainbar_left] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.15);
+    motor[chainbar_right] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.15);
 
 }
 
@@ -442,7 +442,7 @@ task ChainBarControls()
             chainBarDown();
         }
 
-        while (ButtonChainBarOverrideUp)
+/*        while (ButtonChainBarOverrideUp)
         {
             overrideMode = true;
             if (isChainBarLocked) releaseChainBar();
@@ -455,7 +455,7 @@ task ChainBarControls()
             if (isChainBarLocked) releaseChainBar();
             chainBarDown();
         }
-
+*/
         if (!isChainBarLocked)
         {
             if (not overrideMode)
@@ -480,12 +480,7 @@ task SpecialControls()
     {
         if (ButtonSpecialPickUp)
         {
-            if (SensorValue[pot_fourbar_right] - POT_FOURBAR_RIGHT_MIN > 250)
-                holdChainBar(2853);
-            else
-            {
-                holdChainBar(2803);
-            }
+                holdChainBar(2840);
         }
 #ifdef ButtonSpecialDropOffLow
         if (ButtonSpecialDropOffLow)
@@ -497,10 +492,6 @@ task SpecialControls()
         if (ButtonSpecialDropOffHigh)
         {
             holdChainBar(500);
-        }
-        if (vexRT[Btn8L])
-        {
-            //holdFourBar(600);
         }
 #endif
 
@@ -532,7 +523,7 @@ task SpecialControls()
             wasPressedDecrement = false;
 
         }
-        
+
 #ifdef ButtonConeCountReset
         if (ButtonConeCountReset) coneCount = 0;
 #endif
@@ -592,7 +583,7 @@ task SpecialControls()
 #endif
 #endif
 #endif
-        if (vexRT[Btn7RXmtr2]) { holdFourBar(0); }
+
         abortTimeslice();
     }
 }

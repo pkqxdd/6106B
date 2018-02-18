@@ -6,7 +6,7 @@ motor[roller]=ROLLER_ANTIGRAVITY;
 mb_out(false);
 
 holdFourBar(1030);
-holdChainBar(2100);
+holdChainBar(4095);
 
 wait1Msec(400);
 moveWheels(49,true,2.2);
