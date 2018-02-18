@@ -9,7 +9,7 @@
 const int MB_POWER = 127; // power to mobile goal lift
 const int FOURBAR_POWER = 90; //power to fourbar
 const int CHAINBAR_POWER = 80; // power to chainbar
-const int ROLLER_POWER = 100; // power to chainbar
+const int ROLLER_POWER = 100; // power to roller
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
@@ -157,27 +157,37 @@ void rollerZero()
 
 void chainBarUp()
 {
-    motor[chainbar] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_left] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_right] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+
 }
 
 void chainBarMove(const int power)
 {
-    motor[chainbar] = power;
+    motor[chainbar_left] = power;
+    motor[chainbar_left] = power;
+
 }
 
 void chainBarDown()
 {
-    motor[chainbar] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_left] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_right] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+
 }
 
 void chainBarStop()
 {
-    motor[chainbar] = CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_left] = CHAINBAR_ANTIGRAVITY;
+    motor[chainbar_right] = CHAINBAR_ANTIGRAVITY;
+
 }
 
 void chainBarStay()
 {
-    motor[chainbar] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
+    motor[chainbar_left] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
+    motor[chainbar_right] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.2);
+
 }
 
 
@@ -522,7 +532,7 @@ task SpecialControls()
             wasPressedDecrement = false;
 
         }
-
+        
 #ifdef ButtonConeCountReset
         if (ButtonConeCountReset) coneCount = 0;
 #endif
