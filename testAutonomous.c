@@ -35,29 +35,29 @@ task main()
 for(ever){
 if (vexRT[Btn7L]){
 	stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(10,true);
+moveWheels(12,true);
 }
 else if (vexRT[Btn7R]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(20,true);
+moveWheels(24,true);
 }
 else if (vexRT[Btn8L]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(30,true);
+moveWheels(36,true);
 }
 else if (vexRT[Btn8R]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-moveWheels(40,true);
+moveWheels(48,true);
 }
 
 else if (vexRT[Btn7U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-10,true);
+	moveWheels(-12,true);
 }
 else if (vexRT[Btn8U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-20,true);
+	moveWheels(-24,true);
 }
 else if (vexRT[Btn7D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-30,true);
+	moveWheels(-36,true);
 }
 else if (vexRT[Btn8D]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
-	moveWheels(-40,true);
+	moveWheels(-48,true);
 }
 else if (vexRT[Btn5U]){stopTask(WheelControls);clearDebugStream();writeDebugStreamLine("Start of the log");
 	turn(45);
