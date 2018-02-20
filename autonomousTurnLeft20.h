@@ -9,7 +9,7 @@ mb_out(false);
 holdFourBar(1030);
 holdChainBar(4095);
 
-wait1Msec(400);
+wait1Msec(800);
 moveWheels(49,true,2.2);
 wait1Msec(500);
 mb_in(true);
@@ -21,7 +21,7 @@ motor[roller]=-ROLLER_POWER;
 wait1Msec(200);
 holdFourBar(900);
 
-moveWheels(-44,true,1.5);
+moveWheels(-41,true,1.5);
 wait1Msec(500);
 motor[roller]=0;
 
@@ -32,17 +32,16 @@ holdChainBar(600);
 wait1Msec(500);
 holdFourBar(400);
 
-moveWheels(21.5,true,2);
+moveWheels(21.5,true,2.5);
 wait1Msec(700);
 
-turn(100);
-
-mb_mid(false,200);
-
+turn(90);
 wait1Msec(300);
-moveWheels(22,true,4);
 
-mobileGoal(2660,true,50);
+mobileGoal(2270,false,50);
+moveWheels(22,true,4);
+mb_mid(false);
+
 wait1Msec(500);
 
 
