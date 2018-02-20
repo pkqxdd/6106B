@@ -2,7 +2,7 @@
 #define autonomousHelpers
 
 #include "Driver.h"
-#define DEBUG
+//#define DEBUG
 void resetEncoders()
 {
     SensorValue[en_front_left] = 0;
@@ -67,12 +67,12 @@ bool correctDirection = false;
 bool shouldResetGyro = false;
 
 float velocity(const bool init=false){
-static int previousReadingTime[1000];
-static int previousReading[1000];
+static int previousReadingTime[200];
+static int previousReading[200];
 
 
 if (init){
-for (int ii=0;ii<1000;ii++){
+for (int ii=0;ii<200;ii++){
 
 previousReadingTime[ii]=nSysTime;
 previousReading[ii];
@@ -89,22 +89,22 @@ task tMoveWheels()
 		int lastMeasure=nSysTime;
     const float distance = wheelsTarget;
     static const float ticksPerInches = 360 / (PI * 4);
-		int dt=nSysTime-lastMeasure;
+		float dt=nSysTime-lastMeasure;
     resetEncoders();
     if (correctDirection) { if (shouldResetGyro) resetGyro(); }
 
     long long sumLeft = 0, sumRight = 0;
     float kp = 1; // proportional constant
-    const float ki = 0.00001;
-    const float kd = 0; // derivatie constant
-    int lastErrLeft, lastErrRight = 0;
+    const float ki = 0;//0.000025;
+    const float kd = -15; // derivatie constant
+    static int lastErrLeft, lastErrRight = 0;
     int powerOutputLeft, powerOutputRight = 0;
     int errLeft, errRight = 0;
 
     for(ever)
     {
-    		wait1Msec(1);
-    		kp=0.85-(nImmediateBatteryLevel/1000-7)/4;
+    		wait1Msec(25);
+    		kp=0.52-(nImmediateBatteryLevel/1000-7)/4;
         errLeft = distance * ticksPerInches - currLocLeft * EN_FRONT_LEFT_DIRECTION;
         errRight = distance * ticksPerInches - currLocRight * EN_FRONT_RIGHT_DIRECTION;
 				sumLeft += errLeft*dt;
@@ -225,10 +225,11 @@ writeDebugStreamLine("!!!!!Target %d reached at %d. Current reading: %d ", gyroT
 #endif
 }
 
-void mobileGoal(const int target, bool block = false, int tolerance = 20)
+void mobileGoal(const int target, bool block = false, int tolerance = 20, int delay=0)
 {
     stopTask(tMoveMobileGoal);
     mobileGoalTarget = target;
+    wait1Msec(delay);
     startTask(tMoveMobileGoal);
     if (block)
     {
@@ -236,6 +237,18 @@ void mobileGoal(const int target, bool block = false, int tolerance = 20)
 
     }
 
+}
+
+void mb_in(bool block, int delay=0){
+	mobileGoal(900,block,30,delay);
+}
+
+void mb_mid(bool block, int delay=0){
+mobileGoal(2000,block,30,delay);
+}
+
+void mb_out(bool block, int delay=0){
+	mobileGoal(3250,block,30,delay);
 }
 
 

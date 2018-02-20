@@ -20,12 +20,12 @@ const int POT_CHAINBAR_MAX = 2050;
 
 //POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
 const int POT_FOURBAR_LEFT_DIRECTION = -1;
-const int POT_FOURBAR_LEFT_MAX = 1700;
-const int POT_FOURBAR_LEFT_MIN = 2250;
+const int POT_FOURBAR_LEFT_MAX = 672;
+const int POT_FOURBAR_LEFT_MIN = 2030;
 
 const int POT_FOURBAR_RIGHT_DIRECTION = 1;
-const int POT_FOURBAR_RIGHT_MAX = 3800;
-const int POT_FOURBAR_RIGHT_MIN = 1515;
+const int POT_FOURBAR_RIGHT_MAX = 2894;
+const int POT_FOURBAR_RIGHT_MIN = 1550;
 
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
@@ -54,6 +54,7 @@ const int EN_MIN = 940;
 #define and &&
 #define or ||
 #define not !
+
 
 
 bool approxEq(const float a, const float b, const float tolerance)
@@ -110,7 +111,7 @@ void fourBarLeftUp()
 void fourBarRightUp()
 {
     motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
-                      4.25;//+.25*(SensorValue[pot_fourbar_left]-SensorValue[pot_fourbar_right]-17);
+                      4.25;
 }
 
 void fourBarMove(const int powerLeft, const int powerRight)
@@ -136,6 +137,7 @@ void rollerIn()
     clearTimer(T1);
     while (time1(T1) < 500) motor[roller] = ROLLER_POWER;
 }
+
 
 
 void rollerOut()
