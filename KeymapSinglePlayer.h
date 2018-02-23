@@ -1,3 +1,6 @@
+#ifndef keymap
+#define keymap
+
 #define ButtonMobileGoalUp vexRT[Btn5U]
 #define ButtonMobileGoalDown vexRT[Btn5D]
 
@@ -7,12 +10,14 @@
 #define ButtonChainBarUp vexRT[Btn7U]
 #define ButtonChainBarDown vexRT[Btn7L]
 #define ButtonSpecialPickUp vexRT[Btn7R]
-#define ButtonSpecialDropOffHigh vexRT[Btn7D]
+#define ButtonSpecialDropOffAdapt vexRT[Btn7D]
 
 #define ButtonRollerIn vexRT[Btn8U]
 #define ButtonRollerOut vexRT[Btn8R]
-#define ButtonSpecialDropOffLow vexRT[Btn8D]
-
+#define ButtonChainBarOverrideStart vexRT[Btn8D]
+#define ButtonChainBarOverrideStop vexRT[Btn8L]
 
 #define AxisLeftWheels vexRT[Ch3]
 #define AxisRightWheels vexRT[Ch2]
+
+#endif
