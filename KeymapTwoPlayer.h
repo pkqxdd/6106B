@@ -1,4 +1,6 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             //--------------First Player--------------
+#ifndef keymap
+#define keymap
+//--------------First Player--------------
 
 //#define ButtonFourbarUp vexRT[Btn6U]
 //#define ButtonFourbarDown vexRT[Btn6D]
@@ -18,8 +20,8 @@
 #define ButtonMobileGoalUp vexRT[Btn5U]
 #define ButtonMobileGoalDown vexRT[Btn5D]
 
-#define ButtonChainBarOverrideStart vexRT[Btn8D]
-#define ButtonChainBarOverrideStop vexRT[Btn8L]
+//#define ButtonChainBarOverrideStart vexRT[Btn8D]
+//#define ButtonChainBarOverrideStop vexRT[Btn8L]
 
 
 //----------------Second Player-------------
@@ -42,3 +44,8 @@
 
 #define ButtonRollerIn vexRT[Btn8UXmtr2]
 #define ButtonRollerOut vexRT[Btn8RXmtr2]
+#define ButtonChainBarOverrideStart vexRT[Btn8DXmtr2]
+#define ButtonChainBarOverrideStop vexRT[Btn8LXmtr2]
+
+
+#endif

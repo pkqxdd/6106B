@@ -46,14 +46,14 @@ void pre_auton() {
 #include "autonomousHelpers.h"
 
 task autonomous() {
-#include "SkillChallenge.h"
+#include "skillChallenge.h"
 }
 
 task usercontrol() {
-startTask(autonomous);
-while(approxEq(vexRT[Ch2],0,10) and approxEq(vexRT[Ch3],0,10)){}
-stopTask(autonomous);
-releaseWheels();
+	startTask(autonomous);
+	while(approxEq(vexRT[Ch2],0,10) and approxEq(vexRT[Ch3],0,10)){}
+	stopTask(autonomous);
+	releaseWheels();
 #include "UserControls.h"
 
 }
