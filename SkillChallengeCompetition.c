@@ -51,7 +51,7 @@ task autonomous() {
 
 task usercontrol() {
 	startTask(autonomous);
-	while(not userIntervention()){}
+	while(not userIntervention()){abortTimeslice();}
 	stopTask(autonomous);
 	stopTask(tMoveMobileGoal);
 	releaseWheels();
