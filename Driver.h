@@ -15,17 +15,17 @@ const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "sto
 const int CHAINBAR_ANTIGRAVITY = 20;
 const int ROLLER_ANTIGRAVITY = 20;
 
-const int POT_CHAINBAR_MIN = 0;
-const int POT_CHAINBAR_MAX = 2050;
+const int POT_CHAINBAR_MIN = 1200;
+const int POT_CHAINBAR_MAX = 4095;
 
 //POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
 const int POT_FOURBAR_LEFT_DIRECTION = -1;
-const int POT_FOURBAR_LEFT_MAX = 672;
-const int POT_FOURBAR_LEFT_MIN = 2030;
+const int POT_FOURBAR_LEFT_MAX = 0;
+const int POT_FOURBAR_LEFT_MIN = 1205;
 
 const int POT_FOURBAR_RIGHT_DIRECTION = 1;
-const int POT_FOURBAR_RIGHT_MAX = 2894;
-const int POT_FOURBAR_RIGHT_MIN = 1550;
+const int POT_FOURBAR_RIGHT_MAX = 3144;
+const int POT_FOURBAR_RIGHT_MIN = 1500;
 
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
@@ -167,8 +167,7 @@ void chainBarUp()
 void chainBarMove(const int power)
 {
 	motor[chainbar_left] = power;
-	motor[chainbar_left] = power;
-
+	motor[chainbar_right] = power;
 }
 
 void chainBarDown()
@@ -185,13 +184,13 @@ void chainBarStop()
 
 }
 
-void chainBarStay()
+/*void chainBarStay()
 {
 	motor[chainbar_left] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.15);
 	motor[chainbar_right] = min(CHAINBAR_ANTIGRAVITY, (SensorValue[pot_chainbar] - 1200) * 0.15);
 
 }
-
+*/
 
 int chainbarTarget = 0;
 int fourbarTarget = 0;
@@ -202,7 +201,7 @@ bool isChainBarLocked = false;
 task lockChainbar()
 { // hold the chainbar in place. Call stoptask to release it
 #define currLoc SensorValue[pot_chainbar]
-	const float kp = -0.2; // proportional constant
+	const float kp = 0.1; // proportional constant
 	const float ki = 0;
 	const float kd = 0; // derivatie constant
 	int lastErr, allErr, powerOutput = 0;
@@ -462,8 +461,6 @@ task ChainBarControls()
 		{
 			if (not overrideMode)
 			{
-				if (SensorValue[pot_chainbar] < 1200) chainBarStay();
-				else
 					chainBarStop();
 			} else { chainBarStop(); }
 
@@ -482,7 +479,7 @@ task SpecialControls()
 	{
 		if (ButtonSpecialPickUp)
 		{
-			holdChainBar(2840);
+			holdChainBar(2650);
 		}
 #ifdef ButtonSpecialDropOffLow
 		if (ButtonSpecialDropOffLow)
@@ -493,7 +490,7 @@ task SpecialControls()
 #ifdef ButtonSpecialDropOffHigh
 		if (ButtonSpecialDropOffHigh)
 		{
-			holdChainBar(500);
+			holdChainBar(4050);
 		}
 #endif
 
@@ -536,49 +533,53 @@ task SpecialControls()
 			{
 			case 0:
 				holdFourBar(50);
-				holdChainBar(1225);
+				holdChainBar(4050);
 				break;
 			case 1:
 				holdFourBar(50);
-				holdChainBar(1310);
+				holdChainBar(4050);
 				break;
 			case 2:
 				holdFourBar(100);
-				holdChainBar(1210);
+				holdChainBar(4050);
 				break;
 			case 3:
 				holdFourBar(230);
-				holdChainBar(1210);
+				holdChainBar(4050);
 				break;
 			case 4:
-				holdChainBar(2800, 50);
-				holdChainBar(1210);
+				holdChainBar(2650, 50);
+				holdChainBar(4050);
 				holdFourBar(300);
 				break;
 			case 5:
-				holdChainBar(2800, 50);
-				holdChainBar(1390);
+				holdChainBar(2650, 50);
 				holdFourBar(425);
+				holdChainBar(4050);
+
 				break;
 			case 6:
-				holdChainBar(2800, 50);
-				holdChainBar(1385);
+				holdChainBar(2650, 50);
 				holdFourBar(515);
+				holdChainBar(4050);
+
 				break;
 			case 7:
-				holdChainBar(2800, 50);
-				holdChainBar(1360);
+				holdChainBar(2650, 50);
 				holdFourBar(600);
+				holdChainBar(4050);
+
 				break;
 			case 8:
-				holdChainBar(2800, 50);
-				holdChainBar(1425);
+				holdChainBar(2650, 50);
 				holdFourBar(700);
+				holdChainBar(4050);
+
 				break;
 			case 9:
 				holdChainBar(2800, 50);
-				holdChainBar(1400);
 				holdFourBar(900);
+				holdChainBar(4050);
 				break;
 			}
 		}

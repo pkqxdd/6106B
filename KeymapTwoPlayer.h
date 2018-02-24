@@ -22,6 +22,11 @@
 
 //#define ButtonChainBarOverrideStart vexRT[Btn8D]
 //#define ButtonChainBarOverrideStop vexRT[Btn8L]
+#define ButtonChainBarUp vexRT[Btn7UXmtr2]
+#define ButtonChainBarDown vexRT[Btn7LXmtr2]
+#define ButtonSpecialPickUp vexRT[Btn7R]
+#define ButtonSpecialDropOffAdapt vexRT[Btn7D]
+
 
 
 //----------------Second Player-------------
@@ -35,12 +40,12 @@
 
 #define ButtonFourbarUp vexRT[Btn6UXmtr2]
 #define ButtonFourbarDown vexRT[Btn6DXmtr2]
-
+/*
 #define ButtonChainBarUp vexRT[Btn7UXmtr2]
 #define ButtonChainBarDown vexRT[Btn7LXmtr2]
-#define ButtonSpecialPickUp vexRT[Btn7RXmtr2]
+//#define ButtonSpecialPickUp vexRT[Btn7RXmtr2]
 #define ButtonSpecialDropOffAdapt vexRT[Btn7DXmtr2]
-
+*/
 
 #define ButtonRollerIn vexRT[Btn8UXmtr2]
 #define ButtonRollerOut vexRT[Btn8RXmtr2]
