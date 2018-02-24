@@ -84,8 +84,8 @@ previousReading[ii];
 */
 task tMoveWheels()
 { //distance in inches
-#define currLocLeft (SensorValue[en_front_right]-SensorValue[en_back_left])/2
-#define currLocRight (SensorValue[en_front_right]+SensorValue[en_back_right])/2
+#define currLocLeft (SensorValue[en_front_left]+SensorValue[en_back_left])/2
+#define currLocRight (+SensorValue[en_back_right])
 	int lastMeasure=nSysTime;
 	const float distance = wheelsTarget;
 	static const float ticksPerInches = 360 / (PI * 4);

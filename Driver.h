@@ -184,10 +184,10 @@ void chainBarStop()
 }
 
 bool userIntervention(){
-	return 
+	return
 	vexRT[Btn5U] or
-	vexRT[Btn5D] or 
-	vexRT[Btn6U] or 
+	vexRT[Btn5D] or
+	vexRT[Btn6U] or
 	vexRT[Btn6D] or
 	vexRT[Btn7U] or
 	vexRT[Btn7D] or
@@ -197,13 +197,13 @@ bool userIntervention(){
 	vexRT[Btn8D] or
 	vexRT[Btn8L] or
 	vexRT[Btn8R] or
-	approxEq(vexRT[Ch1],0,10) or 
-	approxEq(vexRT[Ch2],0,10) or 
-	approxEq(vexRT[Ch3],0,10) or 
-	approxEq(vexRT[Ch4],0,10) or 
+	not approxEq(vexRT[Ch1],0,10) or
+	not approxEq(vexRT[Ch2],0,10) or
+	not approxEq(vexRT[Ch3],0,10) or
+	not approxEq(vexRT[Ch4],0,10) or
 	vexRT[Btn5UXmtr2] or
-	vexRT[Btn5DXmtr2] or 
-	vexRT[Btn6UXmtr2] or 
+	vexRT[Btn5DXmtr2] or
+	vexRT[Btn6UXmtr2] or
 	vexRT[Btn6DXmtr2] or
 	vexRT[Btn7UXmtr2] or
 	vexRT[Btn7DXmtr2] or
@@ -213,10 +213,10 @@ bool userIntervention(){
 	vexRT[Btn8DXmtr2] or
 	vexRT[Btn8LXmtr2] or
 	vexRT[Btn8RXmtr2] or
-	approxEq(vexRT[Ch1Xmtr2],0,10) or 
-	approxEq(vexRT[Ch2Xmtr2],0,10) or 
-	approxEq(vexRT[Ch3Xmtr2],0,10) or 
-	approxEq(vexRT[Ch4Xmtr2],0,10);
+	not approxEq(vexRT[Ch1Xmtr2],0,10) or
+	not approxEq(vexRT[Ch2Xmtr2],0,10) or
+	not approxEq(vexRT[Ch3Xmtr2],0,10) or
+	not approxEq(vexRT[Ch4Xmtr2],0,10);
 }
 
 int chainbarTarget = 0;
@@ -522,7 +522,7 @@ task ChainBarControls()
 		if (!isChainBarLocked)
 		{
 			chainBarStop();
-			
+
 
 		}
 		abortTimeslice();

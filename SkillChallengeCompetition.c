@@ -51,9 +51,11 @@ task autonomous() {
 
 task usercontrol() {
 	startTask(autonomous);
-	while(approxEq(vexRT[Ch2],0,10) and approxEq(vexRT[Ch3],0,10)){}
+	while(not userIntervention()){}
 	stopTask(autonomous);
+	stopTask(tMoveMobileGoal);
 	releaseWheels();
+
 #include "UserControls.h"
 
 }
