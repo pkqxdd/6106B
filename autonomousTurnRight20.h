@@ -6,15 +6,17 @@ outOfSize(500,1805);
 motor[roller]=ROLLER_ANTIGRAVITY;
 moveWheels(49,true,2.2);
 wait1Msec(500);
-motor[roller]=-ROLLER_POWER;
+motor[roller]=-ROLLER_POWER;//drops first cone before putting mobile goal in
 
 mobileGoal(900,true,200);
 
-moveWheels(5,true,1);
+moveWheels(5,true,1);//moves forward to pick up second cone
 
 motor[roller]=ROLLER_POWER;
-holdFourBar(100,100);
-//holdChainBar(2200,100);
+holdFourBar(100,100); //should move 4 bar down
+//holdChainBar(2000,100); //should move chain bar
+//both of these lock the code in place and dont move past it
+//if both commented out the rest runs as it should
 wait1Msec(500);
 motor[roller]=ROLLER_ANTIGRAVITY;
 holdChainBar(4095,25);
