@@ -1,36 +1,44 @@
 
+motor[roller]=ROLLER_POWER;
 
-motor[roller]=ROLLER_ANTIGRAVITY;
-
-
-//holdFourBar(150);
 mb_out(false);
-
-holdFourBar(1030);
-holdChainBar(4095);
-
-wait1Msec(800);
+outOfSize(500,1805);
+motor[roller]=ROLLER_ANTIGRAVITY;
 moveWheels(49,true,2.2);
 wait1Msec(500);
-mb_in(true);
+motor[roller]=-ROLLER_POWER;
 
+mobileGoal(900,true,200);
+
+moveWheels(5,true,1);
+
+motor[roller]=ROLLER_POWER;
+holdFourBar(100,100);
+//holdChainBar(2200,100);
+wait1Msec(500);
+motor[roller]=ROLLER_ANTIGRAVITY;
+holdChainBar(4095,25);
+motor[roller]=-ROLLER_POWER;
+
+
+/*
 holdFourBar(630);
 wait1Msec(300);
 
 motor[roller]=-ROLLER_POWER;
 wait1Msec(200);
 holdFourBar(900);
-
-moveWheels(-41,true,1.5);
+*/
+moveWheels(-47,true,1.5);
 wait1Msec(500);
 motor[roller]=0;
 
 turn(-135);
 
-holdChainBar(600);
+holdChainBar(4000);
 
 wait1Msec(500);
-holdFourBar(400);
+//holdFourBar(600);
 
 moveWheels(21.5,true,2.5);
 wait1Msec(700);
