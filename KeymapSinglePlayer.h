@@ -14,8 +14,6 @@
 
 #define ButtonRollerIn vexRT[Btn8U]
 #define ButtonRollerOut vexRT[Btn8R]
-#define ButtonChainBarOverrideStart vexRT[Btn8D]
-#define ButtonChainBarOverrideStop vexRT[Btn8L]
 
 #define AxisLeftWheels vexRT[Ch3]
 #define AxisRightWheels vexRT[Ch2]

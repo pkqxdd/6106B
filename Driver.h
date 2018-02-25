@@ -8,12 +8,12 @@
 // -----------------BEGIN Global Constants Configuration-------------------
 const int MB_POWER = 127; // power to mobile goal lift
 const int FOURBAR_POWER = 90; //power to fourbar
-const int CHAINBAR_POWER = 80; // power to chainbar
+const int CHAINBAR_POWER = 120; // power to chainbar
 const int ROLLER_POWER = 100; // power to roller
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int CHAINBAR_ANTIGRAVITY = 20;
-const int ROLLER_ANTIGRAVITY = 20;
+const int ROLLER_ANTIGRAVITY = 25;
 
 const int POT_CHAINBAR_MIN = 1200; //MIN is the physical low position.
 const int POT_CHAINBAR_MAX = 4095;
