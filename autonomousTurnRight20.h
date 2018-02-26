@@ -13,8 +13,8 @@ mobileGoal(900,true,200);
 moveWheels(5,true,1);//moves forward to pick up second cone
 
 motor[roller]=ROLLER_POWER;
-holdFourBar(100,100); //should move 4 bar down
-//holdChainBar(2000,100); //should move chain bar
+holdFourBar(100); //should move 4 bar down
+holdChainBar(2000); //should move chain bar
 //both of these lock the code in place and dont move past it
 //if both commented out the rest runs as it should
 wait1Msec(500);
