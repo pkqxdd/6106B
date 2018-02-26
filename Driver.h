@@ -45,7 +45,7 @@ const int EN_MIN = 940;
 // -----------------BEGIN Keymap Configuration------------------
 
 //#include "KeymapSinglePlayer.h"
-#include "KeymapTwoPlayer.h"
+#include "KeymapSinglePlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------

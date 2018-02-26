@@ -248,7 +248,7 @@ void mb_mid(bool block, int delay=0){
 }
 
 void mb_out(bool block, int delay=0){
-	mobileGoal(3250,block,30,delay);
+	mobileGoal(3300,block,80,delay);
 }
 
 void outOfSize(int fourBar, int chainBar){
