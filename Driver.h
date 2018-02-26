@@ -314,7 +314,7 @@ void holdChainBar(const int target)
 void holdChainBar(const int target, const float tolerance)
 {
 	chainbarTarget = target;
-#define currLoc SensorValue[pot_chainbar]
+#define currLoc SensorValue[pot_chainbar] - POT_CHAINBAR_MIN
 	if (isChainBarLocked)
 	{
 		stopTask(lockChainbar);
@@ -348,6 +348,8 @@ void holdFourBar(const int target)
 
 void holdFourBar(const int target, const float tolerance)
 {
+#define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_LEFT_MIN)*POT_FOURBAR_LEFT_DIRECTION
+#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN)*POT_FOURBAR_RIGHT_DIRECTION
 	fourbarTarget = target;
 	if (isFourBarLocked)
 	{
@@ -357,14 +359,15 @@ void holdFourBar(const int target, const float tolerance)
 		isFourBarLocked = true;
 	}
 	startTask(lockFourBar);
-	while (not(approxEq(target, SensorValue[pot_fourbar_left], tolerance) and approxEq(target,
-		SensorValue[pot_fourbar_right],
+	while (not(approxEq(target,currLocRight , tolerance) and approxEq(target,
+		currLocLeft,
 	tolerance)))
 	{
 		//blocks
 	};
 	return;
-#undef currLoc
+#undef currLocLeft
+#undef currLocRight
 }
 
 void readyForDroppingCone(const int count){

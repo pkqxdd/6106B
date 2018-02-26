@@ -29,7 +29,7 @@ void resetGyro()
 
 task tTurn()
 {
-	const float kp = 0.25; // proportional constant
+	const float kp = 0.28; // proportional constant
 	const float ki = 0;
 	const float kd = 0; // derivatie constant
 	static int lastMeasure=nSysTime;
