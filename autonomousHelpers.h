@@ -225,7 +225,7 @@ void turn(const int degrees, int tolerance = 10) //positive number for turning c
 #endif
 }
 
-void mobileGoal(const int target, bool block = false, int tolerance = 20, int delay=0)
+void mobileGoal(const int target, bool block = false, int tolerance = 30, int delay=0)
 {
 	stopTask(tMoveMobileGoal);
 	mobileGoalTarget = target;
