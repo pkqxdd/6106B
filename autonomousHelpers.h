@@ -29,21 +29,20 @@ void resetGyro()
 
 task tTurn()
 {
-	const float kp = 0.28; // proportional constant
+	const float kp = 0.35; // proportional constant
 	const float ki = 0;
-	const float kd = 0; // derivatie constant
+	const float kd = -20; // derivatie constant
 	static int lastMeasure=nSysTime;
 	int lastErr, allErr, powerOutput = 0;
 	int err = 0;
 	for(ever)
 	{
-		wait1Msec(1);
-		int dt=lastMeasure-nSysTime;
+		wait1Msec(25);
+		float dt=nSysTime-lastMeasure;
 		err = gyroTarget - gyro();
 		powerOutput = err * kp + // Proportional
-		allErr * ki + (lastErr - err)/dt * kd;
+		(lastErr - err)/dt * kd;
 		lastErr = err;
-		allErr += err;
 		moveLeftWheels(-powerOutput);
 		moveRightWheels(powerOutput);
 
