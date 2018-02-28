@@ -13,12 +13,12 @@ mobileGoal(900,true,200);
 moveWheels(5,true,1);
 
 motor[roller]=ROLLER_POWER;
-holdFourBar(50,10);
+holdFourBar(50,15);
 holdChainBar(1400,50);
 wait1Msec(100);
 motor[roller]=ROLLER_ANTIGRAVITY;
 holdFourBar(150);
-holdChainBar(2895,70);
+holdChainBar(2895,120);
 motor[roller]=-ROLLER_POWER; //drop second cone
 
 
@@ -55,13 +55,14 @@ wait1Msec(600);
 turn(90);
 wait1Msec(300);
 
-moveWheels(16,true,2); // move in 5 point zone
+moveWheels(15,true,2); // move in 5 point zone
 wait1Msec(400);
 mb_out(false);
 turn(90);
 
 wait1Msec(400);
 
+mb_out(true);
 moveWheels(24,false,2); // go to mobile goal
 wait1Msec(300);
 mb_in(true);  // take the mobile goal
@@ -90,30 +91,26 @@ mobileGoal(1800,false);
 
 moveWheels(-3,true,1);
 wait1Msec(200);
-turn(-135);
+turn(-120);
 
 mb_out(false);
-wait1Msec(600);
+wait1Msec(400);
 
-moveWheels(55,true,2);
+moveWheels(47,true,2);
+turn(-10);
+moveWheels(12,true,2);
 mb_in(true);
 wait1Msec(300);
 
 moveWheels(-54,true,1.5);
 wait1Msec(300);
 
-turn(-155);
+turn(135);
 
 //holdChainBar(600);
 
 wait1Msec(300);
 //holdFourBar(400);
-
-moveWheels(11.5,true,2.5);
-wait1Msec(400);
-
-turn(-90);
-wait1Msec(300);
 
 mobileGoal(2270,false,50);
 moveWheels(22,true,4);
