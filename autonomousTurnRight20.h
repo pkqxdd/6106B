@@ -33,7 +33,7 @@ turn(135);
 moveWheels(22.5,true,2.5);
 wait1Msec(200);
 
-turn(90);
+turn(94);
 wait1Msec(200);
 
 mobileGoal(2070,false,50,200);
