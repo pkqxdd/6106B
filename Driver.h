@@ -22,11 +22,11 @@ const int POT_CHAINBAR_DIRECTION=1;
 //POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
 const int POT_FOURBAR_LEFT_DIRECTION = -1;
 const int POT_FOURBAR_LEFT_MAX = 0;
-const int POT_FOURBAR_LEFT_MIN = 1205;
+const int POT_FOURBAR_LEFT_MIN = 1140;
 
 const int POT_FOURBAR_RIGHT_DIRECTION = 1;
 const int POT_FOURBAR_RIGHT_MAX = 3144;
-const int POT_FOURBAR_RIGHT_MIN = 1500;
+const int POT_FOURBAR_RIGHT_MIN = 1605;
 
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
@@ -254,7 +254,7 @@ task lockFourBar()
 
 #define currLocLeft (SensorValue[pot_fourbar_left] - POT_FOURBAR_LEFT_MIN) * POT_FOURBAR_LEFT_DIRECTION
 #define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN) * POT_FOURBAR_RIGHT_DIRECTION
-	const float kp = 0.25; // proportional constant
+	const float kp = 0.20; // proportional constant
 	const float kd = 0; // derivatie constant
 	int lastErrLeft, lastErrRight = 0;
 	int powerOutputLeft, powerOutputRight = 0;
