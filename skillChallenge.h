@@ -104,15 +104,17 @@ wait1Msec(500);
 mb_in(true);
 wait1Msec(300);
 
-moveWheels(-56,true,1.5);
+moveWheels(-54,true,1.5);
 wait1Msec(300);
 
-turn(140);
+turn(50);
+moveWheels(12*sqrt(2),true,1.5);
 
 //holdChainBar(600);
 
 wait1Msec(300);
 //holdFourBar(400);
+turn(90);
 
 mobileGoal(2270,false,50);
 moveWheels(26,true,4);

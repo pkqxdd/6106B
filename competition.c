@@ -36,8 +36,8 @@
 
 
 int autonSel=0;
-const int nAutons=5;
-const string autonNames[5]={"Left 20 Points","Right 20 Points","Left 10 Points","Right 10 Points","Skill Challenge"};
+const int nAutons=7;
+const string autonNames[7]={"Left 20 Points","Right 20 Points","Left 10 Points","Right 10 Points","Left 5 Points ","Right 5 Points ","Skill Challenge"};
 
 
 void pre_auton() {
@@ -86,6 +86,12 @@ case 3:
 #include "autonomousTurnRight10.h"
 break;
 case 4:
+#include "autonomousTurnRight5.h"
+break;
+case 5:
+#include "autonomousTurnLeft5.h"
+break;
+case 6:
 #include "skillChallenge.h"
 break;
 
