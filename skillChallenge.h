@@ -105,7 +105,7 @@ wait1Msec(200);
 moveWheels(-54,true,5);
 wait1Msec(400);
 
-turn(47,30);
+turn(47,40);
 moveWheels(-12*sqrt(2)+8,true,1.5);
 
 //holdChainBar(600);
@@ -131,7 +131,7 @@ wait1Msec(400);
 turn(90);
 wait1Msec(300);
 
-moveWheels(12,true,2); // move in 5 point zone
+moveWheels(12.75,true,2); // move in 5 point zone
 wait1Msec(400);
 mb_out(false);
 turn(90);
@@ -143,7 +143,7 @@ wait1Msec(300);
 mb_in(true);  // take the mobile goal
 wait1Msec(300);
 
-turn(-182);
+turn(-182,20);
 wait1Msec(400);
 mb_mid(false);
 moveWheels(30,true,1.5);
