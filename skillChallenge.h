@@ -5,7 +5,7 @@ motor[roller]=ROLLER_POWER;
 mb_out(false);
 outOfSize(500,1805);
 moveWheels(49,true,2.2);
-wait1Msec(500);
+wait1Msec(200);
 motor[roller]=-ROLLER_POWER; // drop first cone
 
 mobileGoal(900,true,200);
@@ -42,44 +42,42 @@ mobileGoal(2070,false,50,200);
 moveWheels(26,true,4);
 //mb_mid(false);
 mobileGoal(2500);
-wait1Msec(500);
+wait1Msec(300);
 
 
 moveWheels(-18,true,2);
-
-
 //finish first mobile goal (22 points)
 
 mb_mid(false);
-wait1Msec(600);
+wait1Msec(400);
 turn(90);
-wait1Msec(300);
+wait1Msec(200);
 
 moveWheels(15,true,2); // move in 5 point zone
-wait1Msec(400);
+wait1Msec(300);
 mb_out(false);
 turn(90);
 
-wait1Msec(400);
+wait1Msec(300);
 
 //mb_out(true);
 moveWheels(24,false,2); // go to mobile goal
 wait1Msec(300);
 mb_in(true);  // take the mobile goal
-wait1Msec(300);
+wait1Msec(200);
 
 turn(-180);
-wait1Msec(600);
+wait1Msec(500);
 mb_mid(false);
 moveWheels(30,true,1.5);
 mobileGoal(1800,false);
 //wait1Msec(600);
 //finish second mobile goal (32 points)
 moveWheels(-7,true,1,false);
-wait1Msec(600);
+wait1Msec(400);
 
 turn(182);
-wait1Msec(600);
+wait1Msec(500);
 mb_out(false);
 moveWheels(42*sqrt(2)-4,true,2);
 
@@ -94,18 +92,18 @@ wait1Msec(200);
 turn(-124);
 
 mb_out(false);
-wait1Msec(400);
+wait1Msec(300);
 
 moveWheels(51,true,2);
-wait1Msec(500);
+wait1Msec(400);
 //turn(-10);
 //wait1Msec(500);
 //moveWheels(12,true,2);
 mb_in(true);
-wait1Msec(300);
+wait1Msec(200);
 
 moveWheels(-54,true,5);
-wait1Msec(600);
+wait1Msec(400);
 
 turn(47,30);
 moveWheels(-12*sqrt(2)+8,true,1.5);
@@ -120,7 +118,7 @@ mobileGoal(2270,false,80);
 moveWheels(25.5,true,4.5);
 mb_mid(false);
 
-wait1Msec(500);
+wait1Msec(400);
 
 
 mb_out(false);
@@ -129,7 +127,7 @@ moveWheels(-18,true,2);
 
 
 mb_mid(false);
-wait1Msec(600);
+wait1Msec(400);
 turn(90);
 wait1Msec(300);
 
@@ -146,7 +144,7 @@ mb_in(true);  // take the mobile goal
 wait1Msec(300);
 
 turn(-182);
-wait1Msec(600);
+wait1Msec(400);
 mb_mid(false);
 moveWheels(30,true,1.5);
 mobileGoal(1800,false);
@@ -156,7 +154,7 @@ moveWheels(-7,true,1,false);
 wait1Msec(200);
 
 turn(182);
-wait1Msec(600);
+wait1Msec(400);
 mb_out(false);
 moveWheels(42*sqrt(2)-2,true,2);
 
