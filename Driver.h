@@ -8,7 +8,7 @@
 // -----------------BEGIN Global Constants Configuration-------------------
 const int MB_POWER = 127; // power to mobile goal lift
 const int FOURBAR_POWER = 90; //power to fourbar
-const int CHAINBAR_POWER = 120; // power to chainbar
+const int CHAINBAR_POWER = 100; // power to chainbar
 const int ROLLER_POWER = 100; // power to roller
 const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
 const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
@@ -26,7 +26,7 @@ const int POT_FOURBAR_LEFT_MIN = 2137;
 
 const int POT_FOURBAR_RIGHT_DIRECTION = 1;
 const int POT_FOURBAR_RIGHT_MAX = 1542;
-const int POT_FOURBAR_RIGHT_MIN = 188;
+const int POT_FOURBAR_RIGHT_MIN = 153;
 
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
@@ -432,8 +432,8 @@ task WheelControls()
 {
 	for (ever) // a foreverloop
 	{
-		moveLeftWheels(AxisLeftWheels);
-		moveRightWheels(AxisRightWheels);
+		moveLeftWheels(min(120,AxisLeftWheels));
+		moveRightWheels(min(120,AxisRightWheels));
 		abortTimeslice();
 
 	}

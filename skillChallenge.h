@@ -13,14 +13,14 @@ mobileGoal(900,true,200);
 moveWheels(5,true,1);
 
 motor[roller]=ROLLER_POWER;
-//holdFourBar(60,30);
+holdFourBar(40,10);
 holdChainBar(1400,50);
 wait1Msec(100);
 motor[roller]=ROLLER_ANTIGRAVITY;
-//holdFourBar(150);
+holdFourBar(110);
 holdChainBar(2895,120);
 motor[roller]=-ROLLER_POWER; //drop second cone
-releaseFourBar();
+//releaseFourBar();
 
 moveWheels(-48,true,1.5);//if 2 cones
 wait1Msec(200);
@@ -35,7 +35,7 @@ turn(135);
 moveWheels(22.5,true,2.5);
 wait1Msec(200);
 
-turn(95);
+turn(97);
 wait1Msec(200);
 
 mobileGoal(2070,false,50,200);
@@ -71,14 +71,14 @@ wait1Msec(300);
 turn(-180);
 wait1Msec(600);
 mb_mid(false);
-moveWheels(29,true,1.5);
+moveWheels(30,true,1.5);
 mobileGoal(1800,false);
-wait1Msec(600);
+//wait1Msec(600);
 //finish second mobile goal (32 points)
-moveWheels(-5,true,1);
-wait1Msec(200);
+moveWheels(-7,true,1,false);
+wait1Msec(600);
 
-turn(184);
+turn(182);
 wait1Msec(600);
 mb_out(false);
 moveWheels(42*sqrt(2)-4,true,2);
@@ -91,12 +91,12 @@ mobileGoal(1800,false);
 
 moveWheels(-3,true,1);
 wait1Msec(200);
-turn(-120);
+turn(-124);
 
 mb_out(false);
 wait1Msec(400);
 
-moveWheels(48,true,2);
+moveWheels(51,true,2);
 wait1Msec(500);
 //turn(-10);
 //wait1Msec(500);
@@ -104,20 +104,20 @@ wait1Msec(500);
 mb_in(true);
 wait1Msec(300);
 
-moveWheels(-54,true,1.5);
-wait1Msec(300);
+moveWheels(-54,true,5);
+wait1Msec(600);
 
-turn(50);
-moveWheels(12*sqrt(2),true,1.5);
+turn(47,30);
+moveWheels(-12*sqrt(2)+8,true,1.5);
 
 //holdChainBar(600);
 
 wait1Msec(300);
 //holdFourBar(400);
-turn(90);
+turn(90,20);
 
-mobileGoal(2270,false,50);
-moveWheels(26,true,4);
+mobileGoal(2270,false,80);
+moveWheels(25.5,true,4.5);
 mb_mid(false);
 
 wait1Msec(500);
@@ -133,7 +133,7 @@ wait1Msec(600);
 turn(90);
 wait1Msec(300);
 
-moveWheels(18,true,2); // move in 5 point zone
+moveWheels(12,true,2); // move in 5 point zone
 wait1Msec(400);
 mb_out(false);
 turn(90);
@@ -145,20 +145,20 @@ wait1Msec(300);
 mb_in(true);  // take the mobile goal
 wait1Msec(300);
 
-turn(-180);
+turn(-182);
 wait1Msec(600);
 mb_mid(false);
 moveWheels(30,true,1.5);
 mobileGoal(1800,false);
-wait1Msec(600);
+//wait1Msec(600);
 //finish fifth mobile goal (72 points)
-moveWheels(-5,true,1);
+moveWheels(-7,true,1,false);
 wait1Msec(200);
 
-turn(180);
+turn(182);
 wait1Msec(600);
 mb_out(false);
-moveWheels(42*sqrt(2)-4,true,2);
+moveWheels(42*sqrt(2)-2,true,2);
 
 //mb_in(true); // take the mobile goal
 mb_mid(false);

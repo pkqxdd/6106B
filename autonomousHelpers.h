@@ -239,11 +239,11 @@ void mobileGoal(const int target, bool block = false, int tolerance = 30, int de
 }
 
 void mb_in(bool block, int delay=0){
-	mobileGoal(900,block,30,delay);
+	mobileGoal(900,block,60,delay);
 }
 
 void mb_mid(bool block, int delay=0){
-	mobileGoal(2000,block,30,delay);
+	mobileGoal(2000,block,60,delay);
 }
 
 void mb_out(bool block, int delay=0){
@@ -252,7 +252,7 @@ void mb_out(bool block, int delay=0){
 
 void outOfSize(int fourBar, int chainBar){
 	holdFourBar(fourBar);
-	while (SensorValue[pot_chainbar] > 3500){
+	while (SensorValue[pot_chainbar] > 3600){
 		chainBarMove(-120);
 	}
 	holdChainBar(chainBar);
