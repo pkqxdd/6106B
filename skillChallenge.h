@@ -13,7 +13,7 @@ mobileGoal(900,true,200);
 moveWheels(5,true,1);
 
 motor[roller]=ROLLER_POWER;
-holdFourBar(40,10);
+//holdFourBar(70,25);
 holdChainBar(1400,50);
 wait1Msec(100);
 motor[roller]=ROLLER_ANTIGRAVITY;

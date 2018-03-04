@@ -4,7 +4,8 @@ motor[roller]=ROLLER_POWER;
 
 mb_out(false);
 outOfSize(500,1805);
-moveWheels(49,true,2.2);
+wait1Msec(500);
+moveWheels(49.5,true,2.2);
 wait1Msec(500);
 motor[roller]=-ROLLER_POWER; // drop first cone
 
@@ -13,16 +14,16 @@ mobileGoal(900,true,200);
 moveWheels(5,true,1);
 
 motor[roller]=ROLLER_POWER;
-holdFourBar(50,10);
+holdFourBar(75,30);
 holdChainBar(1400,50);
 wait1Msec(100);
 motor[roller]=ROLLER_ANTIGRAVITY;
-holdFourBar(125);
+holdFourBar(110);
 holdChainBar(2895,70);
 motor[roller]=-ROLLER_POWER; //drop second cone
 
 
-moveWheels(-48,true,1.5);//if 2 cones
+moveWheels(-48.5,true,1.5);//if 2 cones
 wait1Msec(200);
 motor[roller]=0;
 
@@ -32,7 +33,7 @@ turn(-135);
 
 //holdFourBar(600);
 
-moveWheels(22.5,true,2.5);
+moveWheels(21.5,true,2.5);
 wait1Msec(200);
 
 turn(-92);
