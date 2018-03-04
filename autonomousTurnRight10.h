@@ -17,7 +17,7 @@ holdFourBar(50,10);
 holdChainBar(1400,50);
 wait1Msec(100);
 motor[roller]=ROLLER_ANTIGRAVITY;
-holdFourBar(100);
+holdFourBar(110);
 holdChainBar(2895,50);
 
 motor[roller]=-ROLLER_POWER; //drop second cone

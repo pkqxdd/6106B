@@ -22,11 +22,11 @@ const int POT_CHAINBAR_DIRECTION=1;
 //POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
 const int POT_FOURBAR_LEFT_DIRECTION = 1;
 const int POT_FOURBAR_LEFT_MAX = 3882;
-const int POT_FOURBAR_LEFT_MIN = 2137;
+const int POT_FOURBAR_LEFT_MIN = 2150;
 
 const int POT_FOURBAR_RIGHT_DIRECTION = 1;
-const int POT_FOURBAR_RIGHT_MAX = 1542;
-const int POT_FOURBAR_RIGHT_MIN = 153;
+const int POT_FOURBAR_RIGHT_MAX = 3703;
+const int POT_FOURBAR_RIGHT_MIN = 2060;
 
 const int MB_MIN = 883;
 const int MB_MAX = 3260;
@@ -44,8 +44,8 @@ const int EN_MIN = 940;
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-#include "KeymapSinglePlayer.h"
-//#include "KeymapTwoPlayer.h"
+//#include "KeymapSinglePlayer.h"
+#include "KeymapTwoPlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -112,7 +112,7 @@ void fourBarLeftUp()
 void fourBarRightUp()
 {
 	motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
-	4.25;
+	7;
 }
 
 void fourBarMove(const int powerLeft, const int powerRight)
@@ -124,7 +124,7 @@ void fourBarMove(const int powerLeft, const int powerRight)
 void fourBarDown()
 {
 	motor[fb_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
-	motor[fb_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[fb_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY+4;
 }
 
 void fourBarStop()
@@ -540,9 +540,9 @@ task SpecialControls()
 	bool wasPressedDecrement = false;
 	for (ever)
 	{
-		if (ButtonSpecialPickUp)
+		if (ButtonSpecialPickUp) //aka flat
 		{
-			holdChainBar(1450);
+			holdChainBar(1400);
 		}
 #ifdef ButtonSpecialDropOffLow
 		if (ButtonSpecialDropOffLow)
