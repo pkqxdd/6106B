@@ -73,14 +73,8 @@ I highly suggest anyone who want to use our code to read `C++ Preprocessor Docum
 Driver.h
 --------
 
-All constants at the beginning of the file are measured using the remote debugger. They are specific to our robot only. To use our code, you will need to change almost all of them.
+All constants at the beginning of the file are measured using the remote debugger. They are specific to our robot only. To use our code, you will need to change almost all of them. This section will omit functions that are under 4 lines. The keymap section will be explained in :ref:`keymap`. 
 
-The keymap section will be explained later.
-
-Functions Explanation
-*********************
-
-This section will omit functions that are under 4 lines. 
 
 :Function: :code:`bool approxEq(const float a, const float b, const float tolerance)`
 :Returns: true if the difference of a and b are within tolerance
@@ -93,12 +87,12 @@ This section will omit functions that are under 4 lines.
 ------------
 
 :Task: :code:`lockChainbar()` 
-:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section ``How to tune a PID loop`` below if you want to reuse our code.
+:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section :ref:`PID` below if you want to reuse our code.
 
 ------------
 
 :Task: :code:`lockFourBar()` 
-:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section ``How to tune a PID loop`` below if you want to reuse our code.
+:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section :ref:`PID` if you want to reuse our code.
 
 -----------
 
@@ -155,4 +149,22 @@ This section will omit functions that are under 4 lines.
 :Task: :code:`SpecialControls()`
 :Explanations: Allow drivers to press one button to move a structure to a preset location
 
+autonomousHelper.h
+------------------
+
+TODO
+
+.. keymap_
+
+Key Maps
+--------
+
+TODO
+
+.. PID_
+
+How to Tune a PID Loop
+----------------------
+
+TODO
 
