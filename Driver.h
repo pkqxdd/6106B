@@ -1,8 +1,6 @@
 #ifndef drivers
 #define drivers
-#ifndef ever
-#define ever ;;
-#endif
+
 
 
 // -----------------BEGIN Global Constants Configuration-------------------
@@ -55,7 +53,9 @@ const int EN_FRONT_RIGHT_DIRECTION = -1;
 #define and &&
 #define or ||
 #define not !
-
+#ifndef ever
+#define ever ;; //for(ever)
+#endif
 
 
 bool approxEq(const float a, const float b, const float tolerance)
