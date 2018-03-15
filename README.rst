@@ -149,14 +149,14 @@ autonomousHelper.h
 
 TODO
 
-.. _keymap
+.. _keymap:
 
 Key Maps
 --------
 
 TODO
 
-.. _PID
+.. _PID:
 
 PID Loops
 ---------
