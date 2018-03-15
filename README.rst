@@ -38,9 +38,9 @@ If you want to use our code, please **fork** this repository. You can make chang
 
 To use our code, you don't necessarily have to have similar mechanical structures as ours, you just need to have the following sensors installed:
 
-- 2 gyroscopes
-- 4 potentiometers
-- 4 shaft encoders
+- 2 gyroscopes (minimum 1, requires to modify ``currLoc`` in ``void gyro()`` in ``autonomousHelper.h``)
+- 4 potentiometers (minimum 3, requires to modify ``task lockChainbar()`` and ``task lockFourBar()`` in ``Driver.h``)
+- 4 shaft encoders (minimum 2, requires to modify ``currLoc`` in ``task moveWheels()`` in ``autonomousHelper.h``)
 
 
 General Code Structures
@@ -76,23 +76,18 @@ Driver.h
 All constants at the beginning of the file are measured using the remote debugger. They are specific to our robot only. To use our code, you will need to change almost all of them. This section will omit functions that are under 4 lines. The keymap section will be explained in :ref:`keymap`. 
 
 
-:Function: :code:`bool approxEq(const float a, const float b, const float tolerance)`
-:Returns: true if the difference of a and b are within tolerance
-
-------------
-
 :Function: :code:`bool userIntervention()`
 :Returns: true if the remote is touched
 
 ------------
 
 :Task: :code:`lockChainbar()` 
-:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section :ref:`PID` below if you want to reuse our code.
+:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section :ref:`PID` for a more detailed explanation.
 
 ------------
 
 :Task: :code:`lockFourBar()` 
-:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section :ref:`PID` if you want to reuse our code.
+:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section :ref:`PID` for a more detailed explanation.
 
 -----------
 
@@ -102,7 +97,7 @@ All constants at the beginning of the file are measured using the remote debugge
 -----------
 
 :Function: :code:`void holdChainBar(const int target, const float tolerance)` 
-:Explanation: Proxy function to task ``lockChainbar()``, blocks until the difference between current location and target is within tolerance
+:Explanation: Proxy function to task ``lockChainbar()``, blocks until the difference between current location and ``target`` is within ``tolerance``
 
 -----------
 
@@ -112,7 +107,7 @@ All constants at the beginning of the file are measured using the remote debugge
 -----------
 
 :Function: :code:`void holdFourBar(const int target, const float tolerance)` 
-:Explanation: Proxy function to task ``lockFourBar``, blocks until the difference between current location and target is within tolerance
+:Explanation: Proxy function to task ``lockFourBar``, blocks until the difference between current location and ``target`` is within ``tolerance``
 
 -----------
 
@@ -154,17 +149,17 @@ autonomousHelper.h
 
 TODO
 
-.. keymap_
+.. _keymap
 
 Key Maps
 --------
 
 TODO
 
-.. PID_
+.. _PID
 
-How to Tune a PID Loop
-----------------------
+PID Loops
+---------
 
 TODO
 
