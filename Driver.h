@@ -58,16 +58,10 @@ const int EN_FRONT_RIGHT_DIRECTION = -1;
 #endif
 
 
+
 bool approxEq(const float a, const float b, const float tolerance)
-{
-	if (a == b) return true;
-	else if (a > b)
-	{
-		return a - tolerance <= b;
-	} else
-	{
-		return a + tolerance >= b;
-	}
+{ //tolerance should always be positive
+	return abs(a-b)<=tolerance;
 }
 
 
