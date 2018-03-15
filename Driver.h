@@ -15,16 +15,18 @@ const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "sto
 const int CHAINBAR_ANTIGRAVITY = 20;
 const int ROLLER_ANTIGRAVITY = 25;
 
-const int POT_CHAINBAR_MIN = 1200; //MIN is the physical low position.
+//POT_MIN is the value when the fourbar is physically at its physical lowest location. MIN may be larger than MAX in value.
+//POT_DIRECTION can be either -1 or 1. 1 if the potentiometer reading increase when the structure moves up, -1 otherwise
+const int POT_CHAINBAR_MIN = 1200; 
 const int POT_CHAINBAR_MAX = 4095;
 const int POT_CHAINBAR_DIRECTION=1;
 
-//POT_MIN is the value when the fourbar is physically at its lowest location. MIN may be larger than MAX in value.
+
 const int POT_FOURBAR_LEFT_DIRECTION = 1;
 const int POT_FOURBAR_LEFT_MAX = 3882;
 const int POT_FOURBAR_LEFT_MIN = 2150;
 
-const int POT_FOURBAR_RIGHT_DIRECTION = 1;
+const int POT_FOURBAR_RIGHT_DIRECTION = 1; 
 const int POT_FOURBAR_RIGHT_MAX = 3703;
 const int POT_FOURBAR_RIGHT_MIN = 2060;
 
@@ -38,8 +40,6 @@ const int BACK_RIGHT_DIRECTION = 1;
 
 const int EN_FRONT_LEFT_DIRECTION = -1;
 const int EN_FRONT_RIGHT_DIRECTION = -1;
-const int EN_MAX = 3200;
-const int EN_MIN = 940;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
