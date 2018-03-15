@@ -27,8 +27,12 @@ For all team members, this is our first and last year of VEX Robotics Competitio
 Reuse Our Code
 ==============
 
+Contents:
+
 .. contents::
 	:local:
+
+----------------------
 
 If you want to use our code, please **fork** this repository. You can make changes in the forked repository. It also help us to know how many people are using the code, so please do so even if you are not actually updating anything.
 
@@ -62,7 +66,7 @@ We like to think of our code as a framework/library, especially for autonomous. 
 There are two files essential to the framework:
 
 :autonomousHelper.h: This file contains all function/task definitions that will be useful **only** during autonomous
-:Driver.h: This file contains all function/task definitions that are not in ``autonomousHelper.h``,except for :C:`void pre_auton`, :C:`task autonomous` and :C:`task usercontrol`. It must be included before ``autonomousHelper.h``. The driver in filename is as in "hardware driver"
+:Driver.h: This file contains all function/task definitions that are not in ``autonomousHelper.h``,except for :code:`void pre_auton()`, :code:`task autonomous()` and :code:`task usercontrol()`. It must be included before ``autonomousHelper.h``. The driver in filename is as in "hardware driver"
 
 I highly suggest anyone who want to use our code to read `C++ Preprocessor Documentation <http://www.cplusplus.com/doc/tutorial/preprocessor/>`_ first.
 
@@ -76,8 +80,79 @@ The keymap section will be explained later.
 Functions Explanation
 *********************
 
+This section will omit functions that are under 4 lines. 
 
-:definition: :C:`bool approxEq(const float a, const float b, const float tolerance)`
+:Function: :code:`bool approxEq(const float a, const float b, const float tolerance)`
+:Returns: true if the difference of a and b are within tolerance
 
+------------
+
+:Function: :code:`bool userIntervention()`
+:Returns: true if the remote is touched
+
+------------
+
+:Task: :code:`lockChainbar()` 
+:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section ``How to tune a PID loop`` below if you want to reuse our code.
+
+------------
+
+:Task: :code:`lockFourBar()` 
+:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section ``How to tune a PID loop`` below if you want to reuse our code.
+
+-----------
+
+:Function: :code:`void holdChainBar(const int target)` 
+:Explanation: Proxy function to task ``lockChainbar``, returns immediately
+
+-----------
+
+:Function: :code:`void holdChainBar(const int target, const float tolerance)` 
+:Explanation: Proxy function to task ``lockChainbar()``, blocks until the difference between current location and target is within tolerance
+
+-----------
+
+:Function: :code:`void holdFourBar(const int target)` 
+:Explanation: Proxy function to task ``lockFourBar``, returns immediately
+
+-----------
+
+:Function: :code:`void holdFourBar(const int target, const float tolerance)` 
+:Explanation: Proxy function to task ``lockFourBar``, blocks until the difference between current location and target is within tolerance
+
+-----------
+
+:Function: :code:`void readyForDroppingCone(const int count)`
+:Explanation: Move chainbar and fourbar to the best place to drop a cone for ``count`` cones inside the robot
+
+-----------
+
+:Task: :code:`WheelControls()` 
+:Explanation: Allows drivers to control wheels via remote
+
+-----------
+
+:Task: :code:`MobileGoalControls()`
+:Explanation: Allow drivers to control mobile goal lift via remote
+
+-----------
+
+:Task: :code:`FourBarControls()`
+:Explanation: Allow drivers to control four bar via remote
+
+-----------
+
+:Task: :code:`RollerControls()`
+:Explanation: Allow drivers to control roller via remote
+
+-----------
+
+:Task: :code:`ChainBarControls()`
+:Explanation: Allow drivers to control chain bar via remote
+
+-----------
+
+:Task: :code:`SpecialControls()`
+:Explanations: Allow drivers to press one button to move a structure to a preset location
 
 
