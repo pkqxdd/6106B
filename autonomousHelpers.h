@@ -178,7 +178,7 @@ void releaseWheels()
 }
 
 
-void moveWheels(const float distance, const bool straight = false, const float tolerance = 0.5,
+void moveWheels(const float distance, const bool straight = true, const float tolerance = 0.5,
 const bool shouldResetGyroscope = true)
 {
 	static const float ticksPerInches = 360 / (PI * 4);
@@ -194,13 +194,14 @@ const bool shouldResetGyroscope = true)
 		approxEq(currLocLeft * EN_FRONT_LEFT_DIRECTION, distance * ticksPerInches, tolerance * ticksPerInches) and
 	approxEq(currLocRight * EN_FRONT_RIGHT_DIRECTION, distance * ticksPerInches,
 	tolerance * ticksPerInches))) {} //blocks when target not reached
-	return;
-#ifdef DEBUG
+	#ifdef DEBUG
 	for (int ii=0;ii<100;ii++){
 		writeDebugStreamLine("!!!!!!!!Target %d reached at %d.", wheelsTarget,nSysTime);
 		writeDebugStreamLine("!!!!!!!!Current reading: L: %d | R: %d",currLocLeft * EN_FRONT_LEFT_DIRECTION, currLocRight * EN_FRONT_RIGHT_DIRECTION);
 	}
 #endif
+	return;
+
 
 }
 
@@ -228,7 +229,6 @@ void mobileGoal(const int target, bool block = false, int tolerance = 30, int de
 {
 	stopTask(tMoveMobileGoal);
 	mobileGoalTarget = target;
-	wait1Msec(delay);
 	startTask(tMoveMobileGoal);
 	if (block)
 	{
