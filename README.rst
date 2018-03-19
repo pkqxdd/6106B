@@ -68,13 +68,12 @@ There are two files essential to the framework:
 :autonomousHelper.h: This file contains all function/task definitions that will be useful **only** during autonomous
 :Driver.h: This file contains all function/task definitions that are not in ``autonomousHelper.h``,except for :code:`void pre_auton()`, :code:`task autonomous()` and :code:`task usercontrol()`. It must be included before ``autonomousHelper.h``. The driver in filename is as in "hardware driver"
 
-I highly suggest anyone who want to use our code to read `C++ Preprocessor Documentation <http://www.cplusplus.com/doc/tutorial/preprocessor/>`_ first.
+I highly suggest anyone who want to use our code to read `C++ Preprocessor Documentation <http://www.cplusplus.com/doc/tutorial/preprocessor/>`_ first. 
 
 Driver.h
 --------
 
-All constants at the beginning of the file are measured using the remote debugger. They are specific to our robot only. To use our code, you will need to change almost all of them. This section will omit functions that are under 4 lines. The keymap section will be explained in :ref:`keymap`. 
-
+All constants at the beginning of the file are measured using the remote debugger. They are specific to our robot only. To use our code, you will need to change almost all of them. This section will omit functions that are under 4 lines. The key map part will be explained in Key Maps section below
 
 :Function: :code:`bool userIntervention()`
 :Returns: true if the remote is touched
@@ -82,12 +81,12 @@ All constants at the beginning of the file are measured using the remote debugge
 ------------
 
 :Task: :code:`lockChainbar()` 
-:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section :ref:`PID` for a more detailed explanation.
+:Explanation: Locks the chainbar at ``chainbarTarget``. PID loop. See section PID Loops below for a more detailed explanation.
 
 ------------
 
 :Task: :code:`lockFourBar()` 
-:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section :ref:`PID` for a more detailed explanation.
+:Explanation: Locks the fourbar at ``fourbarTarget``. PID loop. See section PID Loops below for a more detailed explanation.
 
 -----------
 
@@ -147,19 +146,80 @@ All constants at the beginning of the file are measured using the remote debugge
 autonomousHelper.h
 ------------------
 
-TODO
+All name begins with ``t`` are tasks
+
+
+:Function: :code:`int gyro()`
+:Returns: Average reading of two gyroscopes. If you only have one gyro installed, change this accordingly.
+
+------------------
+
+:Task: :code:`tTurn()` 
+:Explanation: PID loop to turn the robot. Controlled by proxy function :code:`Turn`.
+
+------------------
+
+:Task: :code:`tMoveWheels()` 
+:Explanation: PID loop to control the wheels (drive train). Controlled by proxy function :code:`void MoveWheels`.
+
+------------------
+
+:Task: :code:`tMoveMobileGoal()` 
+:Explanation: PID loop to control the mobile goal lift of the robot. Controlled by proxy function :code:`mobileGoal`.
+
+------------------
+
+:Function: :code:`void releaseWheels()`
+:Explanation: This function stops all PID loops that control the wheels. Note that this function does not stop the movement of wheels. To do that, set all motors on wheels to 0. E.g. call :code:`moveLeftWheels(0);moveRightWheels(0);`
+
+------------------
+
+:Function: :code:`void moveWheels(const float distance, const bool straight = true, const float tolerance = 0.5, const bool shouldResetGyroscope = true)`
+:Arguments:
+	:Distance: distance the robot should travel. Positive value moves the robot forward. Measured in inches.
+	:straight: When set to true, the robot will true to adjust its path based on gyro reading to keep going as straight as possible.
+	:tolerance: this value determines when the function returns. Set it to a very high value if you want it to return immediately. We call the target to be "within tolerance" if :code:`abs(currentLocation - target) <= tolerance` Note that :code:`task tMoveWheels` is not stopped when the function returns. This is useful because, after the target is reached, the robot can switch to do something else while the wheels are doing some micro-adjustments. 
+	:shouldResetGyroscope: Determine whether the robot should reset the gyroscopes to 0 at the beginning of the function. Based on our experience, setting it to false is only useful in some rare occasion during skill challenge.
+:Explanation: This is the proxy function to invoke :code:`task tMoveWheels`. Blocks until the target is within tolerance. Note that the constant :code:`ticksPerInch` is specific to our robot. There is one more occurrence of this constant in :code:`task tMoveWheels`.  It is calculated based on the gearing ratio from shaft encoder to the wheels and the diameter of the wheels. The shaft encoder produces 360 ticks for every revolution inside. 
+
+------------------
+
+:Function: :code:`void turn(const int degrees, int tolerance = 10)` 
+:Arguments: 
+	:degrees: how many degrees the robot should turn. Positive for turning clockwise unless you mount the gyro upside-down. 
+	:tolerance: this value determines when the function returns. Set it to a very high value if you want it to return immediately. We call the target to be "within tolerance" if :code:`abs(gyro() - target) <= tolerance` Note that :code:`task tTurn` is not stopped when the function returns. This is useful because, after the target is reached, the robot can switch to do something else while the wheels are doing some micro-adjustments. Measured in one tenth of a degree.
+:Explanation: This is the proxy function to invoke :code:`task tTurn`. Blocks until the target is within tolerance. 
+
+------------------
+
+:Function: :code:`void mobileGoal(const int target, bool block = false, int tolerance = 30, int delay=0)`
+:Arguments: 
+	:target: the target reading of ``pot_mb ``
+	:block: determine whether the function blocks or not.
+	:tolerance: if block is set to true, this value determines when the function returns.
+	:delay: not used. Exist only for backward-compatibility.
+:Explanation: This is the proxy function to invoke :code:`task tMoveMobileGoal`. 
+
+-----------------
+
+Function ``mb_in``, ``mb_mid``, ``mb_out``, and ``outOfSize`` are shortcut functions specific to our robot only.
+
 
 .. _keymap:
 
 Key Maps
 --------
 
-TODO
+This file contains the settings to map different buttons on the joystick to different functions. Its existence allow us to change key maps easily like in video games. Write ``key1 or key2 or key3 ... keyn`` if you want to map multiple keys to the same function. If you don't want to use a specific function, set it to ``false`` instead of deleting it to avoid compilation errors. 
 
-.. _PID:
 
 PID Loops
----------
+=========
 
-TODO
+Read PID Controller article in Wikipedia for more details. Only the first part of "Fundamental Operations" and "Pseudocode" are useful for our purpose.
+
+Based on our experience, only the P and D term are useful. When tuning the constants, remember that oscillation is inevitable. It may be very small, but you can never completely get rid of it. That is the reason why we have :code:`wait1Msec` in our autonomous code almost every other line – to allow oscillations. Ideally though, the oscillation should look somewhat like the positive part of graph of 10sin(x)/x^2
+
+I recommend to start with a relatively big constant – big enough so that it is having visible oscillation – and reduce it gradually to decrease the oscillation.
+
 
