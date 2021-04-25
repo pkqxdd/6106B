@@ -1,7 +1,7 @@
 .. role:: C(code)
 	:language: C
 
-:Author: Jerry Wang
+:Author: Jerie Wang
 :Date: Mar 15, 2018
 
 ===================
@@ -18,7 +18,7 @@ Members List
 ============
 
 :Jack Fenton: builder, driver
-:Jerry Wang: programmer
+:Jerie Wang: programmer
 :Xavier Shattuck: driver
 
 For all team members, this is our first and last year of VEX Robotics Competition.
